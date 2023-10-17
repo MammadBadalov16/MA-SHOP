@@ -1,4 +1,4 @@
-package az.mb.shop.data.remote.dto
+package az.mb.shop.data.remote.dto.product
 
 data class ProductsDTO(
     val limit: Int,

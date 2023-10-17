@@ -2,6 +2,8 @@ package az.mb.shop.di
 
 import az.mb.shop.common.Constants
 import az.mb.shop.data.remote.ShopApi
+import az.mb.shop.data.repository.ApiRepositoryImpl
+import az.mb.shop.domain.repository.ApiRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,4 +25,13 @@ object NetworkModule {
             .build()
             .create(ShopApi::class.java)
     }
+
+    @Provides
+    @Singleton
+    fun provideApiRepository(shopApi: ShopApi): ApiRepository {
+        return ApiRepositoryImpl(shopApi)
+    }
+
+
+
 }

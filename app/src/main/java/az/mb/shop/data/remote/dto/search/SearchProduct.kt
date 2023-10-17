@@ -1,6 +1,6 @@
-package az.mb.shop.data.remote.dto
+package az.mb.shop.data.remote.dto.search
 
-data class ProductDTO(
+data class SearchProduct(
     val brand: String,
     val category: String,
     val description: String,
