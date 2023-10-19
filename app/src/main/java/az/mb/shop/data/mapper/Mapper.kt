@@ -6,6 +6,7 @@ import az.mb.shop.data.remote.dto.product.ProductsDTO
 import az.mb.shop.domain.model.Category
 import az.mb.shop.domain.model.Product
 
+
 fun ProductDTO.toProduct(): Product {
     return Product(
         id = id,

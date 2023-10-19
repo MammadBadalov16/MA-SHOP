@@ -1,4 +1,4 @@
-package az.mb.shop.ui.theme
+package az.mb.shop.presentation.ui.theme
 
 import android.app.Activity
 import android.os.Build

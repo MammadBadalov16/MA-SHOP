@@ -31,7 +31,4 @@ object NetworkModule {
     fun provideApiRepository(shopApi: ShopApi): RemoteRepository {
         return RemoteRepositoryImpl(shopApi)
     }
-
-
-
 }

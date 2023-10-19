@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "17023114847",
+    "project_id": "shopapp-c40f7",
+    "storage_bucket": "shopapp-c40f7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:17023114847:android:bf54c43f7153e801d285ea",
+        "android_client_info": {
+          "package_name": "az.mb.shop"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB__ury0rFyqQcYL9ZmymamkA2TQtaOVIs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
