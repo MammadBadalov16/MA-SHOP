@@ -13,14 +13,14 @@ interface ShopApi {
     @GET("products")
     suspend fun getProducts(): ProductsDTO
 
+    @GET("products/category/{category}")
+    suspend fun getProductsOfCategory(@Path("category") category: String): ProductsDTO
+
     @GET("product/{id}")
     suspend fun getProduct(@Path("id") id: Int): ProductDTO
 
     @GET("products/categories")
     suspend fun getCategories(): CategoryDTO
-
-    @GET("products/category/{category}")
-    suspend fun getCategoryProducts(@Path("category") category: String): ProductDTO
 
     @GET("products/search")
     suspend fun getSearchProducts(@Query("q") searchKey: String): SearchDTO
