@@ -24,7 +24,7 @@ class SignInViewModel @Inject constructor(
     val signInState: State<SignInState> = _signInState
 
     init {
-        signUp("memmedbedelov32@gmail.com", "memmed0102")
+        //signUp("memmedbedelov32@gmail.com", "memmed0102")
     }
 
     private fun signUp(email: String, password: String) {
