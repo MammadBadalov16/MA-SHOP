@@ -6,8 +6,6 @@ plugins {
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
     id("com.google.gms.google-services")
-
-
 }
 
 android {
@@ -75,6 +73,8 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
+
+//Hilt
     implementation("com.google.dagger:hilt-android:2.48")
     kapt("com.google.dagger:hilt-android-compiler:2.48")
     kapt("androidx.hilt:hilt-compiler:1.0.0")
@@ -85,7 +85,6 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     //interceptor
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.1")
-
-
+    // Compose Nav Destinations
 
 }
