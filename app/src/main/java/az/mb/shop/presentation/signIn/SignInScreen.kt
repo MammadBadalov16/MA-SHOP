@@ -14,7 +14,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,11 +24,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import az.mb.shop.R
 import az.mb.shop.presentation.components.ChangeScreen
@@ -38,10 +37,8 @@ import az.mb.shop.presentation.components.FieldPassword
 import az.mb.shop.presentation.ui.theme.placeHolder
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignInScreen(
-    viewModel: SignInViewModel = hiltViewModel(),
     navController: NavController
 ) {
     var emailValue by rememberSaveable { mutableStateOf("") }
@@ -75,9 +72,10 @@ fun SignInScreen(
 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
-                FieldEmail(onChangeValue = { emailValue = it })
+                FieldEmail(initOldValue = emailValue, onChangeValue = { emailValue = it })
 
                 FieldPassword(
+                    initOldValue = passwordValue,
                     onChangeValue = {
                         passwordValue = it
                     }, onChangeVisible = {
@@ -97,6 +95,12 @@ fun SignInScreen(
 
                 Spacer(modifier = Modifier.padding(10.dp))
 
+                ChangeScreen(
+                    questions = stringResource(id = R.string.dont_account),
+                    route = stringResource(id = R.string.sign_up),
+                    navController = navController,
+                    type = 0
+                )
             }
         }
     }

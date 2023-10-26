@@ -23,17 +23,15 @@ class SignUpViewModel @Inject constructor(
     val signUpState: State<SignUpState> = _signUpState
 
 
-    init {
-        signUp("memmedbedelov32@gmail.com","memmed0102")
-    }
 
 
-    private fun signUp(email: String, password: String) {
+    fun signUp(email: String, password: String) {
         signUpUseCase(email = email, password = password).onEach {
 
             when (it) {
                 is Resource.Success -> {
-                    _signUpState.value = (SignUpState(isSuccess = "Sign Up Success"))
+                    _signUpState.value =
+                        (SignUpState(isSuccess = true))
                 }
 
                 is Resource.Loading -> {

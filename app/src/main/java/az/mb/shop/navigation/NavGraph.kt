@@ -19,6 +19,7 @@ fun SetupNavGraph(
         composable(
             route = Screen.SignIn.route
         ) {
+
             SignInScreen(navController = navController)
         }
 

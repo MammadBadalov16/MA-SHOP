@@ -34,9 +34,11 @@ import az.mb.shop.presentation.ui.theme.placeHolder
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FieldEmail(
+    initOldValue: String,
     onChangeValue: (String) -> Unit
 ) {
     var emailValue by rememberSaveable { mutableStateOf("") }
+    emailValue = initOldValue
 
     OutlinedTextField(
         value = emailValue,
@@ -66,11 +68,14 @@ fun FieldEmail(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FieldPassword(
+    initOldValue: String,
     onChangeValue: (String) -> Unit,
     onChangeVisible: (Boolean) -> Unit
 ) {
     var passwordValue by rememberSaveable { mutableStateOf("") }
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
+
+    passwordValue = initOldValue
 
 
     OutlinedTextField(
@@ -110,10 +115,12 @@ fun FieldPassword(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FieldString(
+    initOldValue: String,
     valueType: String,
     onChangeValue: (String) -> Unit
 ) {
     var value by rememberSaveable { mutableStateOf("") }
+    value = initOldValue
 
     OutlinedTextField(
         value = value,
@@ -138,10 +145,12 @@ fun ChangeScreen(questions: String, route: String, navController: NavController,
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text(text = questions)
         TextButton(onClick = {
-            if (type == 0)
+            if (type == 0) {
                 navController.navigate(Screen.SignUp.route)
-            else
+            } else {
+                navController.popBackStack()
                 navController.navigate(Screen.SignIn.route)
+            }
         }) {
             Text(text = route, fontSize = 20.sp)
         }
