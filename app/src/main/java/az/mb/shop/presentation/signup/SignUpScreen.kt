@@ -163,8 +163,6 @@ fun SignUpScreen(
     if ((!state.isSuccess) && (!state.isLoading)) {
         Toast.makeText(LocalContext.current, state.isError, Toast.LENGTH_SHORT).show()
     }
-
-
 }
 
 fun checkFields(user: User, viewModel: SignUpViewModel): String {

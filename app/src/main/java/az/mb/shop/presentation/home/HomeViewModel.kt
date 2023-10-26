@@ -13,10 +13,8 @@ import az.mb.shop.presentation.home.state.CategoryState
 import az.mb.shop.presentation.home.state.ProductState
 import az.mb.shop.presentation.home.state.ProductsState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -44,7 +42,7 @@ class HomeViewModel @Inject constructor(
         getProductsOfCategory("smartphones")
         getCategories()
         getProducts()
-        getProduct(2)
+        getProductById(2)
     }
 
     private fun getProductsOfCategory(category: String) {
@@ -89,7 +87,7 @@ class HomeViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    private fun getProduct(id: Int) {
+    private fun getProductById(id: Int) {
         getProductUseCase(id).onEach {
             when (it) {
                 is Resource.Error -> _stateProduct.value =

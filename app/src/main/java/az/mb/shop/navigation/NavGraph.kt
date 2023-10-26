@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import az.mb.shop.common.Screen
+import az.mb.shop.presentation.home.HomeScreen
 import az.mb.shop.presentation.signIn.SignInScreen
 import az.mb.shop.presentation.signup.SignUpScreen
 
@@ -27,6 +28,10 @@ fun SetupNavGraph(
             route = Screen.SignUp.route
         ) {
             SignUpScreen(navController = navController)
+        }
+
+        composable(route = Screen.Home.route) {
+            HomeScreen(navController = navController)
         }
     }
 }

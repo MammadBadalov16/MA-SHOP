@@ -27,7 +27,7 @@ class SignInViewModel @Inject constructor(
         //signUp("memmedbedelov32@gmail.com", "memmed0102")
     }
 
-    private fun signUp(email: String, password: String) {
+    fun signIn(email: String, password: String) {
         signInUseCase(email = email, password = password).onEach {
             when (it) {
                 is Resource.Success -> {
@@ -43,7 +43,7 @@ class SignInViewModel @Inject constructor(
                 }
 
                 is Resource.Error -> {
-                    _signInState.value = (SignInState(isError = it.message.toString()))
+                    _signInState.value = (SignInState(isError = it.message ?: "Please try again"))
                 }
             }
 
