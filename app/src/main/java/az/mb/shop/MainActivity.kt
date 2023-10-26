@@ -10,7 +10,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import az.mb.shop.navigation.SetupHomeNavGraph
 import az.mb.shop.navigation.SetupNavGraph
+import az.mb.shop.presentation.home.HomeScreen
+import az.mb.shop.presentation.main.MainScreen
 import az.mb.shop.presentation.signIn.SignInScreen
 import az.mb.shop.presentation.signup.SignUpScreen
 import az.mb.shop.presentation.ui.theme.ShopTheme
@@ -34,9 +37,10 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     navHostController = rememberNavController()
-                    SetupNavGraph(navController = navHostController)
-                    //SignInScreen()
-                    //S
+                    //SetupNavGraph(navController = navHostController)
+                    // HomeScreen()
+                    // SetupHomeNavGraph(navController = navHostController)
+                    MainScreen()
                 }
             }
         }

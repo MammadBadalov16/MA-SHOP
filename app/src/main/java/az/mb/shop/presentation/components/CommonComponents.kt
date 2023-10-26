@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import az.mb.shop.R
-import az.mb.shop.common.Screen
+import az.mb.shop.navigation.Screen
 import az.mb.shop.presentation.ui.theme.placeHolder
 
 @OptIn(ExperimentalMaterial3Api::class)

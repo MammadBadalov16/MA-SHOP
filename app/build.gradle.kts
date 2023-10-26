@@ -87,5 +87,8 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.1")
     // Compose Nav Destinations
 
+    implementation("androidx.navigation:navigation-compose:2.7.4")
+
+
 
 }

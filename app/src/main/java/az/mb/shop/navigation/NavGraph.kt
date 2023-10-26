@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import az.mb.shop.common.Screen
+import androidx.navigation.compose.rememberNavController
 import az.mb.shop.presentation.home.HomeScreen
 import az.mb.shop.presentation.signIn.SignInScreen
 import az.mb.shop.presentation.signup.SignUpScreen
@@ -13,6 +13,9 @@ import az.mb.shop.presentation.signup.SignUpScreen
 fun SetupNavGraph(
     navController: NavHostController
 ) {
+
+    lateinit var navHostController: NavHostController
+
     NavHost(
         navController = navController,
         startDestination = Screen.SignIn.route
@@ -31,7 +34,8 @@ fun SetupNavGraph(
         }
 
         composable(route = Screen.Home.route) {
-            HomeScreen(navController = navController)
+            navHostController = rememberNavController()
+            SetupHomeNavGraph(navController = navHostController)
         }
     }
 }

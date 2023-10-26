@@ -39,10 +39,10 @@ class HomeViewModel @Inject constructor(
 
 
     init {
-        getProductsOfCategory("smartphones")
+       /* getProductsOfCategory("smartphones")
         getCategories()
         getProducts()
-        getProductById(2)
+        getProductById(2)*/
     }
 
     private fun getProductsOfCategory(category: String) {

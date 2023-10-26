@@ -38,13 +38,10 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import az.mb.shop.R
-import az.mb.shop.common.Screen
-import az.mb.shop.domain.model.User
+import az.mb.shop.navigation.Screen
 import az.mb.shop.presentation.components.ChangeScreen
 import az.mb.shop.presentation.components.FieldEmail
 import az.mb.shop.presentation.components.FieldPassword
-import az.mb.shop.presentation.signup.SignUpViewModel
-import az.mb.shop.presentation.ui.theme.placeHolder
 
 
 @Composable
@@ -164,7 +161,7 @@ fun SignInScreen(
 
 
 fun signIn(email: String, password: String, viewModel: SignInViewModel): String {
-    
+
     val email = email.trim()
     val password = password.trim()
 
