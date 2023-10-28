@@ -1,132 +1,113 @@
 package az.mb.shop.presentation.main
 
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.outlined.Home
+import android.util.Log
+import android.widget.Toast
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.NavigationDrawerItem
-import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.rememberNavController
-import az.mb.shop.navigation.SetupHomeNavGraph
+import az.mb.shop.common.Constants
+import az.mb.shop.common.PreferencesManager
+import az.mb.shop.navigation.Screen
+import az.mb.shop.navigation.graphs.MyNavGraph
+import az.mb.shop.navigation.graphs.RootNavGraph
+import az.mb.shop.navigation.navigation_items.drawerNavigationScreens
 import az.mb.shop.presentation.main.components.BottomNavigationBar
+import az.mb.shop.presentation.main.components.ModalDrawer
 import az.mb.shop.presentation.main.components.TopBar
-import kotlinx.coroutines.launch
+import az.mb.shop.presentation.main.components.closeDrawer
+import az.mb.shop.presentation.main.components.drawerNavigate
+import az.mb.shop.presentation.signIn.state.SignInState
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen() {
 
-    val navController = rememberNavController()
-
-    val scaffoldState = rememberScrollState()
-
+    val context = LocalContext.current.applicationContext
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    var isClicked by rememberSaveable { mutableStateOf(false) }
+    var clickIndex by rememberSaveable { mutableIntStateOf(0) }
+
+
+    val navController = rememberNavController()
     val scope = rememberCoroutineScope()
-    var selectedItemIndex by rememberSaveable {
-        mutableIntStateOf(0)
-    }
-    var bnSelectedItemIndex by rememberSaveable { mutableIntStateOf(0) }
 
 
-    data class NavigationItem(
-        val title: String,
-        val selectedIcon: ImageVector,
-        val unselectedIcon: ImageVector,
-        val badgeCount: Int? = null
-    )
-
-    val items = listOf(
-        NavigationItem(
-            title = "All",
-            selectedIcon = Icons.Filled.Home,
-            unselectedIcon = Icons.Outlined.Home,
-        ),
-        NavigationItem(
-            title = "Urgent",
-            selectedIcon = Icons.Filled.Home,
-            unselectedIcon = Icons.Outlined.Home,
-            badgeCount = 45
-        ),
-        NavigationItem(
-            title = "Settings",
-            selectedIcon = Icons.Filled.Home,
-            unselectedIcon = Icons.Outlined.Home,
-        ),
-    )
-
-
-    ModalNavigationDrawer(
-        drawerContent = {
-            ModalDrawerSheet {
-                Spacer(modifier = Modifier.height(16.dp))
-                items.forEachIndexed { index, item ->
-                    NavigationDrawerItem(
-                        label = {
-                            Text(text = item.title)
-                        },
-                        selected = index == selectedItemIndex,
-                        onClick = {
-
-//                          navController.navigate(item.route)
-                            selectedItemIndex = index
-                            scope.launch {
-                                drawerState.close()
-                            }
-                        },
-                        icon = {
-                            Icon(
-                                imageVector = if (index == selectedItemIndex) {
-                                    item.selectedIcon
-                                } else item.unselectedIcon,
-                                contentDescription = item.title
+    if (clickIndex != 2) {
+        ModalNavigationDrawer(
+            drawerContent = {
+                ModalDrawer(clickIndex = {
+                    clickIndex = it
+                    when (clickIndex) {
+                        2, 3 -> {
+                            drawerNavigate(
+                                navController = navController,
+                                route = drawerNavigationScreens[clickIndex].route,
+                                scope = scope,
+                                drawerState = drawerState,
                             )
-                        },
-                        badge = {
-                            item.badgeCount?.let {
-                                Text(text = item.badgeCount.toString())
-                            }
-                        },
-                        modifier = Modifier
-                            .padding(NavigationDrawerItemDefaults.ItemPadding)
-                    )
-                }
+                        }
+
+                        1 -> {
+                            isClicked = true
+                        }
+                    }
+                })
+            },
+            drawerState = drawerState
+        ) {
+            Scaffold(
+                topBar = {
+                    TopBar(drawerState)
+                },
+                bottomBar = {
+                    BottomNavigationBar(
+                        navController = navController,
+                        clickedProfile = { clickIndex = 2 })
+                },
+            )
+            {
+                it.toString()
+                MyNavGraph(navController = navController)
             }
-        },
-        drawerState = drawerState
-    ) {
-        Scaffold(
-            topBar = {
-                TopBar(drawerState)
-            },
-            bottomBar = {
-                BottomNavigationBar(navController = navController)
-            },
-        )
-        {
-            it.toString()
-            SetupHomeNavGraph(navController = navController)
         }
     }
 
+    Log.e("index", clickIndex.toString())
+    Log.e("isClicked", isClicked.toString())
+    // if (isClicked) {
+    when (clickIndex) {
+        1 -> {
+            closeDrawer(drawerState = drawerState, scope = scope)
+            navController.navigate(Screen.Profile.route)
+            // MyNavGraph(navController = navController, startDestination = Screen.Profile.route)
+            Log.e("clickIndex", "1")
+        }
+
+        5 -> {
+            PreferencesManager(context = context).deleteData(Constants.TOKEN)
+            RootNavGraph(navController = rememberNavController())
+        }
+
+        else -> {}
+    }
+    // }
 }
+
+
+

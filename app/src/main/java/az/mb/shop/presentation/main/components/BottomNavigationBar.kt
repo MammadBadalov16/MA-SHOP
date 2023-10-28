@@ -1,5 +1,7 @@
 package az.mb.shop.presentation.main.components
 
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -11,11 +13,19 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import az.mb.shop.navigation.bottomNavigationScreens
+import az.mb.shop.navigation.Screen
+import az.mb.shop.navigation.graphs.MyNavGraph
+import az.mb.shop.navigation.navigation_items.DrawerNavigationItem
+import az.mb.shop.navigation.navigation_items.bottomNavigationScreens
+import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun BottomNavigationBar(
     navController: NavController,
+    clickedProfile: () -> Unit
+    /*
+        changeSelectedItem: () -> Unit
+    */
 ) {
 
     var bnSelectedItemIndex by rememberSaveable { mutableIntStateOf(0) }
@@ -26,11 +36,12 @@ fun BottomNavigationBar(
                 selected = bnSelectedItemIndex == index,
                 onClick = {
                     bnSelectedItemIndex = index
-
-                    navController.navigate(item.route) {
-                        popUpTo(navController.graph.findStartDestination().id)
-                        launchSingleTop = true
+                    if (clickedProfile(item.route)){
+                        clickedProfile()
+                        return@NavigationBarItem
                     }
+
+                    navigate(navController = navController, route = item.route)
                 },
                 label = {
                     Text(text = item.title)
@@ -48,4 +59,23 @@ fun BottomNavigationBar(
             )
         }
     }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+private fun navigate(
+    navController: NavController,
+    route: String,
+) {
+    navController.navigate(route) {
+        popUpTo(navController.graph.findStartDestination().id)
+        launchSingleTop = true
+    }
+}
+
+private fun clickedProfile(route: String): Boolean {
+    if (route == Screen.Profile.route)
+        return true
+
+    return false
 }

@@ -1,33 +1,35 @@
-package az.mb.shop.navigation
+package az.mb.shop.navigation.graphs
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import az.mb.shop.navigation.Screen
 import az.mb.shop.presentation.cart.CartScreen
-import az.mb.shop.presentation.category.CategoryScreen
 import az.mb.shop.presentation.favorites.FavoritesScreen
 import az.mb.shop.presentation.home.HomeScreen
-import az.mb.shop.presentation.product.ProductScreen
 import az.mb.shop.presentation.profile.ProfileScreen
 
 @Composable
-fun SetupHomeNavGraph(
-    navController: NavHostController
+fun MyNavGraph(
+    navController: NavHostController,
+    startDestination: String = Screen.Home.route
 ) {
     NavHost(
-        navController = navController, startDestination = BottomNavigationItem.Home.route
+        navController = navController,
+        startDestination = startDestination
     ) {
-        composable(route = BottomNavigationItem.Home.route) {
+        composable(route = Screen.Home.route) {
             HomeScreen()
         }
-        composable(route = BottomNavigationItem.Favorites.route) {
+        composable(route = Screen.Favorites.route) {
             FavoritesScreen()
         }
-        composable(route = BottomNavigationItem.Cart.route) {
+        composable(route = Screen.Cart.route) {
             CartScreen()
         }
-        composable(route = BottomNavigationItem.Profile.route) {
+        composable(route = Screen.Profile.route) {
             ProfileScreen()
         }
     }

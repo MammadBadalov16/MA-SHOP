@@ -1,5 +1,6 @@
 package az.mb.shop.presentation.signIn
 
+import android.content.SharedPreferences
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
@@ -23,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -37,23 +39,31 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import az.mb.shop.R
-import az.mb.shop.navigation.Screen
+import az.mb.shop.common.Constants
+import az.mb.shop.common.PreferencesManager
+import az.mb.shop.navigation.graphs.Graph
+import az.mb.shop.navigation.graphs.RootNavGraph
 import az.mb.shop.presentation.components.ChangeScreen
 import az.mb.shop.presentation.components.FieldEmail
 import az.mb.shop.presentation.components.FieldPassword
+import az.mb.shop.presentation.main.MainScreen
 
 
 @Composable
 fun SignInScreen(
     viewModel: SignInViewModel = hiltViewModel(),
-    navController: NavController
+    navController: NavHostController
 ) {
     val context = LocalContext.current.applicationContext
+    val sharedPreferences = PreferencesManager(context)
     val state = viewModel.signInState.value
     var emailValue by rememberSaveable { mutableStateOf("") }
     var passwordValue by rememberSaveable { mutableStateOf("") }
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
+    var isSuccess by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
 
@@ -149,13 +159,19 @@ fun SignInScreen(
     if (state.isError != "") {
         Toast.makeText(context, state.isError, Toast.LENGTH_SHORT).show()
     }
-        LaunchedEffect(key1 = state) {
-            if (state.isSuccess && state.isEmailVerify) {
-                Toast.makeText(context, "Sign In successfully", Toast.LENGTH_SHORT)
+
+    LaunchedEffect(key1 = state) {
+        if (state.isSuccess && state.isEmailVerify) {
+            Toast.makeText(context, "Sign In successfully", Toast.LENGTH_SHORT)
                 .show()
-            navController.popBackStack()
-            navController.navigate(Screen.Home.route)
+            sharedPreferences.saveData(Constants.TOKEN, "fakeToken")
+            isSuccess = true
         }
+    }
+
+    if (isSuccess) {
+        navController.popBackStack()
+        navController.navigate(Graph.NAV)
     }
 }
 
