@@ -91,6 +91,15 @@ dependencies {
 
     //SharedPrereferences
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+    //constraint layout
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+    //coil
+    implementation("io.coil-kt:coil-compose:2.4.0")
+    //raiting bar
+    implementation("com.github.a914-gowtham:compose-ratingbar:1.3.4")
+
+
+
 
 
 

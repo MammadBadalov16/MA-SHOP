@@ -34,7 +34,7 @@ fun ProductsDTO.toProducts(): List<Product> {
 }
 
 fun CategoryDTO.toCategory() = map {
-    Category(it)
+    Category(category = it)
 }
 
 

@@ -18,6 +18,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavGraph
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.rememberNavController
 import az.mb.shop.common.Constants
@@ -38,76 +39,61 @@ import az.mb.shop.presentation.signIn.state.SignInState
 @Composable
 fun MainScreen() {
 
-    val context = LocalContext.current.applicationContext
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    var isClicked by rememberSaveable { mutableStateOf(false) }
-    var clickIndex by rememberSaveable { mutableIntStateOf(0) }
-
-
     val navController = rememberNavController()
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current.applicationContext
+    var clickSignOut by rememberSaveable { mutableStateOf(false) }
+    val selectedItemId = remember { mutableIntStateOf(1) }
 
-
-    if (clickIndex != 2) {
-        ModalNavigationDrawer(
-            drawerContent = {
-                ModalDrawer(clickIndex = {
-                    clickIndex = it
-                    when (clickIndex) {
-                        2, 3 -> {
-                            drawerNavigate(
-                                navController = navController,
-                                route = drawerNavigationScreens[clickIndex].route,
-                                scope = scope,
-                                drawerState = drawerState,
-                            )
-                        }
-
-                        1 -> {
-                            isClicked = true
+    ModalNavigationDrawer(
+        drawerContent = {
+            ModalDrawer(
+                selectedItem = selectedItemId,
+                clickItemId = { selectedItemId.value = it },
+                clickIndex = {
+                    when (it) {
+                        5 -> {
+                            clickSignOut = true
+                            return@ModalDrawer
                         }
                     }
+                    if (it != 4)
+                        drawerNavigate(
+                            navController = navController,
+                            route = drawerNavigationScreens[it].route,
+                            scope = scope,
+                            drawerState = drawerState,
+                        )
                 })
+        },
+        drawerState = drawerState
+    ) {
+        Scaffold(
+            topBar = {
+                TopBar(drawerState)
             },
-            drawerState = drawerState
-        ) {
-            Scaffold(
-                topBar = {
-                    TopBar(drawerState)
-                },
-                bottomBar = {
-                    BottomNavigationBar(
-                        navController = navController,
-                        clickedProfile = { clickIndex = 2 })
-                },
-            )
-            {
-                it.toString()
-                MyNavGraph(navController = navController)
-            }
+            bottomBar = {
+                BottomNavigationBar(
+                    navController = navController,
+                    clickItemId = { selectedItemId.value = it },
+                    selectedItemId = selectedItemId
+                )
+            },
+        )
+        {
+            it.toString()
+            MyNavGraph(navController = navController)
         }
     }
 
-    Log.e("index", clickIndex.toString())
-    Log.e("isClicked", isClicked.toString())
-    // if (isClicked) {
-    when (clickIndex) {
-        1 -> {
-            closeDrawer(drawerState = drawerState, scope = scope)
-            navController.navigate(Screen.Profile.route)
-            // MyNavGraph(navController = navController, startDestination = Screen.Profile.route)
-            Log.e("clickIndex", "1")
-        }
 
-        5 -> {
-            PreferencesManager(context = context).deleteData(Constants.TOKEN)
-            RootNavGraph(navController = rememberNavController())
-        }
-
-        else -> {}
+    if (clickSignOut) {
+        PreferencesManager(context = context).removeAllSharedPreferences()
+        RootNavGraph(navController = rememberNavController())
     }
-    // }
 }
+
 
 
 

@@ -32,5 +32,7 @@ fun MyNavGraph(
         composable(route = Screen.Profile.route) {
             ProfileScreen()
         }
+        composable(route = Screen.Settings.route) {
+        }
     }
 }

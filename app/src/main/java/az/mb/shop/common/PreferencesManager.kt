@@ -17,7 +17,9 @@ class PreferencesManager(context: Context) {
         return sharedPreferences.getString(key, defaultValue) ?: defaultValue
     }
 
-    fun deleteData(key: String) {
-        sharedPreferences.edit().remove(key)
+    fun removeAllSharedPreferences() {
+        val editor = sharedPreferences.edit()
+        editor.clear()
+        editor.apply()
     }
 }

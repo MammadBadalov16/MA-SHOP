@@ -2,6 +2,7 @@ package az.mb.shop
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -36,6 +37,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val sharedPreferences = PreferencesManager(applicationContext)
                     val token = sharedPreferences.getData(Constants.TOKEN, "")
+                    Log.e("Token", token)
                     navHostController = rememberNavController()
 
                     if (token == "fakeToken")
