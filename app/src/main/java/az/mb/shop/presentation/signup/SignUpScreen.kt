@@ -160,7 +160,7 @@ fun SignUpScreen(
             .show()
     }
     
-    if ((!state.isSuccess) && (!state.isLoading)) {
+    if (state.isError.isNotBlank()) {
         Toast.makeText(LocalContext.current, state.isError, Toast.LENGTH_SHORT).show()
     }
 }

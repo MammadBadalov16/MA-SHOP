@@ -4,7 +4,9 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import az.mb.shop.common.Constants
 import az.mb.shop.common.Resource
+import az.mb.shop.domain.model.Category
 import az.mb.shop.domain.use_case.get_category.GetCategoryUseCase
 import az.mb.shop.domain.use_case.get_prodocts_of_category.GetProductsOfCategoryUseCase
 import az.mb.shop.domain.use_case.get_product.GetProductUseCase
@@ -39,42 +41,36 @@ class HomeViewModel @Inject constructor(
 
 
     init {
-        /* getProductsOfCategory("smartphones")
-         getCategories()
-         getProducts()
-         getProductById(2)*/
         getCategories()
         getProducts()
-
     }
 
-    private fun getProductsOfCategory(category: String) {
+    fun getProductsOfCategory(category: String) {
         getProductsOfCategoryUseCase(category = category).onEach {
             when (it) {
                 is Resource.Loading -> {
-                    _stateProductsOfCategory.value = ProductsState(isLoading = true)
+                    _stateProducts.value = ProductsState(isLoading = true)
                 }
 
                 is Resource.Success -> {
-                    _stateProductsOfCategory.value = ProductsState(products = it.data ?: null)
+                    _stateProducts.value = ProductsState(products = it.data ?: emptyList())
                 }
 
                 is Resource.Error -> {
-                    _stateProductsOfCategory.value = ProductsState(
-                        error = error(it.message.toString())
-                    )
-                }
 
-                else -> {}
+                    _stateProducts.value =
+                        ProductsState(error = it.message ?: Constants.unknownError)
+                }
             }
         }.launchIn(viewModelScope)
     }
 
-    private fun getCategories() {
+    fun getCategories() {
         getCategoryUseCase().onEach {
             when (it) {
                 is Resource.Error -> {
-                    _stateCategories.value = CategoryState(error = it.message.toString())
+                    _stateCategories.value =
+                        CategoryState(error = it.message ?: Constants.unknownError)
                 }
 
                 is Resource.Loading -> {
@@ -82,10 +78,13 @@ class HomeViewModel @Inject constructor(
                 }
 
                 is Resource.Success -> {
-                    _stateCategories.value = CategoryState(categories = it.data)
-                }
+                    val data: MutableList<Category>? = it.data?.toMutableList()
+                    data?.add(0, Category("All"))
 
-                else -> {}
+                    _stateCategories.value =
+                        CategoryState(categories = data ?: mutableListOf())
+
+                }
             }
         }.launchIn(viewModelScope)
     }
@@ -94,16 +93,15 @@ class HomeViewModel @Inject constructor(
         getProductUseCase(id).onEach {
             when (it) {
                 is Resource.Error -> _stateProduct.value =
-                    ProductState(error(it.message.toString()))
+                    ProductState(error = it.message ?: Constants.unknownError)
 
                 is Resource.Loading -> _stateProduct.value = ProductState(boolean = true)
                 is Resource.Success -> _stateProduct.value = ProductState(product = it.data)
-                else -> {}
             }
         }.launchIn(viewModelScope)
     }
 
-    private fun getProducts() {
+    fun getProducts() {
 
 
         getProductsUseCase().onEach {
@@ -113,16 +111,15 @@ class HomeViewModel @Inject constructor(
                 }
 
                 is Resource.Success -> {
-                    _stateProducts.value = ProductsState(products = it.data ?: null)
+                    _stateProducts.value = ProductsState(products = it.data ?: emptyList())
                 }
 
                 is Resource.Error -> {
-                    _stateProducts.value = ProductsState(
-                        error = error(it.message.toString())
-                    )
+                    _stateProducts.value =
+                        ProductsState(error = it.message ?: Constants.unknownError)
+
                 }
 
-                else -> {}
             }
         }.launchIn(viewModelScope)
     }

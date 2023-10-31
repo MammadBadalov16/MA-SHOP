@@ -156,7 +156,7 @@ fun SignInScreen(
         ).show()
     }
 
-    if (state.isError != "") {
+    if (state.isError.isNotBlank()) {
         Toast.makeText(context, state.isError, Toast.LENGTH_SHORT).show()
     }
 

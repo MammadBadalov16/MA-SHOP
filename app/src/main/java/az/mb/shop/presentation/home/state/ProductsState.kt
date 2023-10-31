@@ -5,6 +5,6 @@ import az.mb.shop.domain.model.Product
 
 data class ProductsState(
     val isLoading: Boolean = false,
-    val products: List<Product>? = null,
-    val error: String = "Unkown"
+    val products: List<Product> = emptyList(),
+    val error: String = ""
 )

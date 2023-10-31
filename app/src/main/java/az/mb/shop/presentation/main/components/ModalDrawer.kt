@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import az.mb.shop.navigation.navigation_items.drawerNavigationScreens
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -78,9 +79,10 @@ fun drawerNavigate(
     scope: CoroutineScope,
     drawerState: DrawerState,
 ) {
+    navController.popBackStack()
     navController.navigate(route) {
-        //popUpTo(navController.graph.findStartDestination().id)
-        // launchSingleTop = true
+        popUpTo(navController.graph.findStartDestination().id)
+        launchSingleTop = true
     }
     closeDrawer(drawerState = drawerState, scope = scope)
 }
