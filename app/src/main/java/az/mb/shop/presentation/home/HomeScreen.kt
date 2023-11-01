@@ -22,6 +22,8 @@ import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -40,16 +42,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.rememberNavController
 import az.mb.shop.domain.model.Category
 import az.mb.shop.domain.model.Product
+import az.mb.shop.navigation.graphs.Graph
+import az.mb.shop.navigation.graphs.RootNavGraph
 import az.mb.shop.presentation.home.components.CategoryItem
 
 import az.mb.shop.presentation.home.components.ProductsItem
+import az.mb.shop.presentation.main.components.TopBar
 import az.mb.shop.presentation.ui.theme.f3
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel(),
+    drawerState: DrawerState
 ) {
     val categoriesState = viewModel.stateCategories.value
     val productsState = viewModel.stateProducts.value
@@ -67,7 +75,7 @@ fun HomeScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color.White),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
 
         if (categoriesState.loading)
@@ -79,6 +87,10 @@ fun HomeScreen(
                     .padding(20.dp)
                     .fillMaxSize(),
             ) {
+
+                TopBar(drawerState = drawerState)
+
+                Spacer(modifier = Modifier.height(50.dp))
 
                 CategorySection(
                     viewModel = viewModel,
@@ -93,6 +105,7 @@ fun HomeScreen(
                             .fillMaxSize()
                             .wrapContentSize(Alignment.Center)
                     )
+
                 if (products.isNotEmpty())
                     ProductSection(products = products)
             }
@@ -159,13 +172,16 @@ fun ProductSection(products: List<Product>) {
 
     LazyColumn() {
         items(products.windowed(2, 2, true)) {
-            Row(modifier = Modifier.fillMaxWidth()) {
+            Row(
+                modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
+            ) {
                 it.forEach { product ->
                     Box(
                         modifier = Modifier
                             .weight(0.5f)
                     ) {
-                        ProductsItem(product = product)
+                        ProductsItem(product = product, onClick = {
+                        })
                     }
                 }
             }

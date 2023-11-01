@@ -9,5 +9,6 @@ sealed class Screen(val id: Int, val route: String) {
     object Cart : Screen(id = 6, route = "cart_screen")
     object Settings : Screen(id = 7, route = "settings_screen")
     object SignOut : Screen(id = 8, route = "sign_out")
+    object Product : Screen(id = 8, route = "product_screen")
 
 }

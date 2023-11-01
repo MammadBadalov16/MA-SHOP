@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import az.mb.shop.R
 import az.mb.shop.domain.model.Product
+import az.mb.shop.presentation.components.MyProgressBar
 import az.mb.shop.presentation.ui.theme.de
 import az.mb.shop.presentation.ui.theme.f3
 import coil.compose.AsyncImage
@@ -47,13 +48,13 @@ import com.gowtham.ratingbar.RatingBarStyle
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun ProductsItem(product: Product) {
+fun ProductsItem(product: Product, onClick: (id: Int) -> Unit) {
 
     var rating: Float by remember { mutableFloatStateOf(product.rating.toFloat() / 10) }
 
     Box(
         modifier = Modifier
-            .clickable { }
+            .clickable { onClick(product.id) }
             .padding(10.dp)
     ) {
         Column() {
@@ -71,7 +72,7 @@ fun ProductsItem(product: Product) {
                     SubcomposeAsyncImage(
                         model = product.images[0],
                         contentDescription = null,
-                        loading = { CircularProgressIndicator() }
+                        loading = { MyProgressBar() }
                     )
 
                 }

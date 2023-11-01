@@ -41,8 +41,10 @@ class HomeViewModel @Inject constructor(
 
 
     init {
-        getCategories()
-        getProducts()
+        //  getCategories()
+        //getProducts()
+        getProductById(80)
+
     }
 
     fun getProductsOfCategory(category: String) {
@@ -95,7 +97,7 @@ class HomeViewModel @Inject constructor(
                 is Resource.Error -> _stateProduct.value =
                     ProductState(error = it.message ?: Constants.unknownError)
 
-                is Resource.Loading -> _stateProduct.value = ProductState(boolean = true)
+                is Resource.Loading -> _stateProduct.value = ProductState(isLoading = true)
                 is Resource.Success -> _stateProduct.value = ProductState(product = it.data)
             }
         }.launchIn(viewModelScope)

@@ -44,7 +44,7 @@ fun MainScreen() {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current.applicationContext
     var clickSignOut by rememberSaveable { mutableStateOf(false) }
-    val selectedItemId = remember { mutableIntStateOf(1) }
+    val selectedItemId = remember { mutableIntStateOf(3) }
 
     ModalNavigationDrawer(
         drawerContent = {
@@ -71,7 +71,6 @@ fun MainScreen() {
     ) {
         Scaffold(
             topBar = {
-                TopBar(drawerState)
             },
             bottomBar = {
                 BottomNavigationBar(
@@ -83,7 +82,7 @@ fun MainScreen() {
         )
         {
             it.toString()
-            MyNavGraph(navController = navController)
+            MyNavGraph(navController = navController,drawerState = drawerState)
         }
     }
 

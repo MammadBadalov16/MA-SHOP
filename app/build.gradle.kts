@@ -97,6 +97,9 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.4.0")
     //raiting bar
     implementation("com.github.a914-gowtham:compose-ratingbar:1.3.4")
+    //pager
+    implementation ("com.google.accompanist:accompanist-pager:0.12.0")
+
 
 
 

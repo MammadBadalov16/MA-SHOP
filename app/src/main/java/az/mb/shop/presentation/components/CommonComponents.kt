@@ -155,5 +155,4 @@ fun ChangeScreen(questions: String, route: String, navController: NavController,
             Text(text = route, fontSize = 20.sp)
         }
     }
-
 }

@@ -16,6 +16,7 @@ import az.mb.shop.navigation.graphs.Graph
 import az.mb.shop.navigation.graphs.RootNavGraph
 import az.mb.shop.presentation.home.HomeScreen
 import az.mb.shop.presentation.home.components.CategoryItem
+import az.mb.shop.presentation.product.ProductScreen
 import az.mb.shop.presentation.ui.theme.ShopTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -34,14 +35,15 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val sharedPreferences = PreferencesManager(applicationContext)
+                    /*val sharedPreferences = PreferencesManager(applicationContext)
                     val token = sharedPreferences.getData(Constants.TOKEN, "")
                     navHostController = rememberNavController()
 
                     if (token == "fakeToken")
                         RootNavGraph(navController = navHostController, startGraph = Graph.NAV)
-                    else RootNavGraph(navController = navHostController)
+                    else RootNavGraph(navController = navHostController)*/
                  //   HomeScreen()
+                    ProductScreen()
 
 
                 }

@@ -26,18 +26,11 @@ fun BottomNavigationBar(
     selectedItemId: State<Int> = mutableIntStateOf(3)
 ) {
 
-    selectedItemId.value == 3
-
     var bnSelectedItemIndex by rememberSaveable { mutableIntStateOf(0) }
-    //val m1 = bottomNavigationScreens.find { it==}
-   // Log.e("m1",m1.toString())
-    var selectBottomNavItem =
-        bottomNavigationScreens.indexOf(bottomNavigationScreens.find { it.id == selectedItemId.value })
+    val selectBottomNavItem =
+        bottomNavigationScreens.indexOf(
+            bottomNavigationScreens.find { it.id == selectedItemId.value })
     bnSelectedItemIndex = selectBottomNavItem
-
-    Log.e("selectBottomNavItem",selectBottomNavItem.toString())
-
-
 
 
     NavigationBar(

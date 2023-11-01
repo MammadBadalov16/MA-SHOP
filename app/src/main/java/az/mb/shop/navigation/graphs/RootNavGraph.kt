@@ -15,6 +15,7 @@ fun RootNavGraph(navController: NavHostController, startGraph: String = Graph.AU
         startDestination = startGraph
     ) {
         authGraph(navController = navController)
+        detailsGraph(navController = navController)
         composable(route = Graph.NAV) {
             MainScreen()
         }
