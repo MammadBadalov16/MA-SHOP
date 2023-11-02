@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.kapt3.base.Kapt
 import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
 
 plugins {
@@ -85,10 +86,12 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     //interceptor
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.1")
-    // Compose Nav Destinations
-
+    //Room
+    implementation("androidx.room:room-ktx:2.6.0")
+    kapt("androidx.room:room-compiler:2.6.0")
+    implementation("androidx.room:room-paging:2.6.0")
+    // Compose Nav
     implementation("androidx.navigation:navigation-compose:2.7.4")
-
     //SharedPrereferences
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     //constraint layout
@@ -98,13 +101,7 @@ dependencies {
     //raiting bar
     implementation("com.github.a914-gowtham:compose-ratingbar:1.3.4")
     //pager
-    implementation ("com.google.accompanist:accompanist-pager:0.12.0")
-
-
-
-
-
-
+    implementation("com.google.accompanist:accompanist-pager:0.12.0")
 
 
 }

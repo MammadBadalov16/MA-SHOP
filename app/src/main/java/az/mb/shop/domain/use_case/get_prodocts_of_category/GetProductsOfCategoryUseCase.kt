@@ -3,7 +3,6 @@ package az.mb.shop.domain.use_case.get_prodocts_of_category
 import android.util.Log
 import az.mb.shop.common.Resource
 import az.mb.shop.data.mapper.toProduct
-import az.mb.shop.data.mapper.toProducts
 import az.mb.shop.domain.model.Product
 import az.mb.shop.domain.repository.RemoteRepository
 import kotlinx.coroutines.flow.Flow

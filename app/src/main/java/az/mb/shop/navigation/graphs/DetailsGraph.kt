@@ -21,9 +21,9 @@ fun NavGraphBuilder.detailsGraph(
         startDestination = Screen.Product.route
     ) {
         composable(
-            route = Screen.Profile.route
+            route = Screen.Product.route
         ) {
-            ProductScreen()
+           // ProductScreen(navController)
         }
     }
 }

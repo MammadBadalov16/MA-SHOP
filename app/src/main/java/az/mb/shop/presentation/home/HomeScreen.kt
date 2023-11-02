@@ -42,11 +42,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import az.mb.shop.domain.model.Category
 import az.mb.shop.domain.model.Product
+import az.mb.shop.navigation.Screen
 import az.mb.shop.navigation.graphs.Graph
 import az.mb.shop.navigation.graphs.RootNavGraph
+import az.mb.shop.presentation.components.ErrorScreen
 import az.mb.shop.presentation.home.components.CategoryItem
 
 import az.mb.shop.presentation.home.components.ProductsItem
@@ -57,7 +60,8 @@ import az.mb.shop.presentation.ui.theme.f3
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
-    drawerState: DrawerState
+    drawerState: DrawerState,
+    navController: NavController
 ) {
     val categoriesState = viewModel.stateCategories.value
     val productsState = viewModel.stateProducts.value
@@ -78,47 +82,40 @@ fun HomeScreen(
         contentAlignment = Alignment.Center,
     ) {
 
-        if (categoriesState.loading)
-            CircularProgressIndicator()
+        Column(
+            modifier = Modifier
+                .padding(20.dp)
+                .fillMaxSize(),
+        ) {
+            TopBar(drawerState = drawerState)
 
-        if (category.isNotEmpty())
-            Column(
-                modifier = Modifier
-                    .padding(20.dp)
-                    .fillMaxSize(),
-            ) {
+            Spacer(modifier = Modifier.height(50.dp))
 
-                TopBar(drawerState = drawerState)
+            if (category.isNotEmpty())
+                CategorySection(viewModel = viewModel, category = category)
 
-                Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(30.dp))
 
-                CategorySection(
-                    viewModel = viewModel,
-                    category = category,
+            if (productsState.isLoading)
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .wrapContentSize(Alignment.Center)
                 )
 
-                Spacer(modifier = Modifier.height(30.dp))
-
-                if (productsState.isLoading)
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .wrapContentSize(Alignment.Center)
-                    )
-
-                if (products.isNotEmpty())
-                    ProductSection(products = products)
-            }
+            if (products.isNotEmpty())
+                ProductSection(products = products, navController = navController)
+        }
     }
 
 
     if (categoriesState.error.isNotBlank()) {
-        errorScreen(error = categoriesState.error) {
+        ErrorScreen(error = categoriesState.error) {
             onClickTryAgain = true
         }
     }
     if (productsState.error.isNotBlank()) {
-        errorScreen(error = productsState.error) {
+        ErrorScreen(error = productsState.error) {
             onClickTryAgain = true
         }
     }
@@ -168,7 +165,7 @@ fun CategorySection(
 }
 
 @Composable
-fun ProductSection(products: List<Product>) {
+fun ProductSection(products: List<Product>, navController: NavController) {
 
     LazyColumn() {
         items(products.windowed(2, 2, true)) {
@@ -181,6 +178,8 @@ fun ProductSection(products: List<Product>) {
                             .weight(0.5f)
                     ) {
                         ProductsItem(product = product, onClick = {
+                            Log.e("ProductId", it.toString())
+                            navigateToProductById(productId = it, navController = navController)
                         })
                     }
                 }
@@ -190,7 +189,6 @@ fun ProductSection(products: List<Product>) {
 
 }
 
-
 fun productsByCategories(viewModel: HomeViewModel, category: String) {
     if (category == "All")
         viewModel.getProducts()
@@ -198,35 +196,10 @@ fun productsByCategories(viewModel: HomeViewModel, category: String) {
         viewModel.getProductsOfCategory(category = category)
 }
 
-@Composable
-fun errorScreen(error: String, onClick: () -> Unit) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.White),
-        contentAlignment = Alignment.Center,
-    ) {
-        Column(
-            modifier = Modifier
-                .background(color = f3, shape = RoundedCornerShape(15.dp))
-                .clip(RoundedCornerShape(15.dp))
-                .padding(15.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = "Error",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Red
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            Text(text = error)
-            Spacer(modifier = Modifier.height(15.dp))
-            Button(onClick = { onClick() }) {
-                Text(text = "Try Again")
-            }
-        }
-    }
+fun navigateToProductById(navController: NavController, productId: Int) {
+
+    navController.navigate(Screen.Product.route + "/${productId}")
+
 }
 
 

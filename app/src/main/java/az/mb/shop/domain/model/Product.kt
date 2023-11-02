@@ -1,15 +1,15 @@
 package az.mb.shop.domain.model
 
 data class Product(
-    val brand: String,
-    val category: String,
-    val description: String,
-    val discountPercentage: Double,
-    val id: Int,
-    val images: List<String>,
-    val price: Int,
-    val rating: Double,
-    val stock: Int,
-    val thumbnail: String,
-    val title: String
+    val brand: String? = null,
+    val category: String? = null,
+    val description: String? = null,
+    val discountPercentage: Double? = null,
+    val id: Int? = null,
+    val images: List<String>? = null,
+    val price: Int? = null,
+    val rating: Double? = null,
+    val stock: Int? = null,
+    val thumbnail: String? = null,
+    val title: String? = null
 )

@@ -5,6 +5,7 @@ import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
@@ -16,6 +17,7 @@ import az.mb.shop.navigation.graphs.Graph
 import az.mb.shop.navigation.graphs.RootNavGraph
 import az.mb.shop.presentation.home.HomeScreen
 import az.mb.shop.presentation.home.components.CategoryItem
+import az.mb.shop.presentation.main.MainScreen
 import az.mb.shop.presentation.product.ProductScreen
 import az.mb.shop.presentation.ui.theme.ShopTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,6 +26,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private lateinit var navHostController: NavHostController
+
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -42,8 +46,10 @@ class MainActivity : ComponentActivity() {
                     if (token == "fakeToken")
                         RootNavGraph(navController = navHostController, startGraph = Graph.NAV)
                     else RootNavGraph(navController = navHostController)*/
-                 //   HomeScreen()
-                    ProductScreen()
+                    //  HomeScreen(drawerState = drawer)
+                    navHostController = rememberNavController()
+                    RootNavGraph(navController = navHostController, startGraph = Graph.NAV)
+                    // ProductScreen()
 
 
                 }

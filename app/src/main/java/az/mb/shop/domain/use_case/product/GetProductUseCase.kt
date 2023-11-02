@@ -1,4 +1,4 @@
-package az.mb.shop.domain.use_case.get_product
+package az.mb.shop.domain.use_case.product
 
 import az.mb.shop.common.Resource
 import az.mb.shop.data.mapper.toProduct

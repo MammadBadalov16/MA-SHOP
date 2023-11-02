@@ -9,8 +9,8 @@ import az.mb.shop.common.Resource
 import az.mb.shop.domain.model.Category
 import az.mb.shop.domain.use_case.get_category.GetCategoryUseCase
 import az.mb.shop.domain.use_case.get_prodocts_of_category.GetProductsOfCategoryUseCase
-import az.mb.shop.domain.use_case.get_product.GetProductUseCase
-import az.mb.shop.domain.use_case.get_products.GetProductsUseCase
+import az.mb.shop.domain.use_case.product.GetProductUseCase
+import az.mb.shop.domain.use_case.product.GetProductsUseCase
 import az.mb.shop.presentation.home.state.CategoryState
 import az.mb.shop.presentation.home.state.ProductState
 import az.mb.shop.presentation.home.state.ProductsState
@@ -41,9 +41,9 @@ class HomeViewModel @Inject constructor(
 
 
     init {
-        //  getCategories()
-        //getProducts()
-        getProductById(80)
+          getCategories()
+        getProducts()
+        //getProductById(80)
 
     }
 

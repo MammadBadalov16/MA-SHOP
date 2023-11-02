@@ -13,6 +13,7 @@ import az.mb.shop.navigation.Screen
 import az.mb.shop.presentation.cart.CartScreen
 import az.mb.shop.presentation.favorites.FavoritesScreen
 import az.mb.shop.presentation.home.HomeScreen
+import az.mb.shop.presentation.product.ProductScreen
 import az.mb.shop.presentation.profile.ProfileScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -27,7 +28,13 @@ fun MyNavGraph(
         startDestination = startDestination
     ) {
         composable(route = Screen.Home.route) {
-            HomeScreen(drawerState = drawerState)
+            HomeScreen(drawerState = drawerState, navController = navController)
+        }
+        composable(
+            route = Screen.Product.route + "/{productId}"
+
+        ) {
+            ProductScreen(navController = navController)
         }
         composable(route = Screen.Favorites.route) {
             FavoritesScreen()

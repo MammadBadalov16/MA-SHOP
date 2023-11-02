@@ -1,5 +1,6 @@
 package az.mb.shop.data.mapper
 
+import az.mb.shop.data.local.entity.ProductEntity
 import az.mb.shop.data.remote.dto.CategoryDTO
 import az.mb.shop.data.remote.dto.product.ProductDTO
 import az.mb.shop.data.remote.dto.product.ProductsDTO
@@ -23,7 +24,7 @@ fun ProductDTO.toProduct(): Product {
     )
 }
 
-fun ProductsDTO.toProducts(): List<Product> {
+fun ProductsDTO.toProduct(): List<Product> {
     val list: List<Product> = emptyList()
     products.forEach {
         list.contains(
@@ -36,6 +37,11 @@ fun ProductsDTO.toProducts(): List<Product> {
 fun CategoryDTO.toCategory() = map {
     Category(category = it)
 }
+
+fun ProductEntity.toProduct(): Product {
+    return Product(id = productId)
+}
+
 
 
 

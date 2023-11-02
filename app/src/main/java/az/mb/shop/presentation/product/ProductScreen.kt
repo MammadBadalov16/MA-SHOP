@@ -3,7 +3,6 @@ package az.mb.shop.presentation.product
 import android.util.Log
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -24,9 +23,6 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
-import com.google.accompanist.pager.rememberPagerState
-import com.google.accompanist.pager.PagerState
-
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -36,7 +32,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -44,21 +39,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import az.mb.shop.R
 import az.mb.shop.domain.model.Product
+import az.mb.shop.presentation.components.ErrorScreen
 import az.mb.shop.presentation.components.MyProgressBar
-import az.mb.shop.presentation.home.HomeViewModel
-import az.mb.shop.presentation.home.errorScreen
 import az.mb.shop.presentation.ui.theme.f3
 import coil.compose.SubcomposeAsyncImage
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.PagerState
+import com.google.accompanist.pager.rememberPagerState
 import com.gowtham.ratingbar.RatingBar
 import com.gowtham.ratingbar.RatingBarStyle
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun ProductScreen(viewModel: HomeViewModel = hiltViewModel()) {
+fun ProductScreen(viewModel: ProductViewModel = hiltViewModel(), navController: NavController) {
 
     val state = viewModel.stateProduct.value
     val product = state.product
@@ -83,7 +80,7 @@ fun ProductScreen(viewModel: HomeViewModel = hiltViewModel()) {
 
                 Column {
 
-                    BackButton(onClick = {})
+                    BackButton(onClick = { navController.navigateUp() })
 
                     Spacer(modifier = Modifier.height(10.dp))
 
@@ -103,7 +100,7 @@ fun ProductScreen(viewModel: HomeViewModel = hiltViewModel()) {
 
         if (state.error.isNotBlank()) {
 
-            errorScreen(error = state.error, onClick = {})
+            ErrorScreen(error = state.error, onClick = {})
 
         }
     }
@@ -181,7 +178,7 @@ fun SectionInfo(product: Product) {
                 modifier = Modifier
                     .padding(5.dp)
                     .size(25.dp)
-                    .clickable {  }
+                    .clickable { }
 
             )
         }
