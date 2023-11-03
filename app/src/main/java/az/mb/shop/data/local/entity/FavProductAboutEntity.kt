@@ -1,12 +1,16 @@
-package az.mb.shop.domain.model
+package az.mb.shop.data.local.entity
 
-data class Product(
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity
+data class FavProductAboutEntity(
+    @PrimaryKey(autoGenerate = false)
+    val id: Int,
     val brand: String,
     val category: String,
     val description: String,
     val discountPercentage: Double,
-    val id: Int,
-    val images: List<String>,
     val price: Int,
     val rating: Double,
     val stock: Int,

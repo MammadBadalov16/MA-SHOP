@@ -48,13 +48,17 @@ import com.gowtham.ratingbar.RatingBarStyle
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun ProductsItem(product: Product, onClick: (id: Int) -> Unit) {
+fun ProductsItem(
+    product: Product,
+    onClick: (id: Int) -> Unit,
+    onClickFavorite: (product: Product) -> Unit
+) {
 
-    var rating: Float by remember { mutableFloatStateOf(product.rating.toFloat() / 10) }
+    var rating: Float by remember { mutableFloatStateOf(product.rating!!.toFloat() / 10) }
 
     Box(
         modifier = Modifier
-            .clickable { onClick(product.id) }
+            .clickable { onClick(product.id!!) }
             .padding(10.dp)
     ) {
         Column() {
@@ -70,7 +74,7 @@ fun ProductsItem(product: Product, onClick: (id: Int) -> Unit) {
 
                     ) {
                     SubcomposeAsyncImage(
-                        model = product.images[0],
+                        model = product.images!![0],
                         contentDescription = null,
                         loading = { MyProgressBar() }
                     )
@@ -88,7 +92,7 @@ fun ProductsItem(product: Product, onClick: (id: Int) -> Unit) {
                         top.linkTo(parent.top)
                         end.linkTo(parent.absoluteRight)
                     }
-                    .clickable { }) {
+                    .clickable { onClickFavorite(product) }) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_favorite),
                         contentDescription = null,
@@ -102,7 +106,7 @@ fun ProductsItem(product: Product, onClick: (id: Int) -> Unit) {
                 Spacer(modifier = Modifier.height(5.dp))
 
                 Text(
-                    text = product.title,
+                    text = product.title ?: "Empty",
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     fontSize = 15.sp,

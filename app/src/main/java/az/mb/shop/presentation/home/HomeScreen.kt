@@ -12,49 +12,33 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.foundation.lazy.staggeredgrid.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import az.mb.shop.domain.model.Category
 import az.mb.shop.domain.model.Product
 import az.mb.shop.navigation.Screen
-import az.mb.shop.navigation.graphs.Graph
-import az.mb.shop.navigation.graphs.RootNavGraph
 import az.mb.shop.presentation.components.ErrorScreen
 import az.mb.shop.presentation.home.components.CategoryItem
-
 import az.mb.shop.presentation.home.components.ProductsItem
 import az.mb.shop.presentation.main.components.TopBar
-import az.mb.shop.presentation.ui.theme.f3
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -104,7 +88,11 @@ fun HomeScreen(
                 )
 
             if (products.isNotEmpty())
-                ProductSection(products = products, navController = navController)
+                ProductSection(
+                    products = products,
+                    navController = navController,
+                    viewModel = viewModel
+                )
         }
     }
 
@@ -165,7 +153,11 @@ fun CategorySection(
 }
 
 @Composable
-fun ProductSection(products: List<Product>, navController: NavController) {
+fun ProductSection(
+    products: List<Product>,
+    navController: NavController,
+    viewModel: HomeViewModel
+) {
 
     LazyColumn() {
         items(products.windowed(2, 2, true)) {
@@ -178,9 +170,11 @@ fun ProductSection(products: List<Product>, navController: NavController) {
                             .weight(0.5f)
                     ) {
                         ProductsItem(product = product, onClick = {
-                            Log.e("ProductId", it.toString())
                             navigateToProductById(productId = it, navController = navController)
-                        })
+                        }) {
+                            Log.e("productId", it.toString())
+                            viewModel.onEvent(HomeEvents.FavProduct(it))
+                        }
                     }
                 }
             }

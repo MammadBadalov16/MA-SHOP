@@ -132,7 +132,7 @@ fun ImageSection(pagerState: PagerState, product: Product) {
             ) { pagerCount ->
 
                 SubcomposeAsyncImage(modifier = Modifier.fillMaxSize(),
-                    model = product.images[pagerCount],
+                    model = product.images!![pagerCount],
                     contentDescription = null,
                     contentScale = ContentScale.FillWidth,
                     loading = {
@@ -140,7 +140,7 @@ fun ImageSection(pagerState: PagerState, product: Product) {
                     })
             }
             PageIndicator(
-                pageCount = product.images.size,
+                pageCount = product.images!!.size,
                 currentPage = pagerState.currentPage,
                 modifier = Modifier
                     .padding(0.dp)
@@ -157,7 +157,7 @@ fun ImageSection(pagerState: PagerState, product: Product) {
 @Composable
 fun SectionInfo(product: Product) {
 
-    var rating: Float by remember { mutableFloatStateOf(product.rating.toFloat() / 10) }
+    var rating: Float by remember { mutableFloatStateOf(product.rating!!.toFloat() / 10) }
 
 
     Column {
@@ -167,7 +167,7 @@ fun SectionInfo(product: Product) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = product.title,
+                text = product.title!!,
                 fontSize = 25.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -226,7 +226,7 @@ fun SectionInfo(product: Product) {
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = product.description,
+                text = product.description!!,
                 fontSize = 15.sp,
                 style = LocalTextStyle.current.copy(lineHeight = 18.sp)
             )

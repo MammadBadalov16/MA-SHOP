@@ -1,7 +1,9 @@
 package az.mb.shop.data.repository
 
 import az.mb.shop.data.local.dao.FavoriteProductDao
-import az.mb.shop.data.local.entity.ProductEntity
+import az.mb.shop.data.local.entity.FavProductAboutEntity
+import az.mb.shop.data.local.entity.FavProductEntity
+import az.mb.shop.data.local.entity.FavProductImageEntity
 import az.mb.shop.domain.repository.FavoriteProductRepository
 import kotlinx.coroutines.flow.Flow
 
@@ -9,19 +11,20 @@ class FavoriteProductRepositoryImpl(
     private val dao: FavoriteProductDao
 ) :
     FavoriteProductRepository {
-    override suspend fun getFavoriteProducts(): Flow<List<ProductEntity>> {
+    override fun getFavoriteProducts(): Flow<List<FavProductEntity>> {
         return dao.getFavoriteProducts()
     }
 
-    override suspend fun getFavoriteProductById(favoriteProductId: Int): ProductEntity? {
-        return dao.getFavoriteProductById(favoriteProductId)
+    override suspend fun addFavoriteProduct(product: FavProductAboutEntity) {
+        dao.addFavoriteProduct(product)
     }
 
-    override suspend fun insertFavoriteProduct(productEntity: ProductEntity) {
-        dao.insertFavoriteProduct(productEntity)
+    override suspend fun addFavoriteProductImages(images: List<FavProductImageEntity>) {
+        dao.addFavoriteProductImages(images)
+
     }
 
-    override suspend fun deleteFavoriteProduct(productEntity: ProductEntity) {
-        dao.deleteFavoriteProduct(productEntity )
+    override suspend fun deleteFavoriteProduct(product: FavProductAboutEntity) {
+        dao.deleteFavoriteProduct(product)
     }
 }
