@@ -8,14 +8,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,7 +27,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -39,9 +36,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import az.mb.shop.R
 import az.mb.shop.domain.model.Product
 import az.mb.shop.presentation.components.MyProgressBar
-import az.mb.shop.presentation.ui.theme.de
 import az.mb.shop.presentation.ui.theme.f3
-import coil.compose.AsyncImage
+import az.mb.shop.presentation.ui.theme.f5
 import coil.compose.SubcomposeAsyncImage
 import com.gowtham.ratingbar.RatingBar
 import com.gowtham.ratingbar.RatingBarStyle
@@ -71,7 +67,7 @@ fun ProductsItem(
                 Box(
                     modifier = Modifier
                         .size(150.dp)
-                        .background(f3, shape = RoundedCornerShape(15.dp))
+                        .background(f5, shape = RoundedCornerShape(15.dp))
                         .clip(RoundedCornerShape(15.dp))
                         .constrainAs(image) {},
                     contentAlignment = Alignment.Center,
@@ -145,7 +141,7 @@ fun ProductsItem(
                     Text(
                         text = "${product.stock} stock",
                         modifier = Modifier
-                            .background(color = f3, shape = RoundedCornerShape(8.dp))
+                            .background(color = f5, shape = RoundedCornerShape(8.dp))
                             .padding(top = 5.dp, bottom = 5.dp, start = 8.dp, end = 8.dp),
                         fontSize = 9.sp,
                         fontWeight = FontWeight.Black

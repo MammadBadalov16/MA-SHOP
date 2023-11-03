@@ -45,9 +45,8 @@ import az.mb.shop.R
 import az.mb.shop.domain.model.Product
 import az.mb.shop.presentation.components.ErrorScreen
 import az.mb.shop.presentation.components.MyProgressBar
-import az.mb.shop.presentation.home.state.ProductState
 import az.mb.shop.presentation.product.components.BackButton
-import az.mb.shop.presentation.ui.theme.f3
+import az.mb.shop.presentation.ui.theme.f5
 import coil.compose.SubcomposeAsyncImage
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -135,7 +134,7 @@ fun ImageSection(pagerState: PagerState, product: Product) {
         modifier = Modifier
             .width(400.dp)
             .height(400.dp)
-            .background(f3, shape = RoundedCornerShape(15.dp))
+            .background(f5, shape = RoundedCornerShape(15.dp))
             .clip(RoundedCornerShape(15.dp)),
         contentAlignment = Alignment.Center,
 
@@ -218,7 +217,7 @@ fun SectionInfo(
             Text(
                 text = "${product.stock} stock",
                 modifier = Modifier
-                    .background(color = f3, shape = RoundedCornerShape(8.dp))
+                    .background(color = f5, shape = RoundedCornerShape(8.dp))
                     .padding(top = 3.dp, bottom = 3.dp, start = 8.dp, end = 8.dp),
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Black
@@ -258,6 +257,33 @@ fun SectionInfo(
             )
 
         }
+
+        Spacer(modifier = Modifier.height(15.dp))
+
+        Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = "Quantity",
+                color = Color.Black,
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Medium
+            )
+            Spacer(modifier = Modifier.width(10.dp))
+
+            Row(
+                modifier = Modifier
+                    .background(color = f5, shape = RoundedCornerShape(15.dp))
+                    .padding(top = 8.dp, bottom = 8.dp, start = 8.dp, end = 8.dp)
+                    .clip(RoundedCornerShape(15.dp))
+            ) {
+                Icon(painter = painterResource(id = R.drawable.ic_minus), contentDescription = "")
+                Spacer(modifier = Modifier.width(5.dp))
+                Text(text = "1")
+                Spacer(modifier = Modifier.width(5.dp))
+                Icon(painter = painterResource(id = R.drawable.ic_add), contentDescription = "")
+            }
+        }
+
+
     }
 }
 

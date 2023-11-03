@@ -18,6 +18,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import az.mb.shop.navigation.navigation_items.bottomNavigationScreens
 import az.mb.shop.presentation.ui.theme.darkGrey
 import az.mb.shop.presentation.ui.theme.f3
+import az.mb.shop.presentation.ui.theme.f5
 
 @Composable
 fun BottomNavigationBar(
@@ -43,7 +44,7 @@ fun BottomNavigationBar(
                     selectedIconColor = Color.Black,
                     unselectedIconColor = darkGrey,
                     selectedTextColor = Color.Black,
-                    indicatorColor = f3
+                    indicatorColor = f5
                 ),
                 selected = index == bnSelectedItemIndex,
                 onClick = {
