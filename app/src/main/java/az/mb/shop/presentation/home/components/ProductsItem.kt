@@ -20,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -50,11 +51,14 @@ import com.gowtham.ratingbar.RatingBarStyle
 @Composable
 fun ProductsItem(
     product: Product,
+    isFav: Boolean,
     onClick: (id: Int) -> Unit,
-    onClickFavorite: (product: Product) -> Unit
+    onClickAddFavorite: (product: Product) -> Unit,
+    onClickRemoveFavorite: (product: Product) -> Unit
 ) {
 
     var rating: Float by remember { mutableFloatStateOf(product.rating!!.toFloat() / 10) }
+    var favoriteRemember by remember { mutableStateOf(isFav) }
 
     Box(
         modifier = Modifier
@@ -81,8 +85,6 @@ fun ProductsItem(
 
                 }
 
-
-
                 Box(modifier = Modifier
                     .padding(top = 10.dp, end = 10.dp)
                     .size(30.dp)
@@ -92,9 +94,18 @@ fun ProductsItem(
                         top.linkTo(parent.top)
                         end.linkTo(parent.absoluteRight)
                     }
-                    .clickable { onClickFavorite(product) }) {
+                    .clickable {
+                        if (favoriteRemember)
+                            onClickRemoveFavorite(product)
+                        else
+                            onClickAddFavorite(product)
+                        favoriteRemember = !favoriteRemember
+                    }) {
                     Image(
-                        painter = painterResource(id = R.drawable.ic_favorite),
+                        painter = painterResource(
+                            id = if (favoriteRemember) R.drawable.ic_favorites_full
+                            else R.drawable.ic_favorite
+                        ),
                         contentDescription = null,
                         modifier = Modifier
                             .padding(5.dp)

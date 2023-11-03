@@ -8,8 +8,10 @@ import kotlinx.coroutines.flow.Flow
 interface FavoriteProductRepository {
 
     fun getFavoriteProducts(): Flow<List<FavProductEntity>>
+    fun getFavoriteProductById(id: Int): Flow<FavProductEntity>
     suspend fun addFavoriteProduct(product: FavProductAboutEntity)
     suspend fun addFavoriteProductImages(images: List<FavProductImageEntity>)
     suspend fun deleteFavoriteProduct(product: FavProductAboutEntity)
+    suspend fun deleteFavoriteProductImages(id: Int)
 
 }

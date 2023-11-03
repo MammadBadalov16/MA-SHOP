@@ -7,19 +7,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import az.mb.shop.common.Constants
 import az.mb.shop.common.Resource
-import az.mb.shop.data.local.entity.FavProductAboutEntity
-import az.mb.shop.data.local.entity.FavProductEntity
-import az.mb.shop.data.local.entity.FavProductImageEntity
+import az.mb.shop.data.mapper.toFavProductAboutEntity
+import az.mb.shop.data.mapper.toListFavProductImageEntity
+import az.mb.shop.data.mapper.toProduct
 import az.mb.shop.domain.model.Category
 import az.mb.shop.domain.use_case.get_category.GetCategoryUseCase
 import az.mb.shop.domain.use_case.get_prodocts_of_category.GetProductsOfCategoryUseCase
-import az.mb.shop.domain.use_case.product.GetProductUseCase
 import az.mb.shop.domain.use_case.product.GetProductsUseCase
 import az.mb.shop.domain.use_case.product.ProductUseCase
 import az.mb.shop.presentation.home.state.CategoryState
 import az.mb.shop.presentation.home.state.ProductState
 import az.mb.shop.presentation.home.state.ProductsState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -45,41 +45,34 @@ class HomeViewModel @Inject constructor(
     private val _stateProductsOfCategory = mutableStateOf(ProductsState())
     val stateProductsOfCategory: State<ProductsState> = _stateProductsOfCategory
 
+    private val _stateFavProducts = mutableStateOf(ProductsState())
+    val stateFavProducts: State<ProductsState> = _stateFavProducts
+
+    private val _stateMessage = mutableStateOf("")
+    val stateMessage: State<String> = _stateMessage
+
 
     init {
         getCategories()
         getProducts()
-        //getProductById(80)
+        getFavoriteProducts()
 
     }
 
 
     fun onEvent(event: HomeEvents) {
         when (event) {
-            is HomeEvents.FavProduct -> {
+            is HomeEvents.AddFavProduct -> {
                 viewModelScope.launch {
-                    Log.e("event", event.toString())
-                    //productUseCase.addFavProduct.invoke(event)
-                    val product = event.data
-                    productUseCase.addFavoriteProduct.invoke(
-                        FavProductAboutEntity(
-                            id = product.id,
-                            brand = product.brand,
-                            category = product.category,
-                            discountPercentage = product.discountPercentage,
-                            price = product.price,
-                            rating = product.rating,
-                            stock = product.stock,
-                            thumbnail = product.thumbnail,
-                            title = product.title,
-                            description = product.description
-                        )
-                    )
-                    val list: MutableList<FavProductImageEntity> = mutableListOf()
-                    product.images.forEach {
-                        list.add(FavProductImageEntity(productId = product.id, url = it))
-                    }
-                    productUseCase.addFavProductImages(list)
+                    productUseCase.addFavoriteProduct(event.data.toFavProductAboutEntity())
+                    productUseCase.addFavProductImages(event.data.toListFavProductImageEntity())
+                }
+            }
+
+            is HomeEvents.RemoveFavProduct -> {
+                viewModelScope.launch {
+                    productUseCase.deleteFavoriteProduct(event.data.toFavProductAboutEntity())
+                    productUseCase.deleteFavoriteProductImages(event.data.id)
                 }
             }
         }
@@ -126,6 +119,7 @@ class HomeViewModel @Inject constructor(
                         CategoryState(categories = data ?: mutableListOf())
 
                 }
+
             }
         }.launchIn(viewModelScope)
     }
@@ -152,4 +146,20 @@ class HomeViewModel @Inject constructor(
             }
         }.launchIn(viewModelScope)
     }
+
+    private fun getFavoriteProducts() {
+        productUseCase.getFavoriteProducts.invoke().onEach {
+            try {
+                _stateFavProducts.value = ProductsState(isLoading = true)
+                val products = it.map { favProduct -> favProduct.toProduct() }
+                _stateFavProducts.value = ProductsState(products = products)
+                Log.e("products", products.toString())
+
+            } catch (exception: Exception) {
+                _stateFavProducts.value = ProductsState(error = exception.message.toString())
+            }
+        }.launchIn(viewModelScope)
+
+    }
 }
+

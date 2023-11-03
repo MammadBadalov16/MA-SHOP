@@ -49,8 +49,10 @@ fun HomeScreen(
 ) {
     val categoriesState = viewModel.stateCategories.value
     val productsState = viewModel.stateProducts.value
+    val favProductsState = viewModel.stateFavProducts.value
     val category = categoriesState.categories
     val products = productsState.products
+    val favProducts = favProductsState.products
     var onClickTryAgain by remember { mutableStateOf(false) }
 
 
@@ -89,13 +91,13 @@ fun HomeScreen(
 
             if (products.isNotEmpty())
                 ProductSection(
+                    favProducts = favProducts,
                     products = products,
                     navController = navController,
                     viewModel = viewModel
                 )
         }
     }
-
 
     if (categoriesState.error.isNotBlank()) {
         ErrorScreen(error = categoriesState.error) {
@@ -154,6 +156,7 @@ fun CategorySection(
 
 @Composable
 fun ProductSection(
+    favProducts: List<Product>,
     products: List<Product>,
     navController: NavController,
     viewModel: HomeViewModel
@@ -169,12 +172,20 @@ fun ProductSection(
                         modifier = Modifier
                             .weight(0.5f)
                     ) {
-                        ProductsItem(product = product, onClick = {
-                            navigateToProductById(productId = it, navController = navController)
-                        }) {
-                            Log.e("productId", it.toString())
-                            viewModel.onEvent(HomeEvents.FavProduct(it))
-                        }
+                        ProductsItem(product = product,
+                            isFav = favProducts.contains(product),
+                            onClick = {
+                                navigateToProductById(
+                                    productId = it,
+                                    navController = navController
+                                )
+                            }, onClickAddFavorite = {
+                                viewModel.onEvent(HomeEvents.AddFavProduct(it))
+
+                            }, onClickRemoveFavorite = {
+
+                                viewModel.onEvent(HomeEvents.RemoveFavProduct(it))
+                            })
                     }
                 }
             }

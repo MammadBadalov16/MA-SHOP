@@ -15,6 +15,10 @@ class FavoriteProductRepositoryImpl(
         return dao.getFavoriteProducts()
     }
 
+    override fun getFavoriteProductById(id: Int): Flow<FavProductEntity> {
+        return dao.getFavoriteProductById(id = id)
+    }
+
     override suspend fun addFavoriteProduct(product: FavProductAboutEntity) {
         dao.addFavoriteProduct(product)
     }
@@ -26,5 +30,9 @@ class FavoriteProductRepositoryImpl(
 
     override suspend fun deleteFavoriteProduct(product: FavProductAboutEntity) {
         dao.deleteFavoriteProduct(product)
+    }
+
+    override suspend fun deleteFavoriteProductImages(id: Int) {
+        dao.deleteFavoriteProductImages(id)
     }
 }

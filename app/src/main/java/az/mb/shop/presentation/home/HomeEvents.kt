@@ -4,5 +4,6 @@ import az.mb.shop.domain.model.Product
 
 
 sealed class HomeEvents {
-    data class FavProduct(val data: Product) : HomeEvents()
+    data class AddFavProduct(val data: Product) : HomeEvents()
+    data class RemoveFavProduct(val data: Product) : HomeEvents()
 }

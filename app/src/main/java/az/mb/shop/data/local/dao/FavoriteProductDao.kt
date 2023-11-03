@@ -19,6 +19,10 @@ interface FavoriteProductDao {
     @Query("SELECT  * FROM  FAVPRODUCTABOUTENTITY INNER JOIN FAVPRODUCTIMAGEENTITY ON productId= FAVPRODUCTABOUTENTITY.id GROUP BY FAVPRODUCTABOUTENTITY.id")
     fun getFavoriteProducts(): Flow<List<FavProductEntity>>
 
+    @Transaction
+    @Query("SELECT  * FROM  FAVPRODUCTABOUTENTITY INNER JOIN FAVPRODUCTIMAGEENTITY ON productId= FAVPRODUCTABOUTENTITY.id WHERE FAVPRODUCTABOUTENTITY.ID = :id GROUP BY FAVPRODUCTABOUTENTITY.id")
+    fun getFavoriteProductById(id: Int): Flow<FavProductEntity>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addFavoriteProduct(product: FavProductAboutEntity)
 
@@ -27,5 +31,8 @@ interface FavoriteProductDao {
 
     @Delete
     suspend fun deleteFavoriteProduct(product: FavProductAboutEntity)
+
+    @Query("DELETE FROM FavProductImageEntity WHERE productId =:id")
+    suspend fun deleteFavoriteProductImages(id: Int)
 
 }

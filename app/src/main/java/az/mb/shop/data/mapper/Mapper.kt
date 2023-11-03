@@ -1,5 +1,8 @@
 package az.mb.shop.data.mapper
 
+import az.mb.shop.data.local.entity.FavProductAboutEntity
+import az.mb.shop.data.local.entity.FavProductEntity
+import az.mb.shop.data.local.entity.FavProductImageEntity
 import az.mb.shop.data.remote.dto.CategoryDTO
 import az.mb.shop.data.remote.dto.product.ProductDTO
 import az.mb.shop.data.remote.dto.product.ProductsDTO
@@ -36,6 +39,54 @@ fun ProductsDTO.toProduct(): List<Product> {
 fun CategoryDTO.toCategory() = map {
     Category(category = it)
 }
+
+fun FavProductEntity.toProduct(): Product {
+    val mutableList: MutableList<String> = mutableListOf()
+    images.forEach {
+        mutableList.add(it.url)
+    }
+
+    return Product(
+        id = favProductAboutEntity.id,
+        brand = favProductAboutEntity.brand,
+        category = favProductAboutEntity.category,
+        discountPercentage = favProductAboutEntity.discountPercentage,
+        price = favProductAboutEntity.price,
+        rating = favProductAboutEntity.rating,
+        stock = favProductAboutEntity.stock,
+        thumbnail = favProductAboutEntity.thumbnail,
+        title = favProductAboutEntity.title,
+        description = favProductAboutEntity.description,
+        images = mutableList
+    )
+}
+
+fun Product.toFavProductAboutEntity(): FavProductAboutEntity {
+    return FavProductAboutEntity(
+        id = id,
+        brand = brand,
+        category = category,
+        discountPercentage = discountPercentage,
+        price = price,
+        rating = rating,
+        stock = stock,
+        thumbnail = thumbnail,
+        title = title,
+        description = description
+    )
+}
+
+fun Product.toListFavProductImageEntity(): List<FavProductImageEntity> {
+
+    val list: MutableList<FavProductImageEntity> = mutableListOf()
+    images.forEach {
+        list.add(FavProductImageEntity(productId = id, url = it))
+    }
+
+    return list
+}
+
+
 /*
 fun ProductEntity.toProduct(): Product {
     return Product(

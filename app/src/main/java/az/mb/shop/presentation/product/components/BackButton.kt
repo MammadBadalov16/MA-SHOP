@@ -1,4 +1,4 @@
-package az.mb.shop.presentation.product
+package az.mb.shop.presentation.product.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

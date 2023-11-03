@@ -7,26 +7,57 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import az.mb.shop.common.Constants
 import az.mb.shop.common.Resource
+import az.mb.shop.data.mapper.toFavProductAboutEntity
+import az.mb.shop.data.mapper.toListFavProductImageEntity
+import az.mb.shop.data.mapper.toProduct
 import az.mb.shop.domain.use_case.product.GetProductUseCase
+import az.mb.shop.domain.use_case.product.ProductUseCase
+import az.mb.shop.presentation.home.HomeEvents
 import az.mb.shop.presentation.home.state.ProductState
+import az.mb.shop.presentation.home.state.ProductsState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ProductViewModel @Inject constructor(
     private val getProductUseCase: GetProductUseCase,
+    private val productUseCase: ProductUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val _stateProduct = mutableStateOf(ProductState())
     val stateProduct: State<ProductState> = _stateProduct
 
+    private val _stateFavProducts = mutableStateOf(ProductState())
+    val stateFavProducts: State<ProductState> = _stateFavProducts
+
 
     init {
         savedStateHandle.get<String>("productId")?.let { productId ->
             getProductById(productId.toInt())
+            getFavoriteProductById(productId.toInt())
+        }
+
+    }
+
+    fun onEvent(event: ProductScreenEvents) {
+        when (event) {
+            is ProductScreenEvents.AddFavProduct -> {
+                viewModelScope.launch {
+                    productUseCase.addFavoriteProduct(event.data.toFavProductAboutEntity())
+                    productUseCase.addFavProductImages(event.data.toListFavProductImageEntity())
+                }
+            }
+
+            is ProductScreenEvents.RemoveFavProduct -> {
+                viewModelScope.launch {
+                    productUseCase.deleteFavoriteProduct(event.data.toFavProductAboutEntity())
+                    productUseCase.deleteFavoriteProductImages(event.data.id)
+                }
+            }
         }
     }
 
@@ -43,5 +74,16 @@ class ProductViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
+    private fun getFavoriteProductById(id: Int) {
+        productUseCase.getFavoriteProduct.invoke(id).onEach {
+            try {
+                _stateFavProducts.value = ProductState(isLoading = true)
+                val products = it.toProduct()
+                _stateFavProducts.value = ProductState(product = products)
 
+            } catch (exception: Exception) {
+                _stateFavProducts.value = ProductState(error = exception.message.toString())
+            }
+        }.launchIn(viewModelScope)
+    }
 }

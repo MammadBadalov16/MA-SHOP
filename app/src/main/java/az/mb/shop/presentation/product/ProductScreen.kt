@@ -26,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -44,6 +45,8 @@ import az.mb.shop.R
 import az.mb.shop.domain.model.Product
 import az.mb.shop.presentation.components.ErrorScreen
 import az.mb.shop.presentation.components.MyProgressBar
+import az.mb.shop.presentation.home.state.ProductState
+import az.mb.shop.presentation.product.components.BackButton
 import az.mb.shop.presentation.ui.theme.f3
 import coil.compose.SubcomposeAsyncImage
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -57,11 +60,14 @@ import com.gowtham.ratingbar.RatingBarStyle
 @Composable
 fun ProductScreen(viewModel: ProductViewModel = hiltViewModel(), navController: NavController) {
 
-    val state = viewModel.stateProduct.value
-    val product = state.product
-    val images = state.product?.images
+    val stateProduct = viewModel.stateProduct.value
+    val product = stateProduct.product
+    val images = stateProduct.product?.images
 
-    Log.e("HomeViewModel", viewModel.toString())
+    val stateFavProduct = viewModel.stateFavProducts.value
+    val favProduct = stateFavProduct.product
+
+    Log.e("ProductScreen", stateFavProduct.toString())
 
     val animations = listOf(
         R.raw.intro1, R.raw.intro2, R.raw.intro3
@@ -88,19 +94,33 @@ fun ProductScreen(viewModel: ProductViewModel = hiltViewModel(), navController: 
 
                     Spacer(modifier = Modifier.height(30.dp))
 
-                    SectionInfo(product = product)
+                    SectionInfo(product = product,
+                        isFav = favProduct != null,
+                        onClickAddFavorite = {
+                            viewModel.onEvent(
+                                ProductScreenEvents.AddFavProduct(
+                                    it
+                                )
+                            )
+                        },
+                        onClickRemoveFavorite = {
+                            viewModel.onEvent(
+                                ProductScreenEvents.RemoveFavProduct(
+                                    it
+                                )
+                            )
+                        }
 
-
+                    )
                 }
             }
         }
 
-        if (state.isLoading)
-            CircularProgressIndicator()
+        if (stateProduct.isLoading) CircularProgressIndicator()
 
-        if (state.error.isNotBlank()) {
+        if (stateProduct.error.isNotBlank()) {
 
-            ErrorScreen(error = state.error, onClick = {})
+            ErrorScreen(error = stateProduct.error, onClick = {})
 
         }
     }
@@ -126,10 +146,8 @@ fun ImageSection(pagerState: PagerState, product: Product) {
             val (indicator, horizontalPager) = createRefs()
 
 
-            HorizontalPager(
-                state = pagerState,
-                modifier = Modifier.constrainAs(horizontalPager) {}
-            ) { pagerCount ->
+            HorizontalPager(state = pagerState,
+                modifier = Modifier.constrainAs(horizontalPager) {}) { pagerCount ->
 
                 SubcomposeAsyncImage(modifier = Modifier.fillMaxSize(),
                     model = product.images!![pagerCount],
@@ -155,9 +173,16 @@ fun ImageSection(pagerState: PagerState, product: Product) {
 }
 
 @Composable
-fun SectionInfo(product: Product) {
+fun SectionInfo(
+    product: Product,
+    isFav: Boolean,
+    onClickAddFavorite: (product: Product) -> Unit,
+    onClickRemoveFavorite: (product: Product) -> Unit
+) {
 
     var rating: Float by remember { mutableFloatStateOf(product.rating!!.toFloat() / 10) }
+    var favoriteRemember by remember { mutableStateOf(isFav) }
+
 
 
     Column {
@@ -167,18 +192,22 @@ fun SectionInfo(product: Product) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = product.title!!,
-                fontSize = 25.sp,
-                fontWeight = FontWeight.Bold
+                text = product.title!!, fontSize = 25.sp, fontWeight = FontWeight.Bold
             )
 
-            Icon(
-                painter = painterResource(id = R.drawable.ic_heart),
+            Icon(painter = painterResource(
+                id = if (!favoriteRemember) R.drawable.ic_heart
+                else R.drawable.ic_heart_full
+            ),
                 contentDescription = null,
                 modifier = Modifier
                     .padding(5.dp)
                     .size(25.dp)
-                    .clickable { }
+                    .clickable {
+                        if (favoriteRemember) onClickRemoveFavorite(product)
+                        else onClickAddFavorite(product)
+                        favoriteRemember = !favoriteRemember
+                    }
 
             )
         }
@@ -198,17 +227,14 @@ fun SectionInfo(product: Product) {
             Spacer(modifier = Modifier.width(10.dp))
 
 
-            RatingBar(
-                value = rating,
+            RatingBar(value = rating,
                 style = RatingBarStyle.Default,
                 numOfStars = 1,
                 size = 20.dp,
                 onValueChange = {
                     rating = it
                 },
-                onRatingChanged = {
-                }
-            )
+                onRatingChanged = {})
             Spacer(modifier = Modifier.width(5.dp))
 
             Text(text = "${product.rating} (5.389 reviews)", fontSize = 17.sp)

@@ -10,6 +10,7 @@ import az.mb.shop.data.repository.FavoriteProductRepositoryImpl
 import az.mb.shop.domain.repository.FavoriteProductRepository
 import az.mb.shop.domain.use_case.product.AddFavoriteProductImagesUseCase
 import az.mb.shop.domain.use_case.product.AddFavoriteProductUseCase
+import az.mb.shop.domain.use_case.product.DeleteFavoriteProductImagesUseCase
 import az.mb.shop.domain.use_case.product.DeleteFavoriteProductUseCase
 import az.mb.shop.domain.use_case.product.GetFavoriteProductUseCase
 import az.mb.shop.domain.use_case.product.GetFavoriteProductsUseCase
@@ -49,6 +50,7 @@ object RoomModule {
         return ProductUseCase(
             getFavoriteProduct = GetFavoriteProductUseCase(repository),
             deleteFavoriteProduct = DeleteFavoriteProductUseCase(repository),
+            deleteFavoriteProductImages = DeleteFavoriteProductImagesUseCase(repository),
             addFavoriteProduct = AddFavoriteProductUseCase(repository),
             getFavoriteProducts = GetFavoriteProductsUseCase(repository),
             addFavProductImages = AddFavoriteProductImagesUseCase(repository)
