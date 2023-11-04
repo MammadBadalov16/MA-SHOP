@@ -14,16 +14,17 @@ import az.mb.shop.presentation.signup.SignUpScreen
 
 
 fun NavGraphBuilder.detailsGraph(
-    navController: NavHostController
+    navController: NavHostController,
+    startDestination: String = Screen.Product.route
 ) {
     navigation(
         route = Graph.DETAILS,
-        startDestination = Screen.Product.route
+        startDestination = startDestination
     ) {
         composable(
-            route = Screen.Product.route
+            route = Screen.Product.route + "/{productId}"
         ) {
-           // ProductScreen(navController)
+            ProductScreen(navController = navController)
         }
     }
 }

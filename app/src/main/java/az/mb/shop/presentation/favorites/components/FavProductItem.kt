@@ -1,4 +1,4 @@
-package az.mb.shop.presentation.home.components
+package az.mb.shop.presentation.favorites.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -42,100 +44,78 @@ import coil.compose.SubcomposeAsyncImage
 import com.gowtham.ratingbar.RatingBar
 import com.gowtham.ratingbar.RatingBarStyle
 
-
 @Composable
-fun ProductsItem(
+fun FavProductsItem(
     product: Product,
     isFav: Boolean,
-    onClick: (id: Int) -> Unit,
-    onClickAddFavorite: (product: Product) -> Unit,
-    onClickRemoveFavorite: (product: Product) -> Unit
+    onClick: (id: Int) -> Unit
 ) {
 
-    var rating: Float by remember { mutableFloatStateOf(product.rating.toFloat() / 10) }
-    var favoriteRemember by remember { mutableStateOf(isFav) }
+    var rating: Float by remember { mutableFloatStateOf(product.rating!!.toFloat() / 10) }
 
-    Box(
+
+    Row(
         modifier = Modifier
-            .clickable { onClick(product.id!!) }
-            .padding(10.dp)
+            .fillMaxWidth()
+            .height(150.dp)
+            .padding(top = 25.dp)
+            .clickable { onClick(product.id) }
     ) {
-        Column() {
-            ConstraintLayout() {
-                val (icon, image) = createRefs()
-                Box(
-                    modifier = Modifier
-                        .size(150.dp)
-                        .background(f5, shape = RoundedCornerShape(15.dp))
-                        .clip(RoundedCornerShape(15.dp))
-                        .constrainAs(image) {},
-                    contentAlignment = Alignment.Center,
+        Box(
+            modifier = Modifier
+                .size(150.dp)
+                .background(f5, shape = RoundedCornerShape(15.dp))
+                .clip(RoundedCornerShape(15.dp)),
+            contentAlignment = Alignment.Center,
+        ) {
+            SubcomposeAsyncImage(model = product.images!![0],
+                contentDescription = null,
+                loading = { MyProgressBar() })
+        }
 
-                    ) {
-                    SubcomposeAsyncImage(
-                        model = product.images!![0],
-                        contentDescription = null,
-                        loading = { MyProgressBar() }
-                    )
+        Spacer(modifier = Modifier.width(20.dp))
 
-                }
 
-                Box(modifier = Modifier
-                    .padding(top = 10.dp, end = 10.dp)
-                    .size(30.dp)
-                    .background(color = Color.Black, shape = CircleShape)
-                    .clip(CircleShape)
-                    .constrainAs(icon) {
-                        top.linkTo(parent.top)
-                        end.linkTo(parent.absoluteRight)
-                    }
-                    .clickable {
-                        if (favoriteRemember)
-                            onClickRemoveFavorite(product)
-                        else
-                            onClickAddFavorite(product)
-                        favoriteRemember = !favoriteRemember
-                    }) {
-                    Image(
-                        painter = painterResource(
-                            id = if (favoriteRemember) R.drawable.ic_favorites_full
-                            else R.drawable.ic_favorite
-                        ),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(5.dp)
-                            .size(20.dp), colorFilter = ColorFilter.tint(Color.White)
-                    )
-                }
-            }
-            Column() {
-                Spacer(modifier = Modifier.height(5.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(),
+            verticalArrangement = Arrangement.SpaceBetween,
+        ) {
 
-                Text(
-                    text = product.title ?: "Empty",
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.height(5.dp))
+            Text(
+                text = product.title,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Medium
+            )
+
+            Text(
+                text = product.description,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Normal
+            )
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
 
                 Row(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    RatingBar(
-                        value = rating,
+                    RatingBar(value = rating,
                         style = RatingBarStyle.Default,
                         numOfStars = 1,
                         size = 18.dp,
                         onValueChange = {
                             rating = it
                         },
-                        onRatingChanged = {
-                        }
-                    )
-                    Spacer(modifier = Modifier.width(5.dp))
+                        onRatingChanged = {})
                     Text(text = "${product.rating} |  ", fontSize = 12.sp)
                     Text(
                         text = "${product.stock} stock",
@@ -146,16 +126,24 @@ fun ProductsItem(
                         fontWeight = FontWeight.Black
                     )
                 }
-                Spacer(modifier = Modifier.height(5.dp))
+
                 Text(
                     text = "$${product.price}",
+                    fontSize = 14.sp,
                     fontWeight = FontWeight(600),
                     color = Color.Black
                 )
 
+
             }
+
+
         }
     }
 }
+
+
+
+
 
 

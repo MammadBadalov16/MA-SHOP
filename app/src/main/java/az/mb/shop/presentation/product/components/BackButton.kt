@@ -20,12 +20,13 @@ import az.mb.shop.presentation.ui.theme.f3
 import az.mb.shop.presentation.ui.theme.f5
 
 @Composable
-fun BackButton(onClick: () -> Unit) {
-    Box(modifier = Modifier
-        .size(30.dp)
-        .background(color = Color.Transparent, shape = CircleShape)
-        .clip(CircleShape)
-        .clickable { onClick() }, contentAlignment = Alignment.Center
+fun BackButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
+    Box(
+        modifier = modifier
+            .size(30.dp)
+            .background(color = Color.Transparent, shape = CircleShape)
+            .clip(CircleShape)
+            .clickable { onClick() }, contentAlignment = Alignment.Center
 
     ) {
         Image(

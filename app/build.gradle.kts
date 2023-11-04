@@ -102,6 +102,8 @@ dependencies {
     implementation("com.github.a914-gowtham:compose-ratingbar:1.3.4")
     //pager
     implementation("com.google.accompanist:accompanist-pager:0.12.0")
+    //systemUiController
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
 
 
 }

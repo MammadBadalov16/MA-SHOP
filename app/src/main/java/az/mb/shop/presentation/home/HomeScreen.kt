@@ -21,8 +21,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,9 +34,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import az.mb.shop.domain.model.Category
 import az.mb.shop.domain.model.Product
 import az.mb.shop.navigation.Screen
+import az.mb.shop.navigation.graphs.Graph
+import az.mb.shop.navigation.graphs.RootNavGraph
+import az.mb.shop.navigation.graphs.detailsGraph
 import az.mb.shop.presentation.components.ErrorScreen
 import az.mb.shop.presentation.home.components.CategoryItem
 import az.mb.shop.presentation.home.components.ProductsItem
@@ -45,7 +53,7 @@ import az.mb.shop.presentation.main.components.TopBar
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     drawerState: DrawerState,
-    navController: NavController
+    navController: NavController,
 ) {
     val categoriesState = viewModel.stateCategories.value
     val productsState = viewModel.stateProducts.value
@@ -55,11 +63,6 @@ fun HomeScreen(
     val favProducts = favProductsState.products
     var onClickTryAgain by remember { mutableStateOf(false) }
 
-
-    Log.e("HomeViewModel : Categories", viewModel.stateCategories.value.toString())
-    Log.e("HomeViewModel : Product", viewModel.stateProduct.value.toString())
-    Log.e("HomeViewModel : Products", viewModel.stateProducts.value.toString())
-    Log.e("HomeViewModel : ProductsOfCategory", viewModel.stateProductsOfCategory.value.toString())
 
     Box(
         modifier = Modifier
@@ -86,7 +89,8 @@ fun HomeScreen(
                 CircularProgressIndicator(
                     modifier = Modifier
                         .fillMaxSize()
-                        .wrapContentSize(Alignment.Center)
+                        .wrapContentSize(Alignment.Center),
+                    color = Color.Black
                 )
 
             if (products.isNotEmpty())
@@ -159,9 +163,8 @@ fun ProductSection(
     favProducts: List<Product>,
     products: List<Product>,
     navController: NavController,
-    viewModel: HomeViewModel
+    viewModel: HomeViewModel,
 ) {
-
     LazyColumn() {
         items(products.windowed(2, 2, true)) {
             Row(
@@ -175,10 +178,13 @@ fun ProductSection(
                         ProductsItem(product = product,
                             isFav = favProducts.contains(product),
                             onClick = {
+
+
                                 navigateToProductById(
                                     productId = it,
                                     navController = navController
                                 )
+
                             }, onClickAddFavorite = {
                                 viewModel.onEvent(HomeEvents.AddFavProduct(it))
 
@@ -203,8 +209,10 @@ fun productsByCategories(viewModel: HomeViewModel, category: String) {
 
 fun navigateToProductById(navController: NavController, productId: Int) {
 
-    navController.navigate(Screen.Product.route + "/${productId}")
+    navController.navigate(Screen.Product.route + "/" + productId.toString())
 
 }
+
+
 
 

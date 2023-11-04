@@ -16,8 +16,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
@@ -26,6 +28,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -36,6 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -72,7 +76,12 @@ fun ProductScreen(viewModel: ProductViewModel = hiltViewModel(), navController: 
         R.raw.intro1, R.raw.intro2, R.raw.intro3
     )
 
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White),
+        contentAlignment = Alignment.Center,
+    ) {
 
         if (product != null && images != null) {
 
@@ -85,7 +94,14 @@ fun ProductScreen(viewModel: ProductViewModel = hiltViewModel(), navController: 
 
                 Column {
 
-                    BackButton(onClick = { navController.navigateUp() })
+
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        BackButton(onClick = { navController.navigateUp() })
+
+                        Box(modifier = Modifier.align(Alignment.Center)) {
+                            Text(text = product.brand)
+                        }
+                    }
 
                     Spacer(modifier = Modifier.height(10.dp))
 
@@ -93,29 +109,38 @@ fun ProductScreen(viewModel: ProductViewModel = hiltViewModel(), navController: 
 
                     Spacer(modifier = Modifier.height(30.dp))
 
-                    SectionInfo(product = product,
-                        isFav = favProduct != null,
-                        onClickAddFavorite = {
-                            viewModel.onEvent(
-                                ProductScreenEvents.AddFavProduct(
-                                    it
-                                )
-                            )
-                        },
-                        onClickRemoveFavorite = {
-                            viewModel.onEvent(
-                                ProductScreenEvents.RemoveFavProduct(
-                                    it
-                                )
-                            )
-                        }
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .verticalScroll(rememberScrollState())
+                    ) {
 
-                    )
+
+                        SectionInfo(product = product,
+                            isFav = favProduct != null,
+                            onClickAddFavorite = {
+                                viewModel.onEvent(
+                                    ProductScreenEvents.AddFavProduct(
+                                        it
+                                    )
+                                )
+                            },
+                            onClickRemoveFavorite = {
+                                viewModel.onEvent(
+                                    ProductScreenEvents.RemoveFavProduct(
+                                        it
+                                    )
+                                )
+                            }
+
+                        )
+
+                    }
                 }
             }
         }
 
-        if (stateProduct.isLoading) CircularProgressIndicator()
+        if (stateProduct.isLoading) CircularProgressIndicator(color = Color.Black)
 
         if (stateProduct.error.isNotBlank()) {
 
@@ -181,6 +206,7 @@ fun SectionInfo(
 
     var rating: Float by remember { mutableFloatStateOf(product.rating!!.toFloat() / 10) }
     var favoriteRemember by remember { mutableStateOf(isFav) }
+    var quantityRemember by remember { mutableIntStateOf(1) }
 
 
 
@@ -255,12 +281,14 @@ fun SectionInfo(
                 fontSize = 15.sp,
                 style = LocalTextStyle.current.copy(lineHeight = 18.sp)
             )
-
         }
 
         Spacer(modifier = Modifier.height(15.dp))
 
-        Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Text(
                 text = "Quantity",
                 color = Color.Black,
@@ -271,15 +299,36 @@ fun SectionInfo(
 
             Row(
                 modifier = Modifier
-                    .background(color = f5, shape = RoundedCornerShape(15.dp))
-                    .padding(top = 8.dp, bottom = 8.dp, start = 8.dp, end = 8.dp)
-                    .clip(RoundedCornerShape(15.dp))
+                    .background(color = f5, shape = RoundedCornerShape(30.dp))
+                    .padding(top = 12.dp, bottom = 12.dp, start = 18.dp, end = 18.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(painter = painterResource(id = R.drawable.ic_minus), contentDescription = "")
-                Spacer(modifier = Modifier.width(5.dp))
-                Text(text = "1")
-                Spacer(modifier = Modifier.width(5.dp))
-                Icon(painter = painterResource(id = R.drawable.ic_add), contentDescription = "")
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_minus),
+                    tint = Color.Black,
+                    contentDescription = "",
+                    modifier = Modifier.clickable {
+                        if (quantityRemember != 1)
+                            quantityRemember--
+                    }
+                )
+                Spacer(modifier = Modifier.width(18.dp))
+                Text(
+                    text = quantityRemember.toString(),
+                    color = Color.Black,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Medium
+                )
+                Spacer(modifier = Modifier.width(18.dp))
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_add),
+                    tint = Color.Black,
+                    contentDescription = "",
+                    modifier = Modifier.clickable {
+                        quantityRemember++
+                    }
+
+                )
             }
         }
 
