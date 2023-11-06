@@ -41,6 +41,9 @@ class ProductViewModel @Inject constructor(
             getFavoriteProductById(productId.toInt())
         }
 
+        getProductById(5)
+        getFavoriteProductById(5)
+
     }
 
     fun onEvent(event: ProductScreenEvents) {

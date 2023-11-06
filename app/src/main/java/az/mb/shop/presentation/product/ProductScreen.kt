@@ -20,6 +20,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
@@ -27,6 +29,7 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -39,7 +42,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -61,7 +63,10 @@ import com.gowtham.ratingbar.RatingBarStyle
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun ProductScreen(viewModel: ProductViewModel = hiltViewModel(), navController: NavController) {
+fun ProductScreen(
+    viewModel: ProductViewModel = hiltViewModel(),
+    navController: NavController
+) {
 
     val stateProduct = viewModel.stateProduct.value
     val product = stateProduct.product
@@ -70,16 +75,20 @@ fun ProductScreen(viewModel: ProductViewModel = hiltViewModel(), navController: 
     val stateFavProduct = viewModel.stateFavProducts.value
     val favProduct = stateFavProduct.product
 
-    Log.e("ProductScreen", stateFavProduct.toString())
+    Log.e("ProductScreen", stateProduct.toString())
 
     val animations = listOf(
         R.raw.intro1, R.raw.intro2, R.raw.intro3
     )
 
+    var quantity by remember { mutableIntStateOf(1) }
+    val totalPrice by remember { mutableDoubleStateOf(0.0) }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .background(Color.White)
+            .verticalScroll(rememberScrollState()),
         contentAlignment = Alignment.Center,
     ) {
 
@@ -94,14 +103,7 @@ fun ProductScreen(viewModel: ProductViewModel = hiltViewModel(), navController: 
 
                 Column {
 
-
-                    Box(modifier = Modifier.fillMaxWidth()) {
-                        BackButton(onClick = { navController.navigateUp() })
-
-                        Box(modifier = Modifier.align(Alignment.Center)) {
-                            Text(text = product.brand)
-                        }
-                    }
+                    HeaderSection(navController = navController, product = product)
 
                     Spacer(modifier = Modifier.height(10.dp))
 
@@ -109,45 +111,49 @@ fun ProductScreen(viewModel: ProductViewModel = hiltViewModel(), navController: 
 
                     Spacer(modifier = Modifier.height(30.dp))
 
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .verticalScroll(rememberScrollState())
-                    ) {
-
-
-                        SectionInfo(product = product,
-                            isFav = favProduct != null,
-                            onClickAddFavorite = {
-                                viewModel.onEvent(
-                                    ProductScreenEvents.AddFavProduct(
-                                        it
-                                    )
+                    ContentSection(product = product,
+                        isFav = favProduct != null,
+                        onClickAddFavorite = {
+                            viewModel.onEvent(
+                                ProductScreenEvents.AddFavProduct(
+                                    it
                                 )
-                            },
-                            onClickRemoveFavorite = {
-                                viewModel.onEvent(
-                                    ProductScreenEvents.RemoveFavProduct(
-                                        it
-                                    )
+                            )
+                        },
+                        onClickRemoveFavorite = {
+                            viewModel.onEvent(
+                                ProductScreenEvents.RemoveFavProduct(
+                                    it
                                 )
-                            }
+                            )
+                        }
+                    )
 
-                        )
-
-                    }
                 }
             }
         }
 
+
         if (stateProduct.isLoading) CircularProgressIndicator(color = Color.Black)
 
         if (stateProduct.error.isNotBlank()) {
-
             ErrorScreen(error = stateProduct.error, onClick = {})
-
         }
     }
+}
+
+
+@Composable
+fun HeaderSection(navController: NavController, product: Product) {
+
+    Box(modifier = Modifier.fillMaxWidth()) {
+        BackButton(onClick = { navController.navigateUp() })
+
+        Box(modifier = Modifier.align(Alignment.Center)) {
+            Text(text = product.brand)
+        }
+    }
+
 }
 
 
@@ -168,7 +174,6 @@ fun ImageSection(pagerState: PagerState, product: Product) {
         ConstraintLayout {
 
             val (indicator, horizontalPager) = createRefs()
-
 
             HorizontalPager(state = pagerState,
                 modifier = Modifier.constrainAs(horizontalPager) {}) { pagerCount ->
@@ -197,20 +202,19 @@ fun ImageSection(pagerState: PagerState, product: Product) {
 }
 
 @Composable
-fun SectionInfo(
+fun ContentSection(
     product: Product,
     isFav: Boolean,
     onClickAddFavorite: (product: Product) -> Unit,
-    onClickRemoveFavorite: (product: Product) -> Unit
+    onClickRemoveFavorite: (product: Product) -> Unit,
 ) {
 
     var rating: Float by remember { mutableFloatStateOf(product.rating!!.toFloat() / 10) }
     var favoriteRemember by remember { mutableStateOf(isFav) }
     var quantityRemember by remember { mutableIntStateOf(1) }
 
-
-
     Column {
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -271,69 +275,144 @@ fun SectionInfo(
 
         Spacer(modifier = Modifier.height(15.dp))
 
-        Column {
-            Text(text = "Description", fontSize = 22.sp, fontWeight = FontWeight.Medium)
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = product.description!!,
-                fontSize = 15.sp,
-                style = LocalTextStyle.current.copy(lineHeight = 18.sp)
-            )
-        }
+        DescriptionSection(product = product)
 
         Spacer(modifier = Modifier.height(15.dp))
 
+        QuantitySection(quantityValue = { quantity -> quantityRemember = quantity })
+
+        Spacer(modifier = Modifier.height(15.dp))
+
+        PriceAndToCartSection(
+            totalPrice = (quantityRemember * product.price).toDouble(),
+            addToCart = {}
+        )
+    }
+}
+
+@Composable
+fun DescriptionSection(product: Product) {
+
+    Column {
+        Text(text = "Description", fontSize = 22.sp, fontWeight = FontWeight.Medium)
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            text = product.description!!,
+            fontSize = 15.sp,
+            style = LocalTextStyle.current.copy(lineHeight = 18.sp)
+        )
+    }
+
+
+}
+
+@Composable
+fun QuantitySection(quantityValue: (quantity: Int) -> Unit) {
+
+    var quantityRemember by remember { mutableIntStateOf(1) }
+
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "Quantity",
+            color = Color.Black,
+            fontSize = 22.sp,
+            fontWeight = FontWeight.Medium
+        )
+        Spacer(modifier = Modifier.width(10.dp))
+
         Row(
-            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .background(color = f5, shape = RoundedCornerShape(30.dp))
+                .padding(top = 12.dp, bottom = 12.dp, start = 18.dp, end = 18.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_minus),
+                tint = Color.Black,
+                contentDescription = "",
+                modifier = Modifier.clickable {
+                    if (quantityRemember != 1)
+                        quantityRemember--
+                    quantityValue(quantityRemember)
+                }
+            )
+            Spacer(modifier = Modifier.width(18.dp))
             Text(
-                text = "Quantity",
+                text = quantityRemember.toString(),
                 color = Color.Black,
-                fontSize = 22.sp,
+                fontSize = 18.sp,
                 fontWeight = FontWeight.Medium
             )
-            Spacer(modifier = Modifier.width(10.dp))
+            Spacer(modifier = Modifier.width(18.dp))
+            Icon(
+                painter = painterResource(id = R.drawable.ic_add),
+                tint = Color.Black,
+                contentDescription = "",
+                modifier = Modifier.clickable {
+                    quantityRemember++
+                    quantityValue(quantityRemember)
+                }
+            )
+        }
+    }
 
-            Row(
-                modifier = Modifier
-                    .background(color = f5, shape = RoundedCornerShape(30.dp))
-                    .padding(top = 12.dp, bottom = 12.dp, start = 18.dp, end = 18.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_minus),
-                    tint = Color.Black,
-                    contentDescription = "",
-                    modifier = Modifier.clickable {
-                        if (quantityRemember != 1)
-                            quantityRemember--
-                    }
-                )
-                Spacer(modifier = Modifier.width(18.dp))
-                Text(
-                    text = quantityRemember.toString(),
-                    color = Color.Black,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Medium
-                )
-                Spacer(modifier = Modifier.width(18.dp))
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_add),
-                    tint = Color.Black,
-                    contentDescription = "",
-                    modifier = Modifier.clickable {
-                        quantityRemember++
-                    }
+    Spacer(modifier = Modifier.height(15.dp))
 
-                )
-            }
+    Divider(color = Color.LightGray, thickness = 1.dp)
+
+
+}
+
+@Composable
+fun PriceAndToCartSection(
+    totalPrice: Double,
+    addToCart: () -> Unit
+) {
+
+    Row(Modifier.fillMaxWidth()) {
+
+
+        Column(Modifier.weight(1f)) {
+
+            Text(
+                text = "Total price",
+                color = Color.Gray
+            )
+
+            Text(
+                text = totalPrice.toString(),
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Medium,
+                color = Color.Black
+            )
         }
 
 
+        Box(Modifier.weight(2f)) {
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp),
+                onClick = { addToCart() },
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = Color.White,
+                    containerColor = Color.Black
+                )
+            ) {
+
+                Text(text = "Add to cart")
+
+            }
+        }
+
     }
+
+
 }
 
 @Composable
