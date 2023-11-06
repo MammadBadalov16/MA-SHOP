@@ -17,9 +17,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.room.Room
 import az.mb.shop.common.Constants
 import az.mb.shop.data.local.ShopDatabase
-import az.mb.shop.navigation.graphs.Graph
-import az.mb.shop.navigation.graphs.RootNavGraph
-import az.mb.shop.presentation.favorites.FavoritesScreen
 import az.mb.shop.presentation.product.ProductScreen
 import az.mb.shop.presentation.ui.theme.ShopTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController

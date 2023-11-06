@@ -1,13 +1,17 @@
 package az.mb.shop.di
 
 import android.app.Application
-import androidx.room.Delete
 import androidx.room.Room
-import az.mb.shop.MainActivity
 import az.mb.shop.common.Constants
 import az.mb.shop.data.local.ShopDatabase
+import az.mb.shop.data.repository.CartRepositoryImpl
 import az.mb.shop.data.repository.FavoriteProductRepositoryImpl
+import az.mb.shop.domain.repository.CartRepository
 import az.mb.shop.domain.repository.FavoriteProductRepository
+import az.mb.shop.domain.use_case.cart.AddCartUseCase
+import az.mb.shop.domain.use_case.cart.CartUseCase
+import az.mb.shop.domain.use_case.cart.DeleteCartUseCase
+import az.mb.shop.domain.use_case.cart.GetCartUseCase
 import az.mb.shop.domain.use_case.product.AddFavoriteProductImagesUseCase
 import az.mb.shop.domain.use_case.product.AddFavoriteProductUseCase
 import az.mb.shop.domain.use_case.product.DeleteFavoriteProductImagesUseCase
@@ -56,4 +60,24 @@ object RoomModule {
             addFavProductImages = AddFavoriteProductImagesUseCase(repository)
         )
     }
+
+
+
+    @Provides
+    @Singleton
+    fun provideCartRepository(db: ShopDatabase): CartRepository {
+        return CartRepositoryImpl(db.cartDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCartUseCase(repository: CartRepository): CartUseCase {
+        return CartUseCase(
+            getCartUseCase = GetCartUseCase(repository),
+            addCartUseCase = AddCartUseCase(repository),
+            deleteCartUseCase = DeleteCartUseCase(repository)
+        )
+    }
+
+
 }
