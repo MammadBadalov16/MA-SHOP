@@ -76,14 +76,6 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(30.dp))
 
-            if (productsState.isLoading)
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .wrapContentSize(Alignment.Center),
-                    color = Color.Black
-                )
-
             if (products.isNotEmpty())
                 ProductSection(
                     favProducts = favProducts,
@@ -92,6 +84,15 @@ fun HomeScreen(
                     viewModel = viewModel
                 )
         }
+
+        if (productsState.isLoading)
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .wrapContentSize(Alignment.Center),
+                color = Color.Black
+            )
+
     }
 
     if (categoriesState.error.isNotBlank()) {

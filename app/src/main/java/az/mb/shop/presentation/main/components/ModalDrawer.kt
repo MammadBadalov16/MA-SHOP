@@ -27,6 +27,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import az.mb.shop.common.PreferencesManager
 import az.mb.shop.navigation.Screen
+import az.mb.shop.navigation.navigation_items.bottomNavigationScreens
 import az.mb.shop.navigation.navigation_items.drawerNavigationScreens
 import az.mb.shop.presentation.ui.theme.darkGrey
 import az.mb.shop.presentation.ui.theme.f5
@@ -40,9 +41,15 @@ fun ModalDrawer(
     navController: NavController,
     scope: CoroutineScope,
     drawerState: DrawerState,
-    context: Context
+    context: Context,
+    selectedItemId: State<Int> = mutableIntStateOf(3),
 ) {
     var selectedItemIndex by rememberSaveable { mutableIntStateOf(0) }
+
+    val selectBottomNavItem =
+        drawerNavigationScreens.indexOf(
+            drawerNavigationScreens.find { it.id == selectedItemId.value })
+    selectedItemIndex = selectBottomNavItem
 
     ModalDrawerSheet(drawerContainerColor = Color.White) {
         Spacer(modifier = Modifier.height(16.dp))
@@ -53,13 +60,11 @@ fun ModalDrawer(
                 label = { Text(text = item.title) },
                 selected = index == selectedItemIndex,
                 onClick = {
+                    clickItemId(item.id)
 
-                    if (item.id != 4 && item.id != 5) {
+                    if (index != 4 && index != 5) {
+
                         selectedItemIndex = index
-                        clickItemId(item.id)
-                    }
-
-                    if (index != 4) {
 
                         drawerNavigate(
                             navController = navController,
@@ -104,8 +109,8 @@ fun drawerNavigate(
 ) {
     //
 
-    if (route == Screen.SignOut.route)
-        PreferencesManager(context).removeAllSharedPreferences()
+    /*  if (route == Screen.SignOut.route)
+          PreferencesManager(context).removeAllSharedPreferences()*/
 
 
     navController.navigate(route) {

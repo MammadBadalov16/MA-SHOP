@@ -15,6 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import az.mb.shop.navigation.Screen
 import az.mb.shop.navigation.navigation_items.bottomNavigationScreens
 import az.mb.shop.presentation.ui.theme.darkGrey
 import az.mb.shop.presentation.ui.theme.f3
@@ -24,14 +25,18 @@ import az.mb.shop.presentation.ui.theme.f5
 fun BottomNavigationBar(
     navController: NavController,
     clickItemId: (index: Int) -> Unit,
-    selectedItemId: State<Int> = mutableIntStateOf(3)
+    selectedItemId: State<Int> = mutableIntStateOf(3),
 ) {
+
+    Log.e("bottomNav","selectedItemId ${selectedItemId.value}")
 
     var bnSelectedItemIndex by rememberSaveable { mutableIntStateOf(0) }
     val selectBottomNavItem =
         bottomNavigationScreens.indexOf(
             bottomNavigationScreens.find { it.id == selectedItemId.value })
     bnSelectedItemIndex = selectBottomNavItem
+
+    Log.e("bottomNav", bnSelectedItemIndex.toString())
 
 
     NavigationBar(

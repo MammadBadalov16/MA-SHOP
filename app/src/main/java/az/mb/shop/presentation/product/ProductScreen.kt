@@ -136,12 +136,12 @@ fun ProductScreen(
             }
         }
 
-
-        if (stateProduct.isLoading) CircularProgressIndicator(color = Color.Black)
-
         if (stateProduct.error.isNotBlank()) {
             ErrorScreen(error = stateProduct.error, onClick = {})
         }
+
+        if (stateProduct.isLoading) CircularProgressIndicator(color = Color.Black)
+
     }
 }
 

@@ -1,10 +1,6 @@
 package az.mb.shop.navigation.graphs
 
 import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,45 +23,18 @@ import az.mb.shop.presentation.profile.ProfileScreen
 import az.mb.shop.presentation.signIn.SignInScreen
 import az.mb.shop.presentation.signup.SignUpScreen
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyNavGraph(
+fun AuthGraph(
     navController: NavHostController,
-    startDestination: String = Screen.Home.route,
-    drawerState: DrawerState,
+    startDestination: String = Screen.SignIn.route,
 ) {
     NavHost(
         navController = navController,
         startDestination = startDestination,
         enterTransition = {
-            fadeIn(animationSpec = tween(1000))
-        },
-        exitTransition = {
-            fadeOut(animationSpec = tween(500))
+            EnterTransition.None
         }
     ) {
-        composable(route = Screen.Home.route) {
-            HomeScreen(
-                drawerState = drawerState,
-                navController = navController,
-            )
-        }
-        composable(
-            route = Screen.Product.route + "/{productId}"
-        ) {
-            ProductScreen(navController = navController)
-        }
-        composable(route = Screen.Favorites.route) {
-            FavoritesScreen(navController = navController)
-        }
-        composable(route = Screen.Cart.route) {
-            CartScreen()
-        }
-        composable(route = Screen.Profile.route) {
-            ProfileScreen()
-        }
-        composable(route = Screen.Settings.route) {
-        }
         composable(
             route = Screen.SignIn.route
         ) {
@@ -75,11 +44,6 @@ fun MyNavGraph(
             route = Screen.SignUp.route
         ) {
             SignUpScreen(navController = navController)
-        }
-        composable(
-            route = Screen.SignOut.route
-        ) {
-            SignInScreen(navController = navController)
         }
     }
 }

@@ -22,6 +22,7 @@ import az.mb.shop.common.Constants
 import az.mb.shop.common.PreferencesManager
 import az.mb.shop.data.local.ShopDatabase
 import az.mb.shop.navigation.Screen
+import az.mb.shop.navigation.graphs.AuthGraph
 import az.mb.shop.navigation.graphs.MyNavGraph
 import az.mb.shop.presentation.main.MainScreen
 import az.mb.shop.presentation.ui.theme.ShopTheme
@@ -59,12 +60,8 @@ class MainActivity : ComponentActivity() {
 
 
                     if (token != "fakeToken")
-                        MyNavGraph(
-                            navController = navHostController,
-                            startDestination = Screen.SignIn.route,
-                            drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-                        ) else
-                        MainScreen()
+                        AuthGraph(navController = navHostController)
+                    else MainScreen()
 
 
                 }
