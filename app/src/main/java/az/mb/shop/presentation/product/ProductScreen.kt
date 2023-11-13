@@ -48,6 +48,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import az.mb.shop.R
+import az.mb.shop.data.local.entity.CartEntity
 import az.mb.shop.domain.model.Product
 import az.mb.shop.presentation.components.ErrorScreen
 import az.mb.shop.presentation.components.MyProgressBar
@@ -84,6 +85,7 @@ fun ProductScreen(
     var quantity by remember { mutableIntStateOf(1) }
     val totalPrice by remember { mutableDoubleStateOf(0.0) }
 
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -113,6 +115,7 @@ fun ProductScreen(
 
                     ContentSection(product = product,
                         isFav = favProduct != null,
+                        viewModel = viewModel,
                         onClickAddFavorite = {
                             viewModel.onEvent(
                                 ProductScreenEvents.AddFavProduct(
@@ -205,6 +208,7 @@ fun ImageSection(pagerState: PagerState, product: Product) {
 fun ContentSection(
     product: Product,
     isFav: Boolean,
+    viewModel: ProductViewModel,
     onClickAddFavorite: (product: Product) -> Unit,
     onClickRemoveFavorite: (product: Product) -> Unit,
 ) {
@@ -285,7 +289,16 @@ fun ContentSection(
 
         PriceAndToCartSection(
             totalPrice = (quantityRemember * product.price).toDouble(),
-            addToCart = {}
+            addToCart = {
+                viewModel.onEvent(
+                    ProductScreenEvents.AddToCart(
+                        CartEntity(
+                            productId = product.id,
+                            quantity = quantityRemember
+                        )
+                    )
+                )
+            }
         )
     }
 }

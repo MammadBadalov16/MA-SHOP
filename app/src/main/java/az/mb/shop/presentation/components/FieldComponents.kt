@@ -1,16 +1,24 @@
 package az.mb.shop.presentation.components
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.PersonOutline
+import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -41,6 +50,14 @@ fun FieldEmail(
     emailValue = initOldValue
 
     OutlinedTextField(
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            unfocusedBorderColor = Color.Gray,
+            unfocusedLabelColor = Color.Black,
+            unfocusedLeadingIconColor = Color.Black,
+            focusedBorderColor = Color.Black,
+            focusedLabelColor = Color.Black,
+            focusedLeadingIconColor = Color.Black
+        ),
         value = emailValue,
         onValueChange = {
             emailValue = it
@@ -50,9 +67,8 @@ fun FieldEmail(
         shape = CutCornerShape(percent = 25),
         leadingIcon = {
             Icon(
-                painterResource(id = R.drawable.ic_username),
-                contentDescription = null,
-                Modifier.size(24.dp)
+                Icons.Default.PersonOutline,
+                contentDescription = ""
             )
         },
         singleLine = true,
@@ -79,6 +95,14 @@ fun FieldPassword(
 
 
     OutlinedTextField(
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            unfocusedBorderColor = Color.Gray,
+            unfocusedLabelColor = Color.Black,
+            unfocusedLeadingIconColor = Color.Black,
+            focusedBorderColor = Color.Black,
+            focusedLabelColor = Color.Black,
+            focusedLeadingIconColor = Color.Black
+        ),
         value = passwordValue,
         onValueChange = {
             passwordValue = it
@@ -88,8 +112,8 @@ fun FieldPassword(
         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         leadingIcon = {
             Icon(
-                painterResource(id = R.drawable.ic_lock),
-                contentDescription = null,
+                Icons.Outlined.Lock,
+                contentDescription = ""
             )
         },
         trailingIcon = {
@@ -123,6 +147,14 @@ fun FieldString(
     value = initOldValue
 
     OutlinedTextField(
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            unfocusedBorderColor = Color.Gray,
+            unfocusedLabelColor = Color.Black,
+            unfocusedLeadingIconColor = Color.Black,
+            focusedBorderColor = Color.Black,
+            focusedLabelColor = Color.Black,
+            focusedLeadingIconColor = Color.Black
+        ),
         value = value,
         onValueChange = {
             value = it
@@ -142,8 +174,14 @@ fun FieldString(
 @Composable
 fun ChangeScreen(questions: String, route: String, navController: NavController, type: Int) {
 
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Text(text = questions)
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = questions,
+            color = Color.Black,
+            fontSize = 16.sp
+        )
         TextButton(onClick = {
             if (type == 0) {
                 navController.navigate(Screen.SignUp.route)
@@ -152,7 +190,12 @@ fun ChangeScreen(questions: String, route: String, navController: NavController,
                 navController.navigate(Screen.SignIn.route)
             }
         }) {
-            Text(text = route, fontSize = 20.sp)
+            Text(
+                text = route,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Medium,
+                color = Color.Black
+            )
         }
     }
 }

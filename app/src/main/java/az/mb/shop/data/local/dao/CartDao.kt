@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Upsert
 import az.mb.shop.data.local.entity.CartEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -15,7 +16,6 @@ interface CartDao {
     @Transaction
     @Query("SELECT * FROM CartEntity")
     fun getCarts(): Flow<List<CartEntity>>
-
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCart(cartEntity: CartEntity)

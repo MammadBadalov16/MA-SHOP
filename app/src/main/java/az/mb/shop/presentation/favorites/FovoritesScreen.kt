@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import az.mb.shop.domain.model.Product
+import az.mb.shop.presentation.components.ErrorScreen
 import az.mb.shop.presentation.favorites.components.FavProductsItem
 import az.mb.shop.presentation.home.navigateToProductById
 
@@ -42,10 +43,19 @@ fun FavoritesScreen(
         contentAlignment = Alignment.Center
     ) {
 
+
         if (state.value.isLoading) CircularProgressIndicator(color = Color.Black)
 
-        if (products.isEmpty()) Text(text = "Favorites is empty")
-        else content(products = products, navController = navController)
+        if (products.isNotEmpty())
+            content(products = products, navController = navController)
+
+        if (products.isEmpty() && !state.value.isLoading) Text(text = "Favorites is empty")
+
+        if (state.value.error.isNotBlank())
+            ErrorScreen(
+                error = state.value.error,
+                onClick = { viewModel.getFavProducts() })
+
     }
 }
 

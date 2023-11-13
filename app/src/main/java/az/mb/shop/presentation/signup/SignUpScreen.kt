@@ -17,6 +17,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,6 +43,8 @@ import az.mb.shop.presentation.components.ChangeScreen
 import az.mb.shop.presentation.components.FieldEmail
 import az.mb.shop.presentation.components.FieldPassword
 import az.mb.shop.presentation.components.FieldString
+import az.mb.shop.presentation.components.ToastError
+import az.mb.shop.presentation.components.ToastSuccess
 
 @Composable
 fun SignUpScreen(
@@ -81,7 +84,8 @@ fun SignUpScreen(
                 Text(
                     text = "Sign Up",
                     style = TextStyle(fontWeight = FontWeight.Bold),
-                    fontSize = 30.sp
+                    fontSize = 30.sp,
+                    color = Color.Black
                 )
 
                 Spacer(modifier = Modifier.padding(10.dp))
@@ -111,6 +115,7 @@ fun SignUpScreen(
 
                     Button(
                         shape = CutCornerShape(percent = 25),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                         onClick = {
                             val checkFieldsResponse = checkFields(
                                 user = User(
@@ -121,14 +126,13 @@ fun SignUpScreen(
                                 ), viewModel = viewModel
                             )
                             if (checkFieldsResponse != "") {
-                                Toast.makeText(context, checkFieldsResponse, Toast.LENGTH_SHORT)
-                                    .show()
+                                ToastError(context = context, message = checkFieldsResponse)
                             }
                         },
                         modifier = Modifier
                             .fillMaxWidth(0.9f)
                     ) {
-                        Text(text = "Sign Up", fontSize = 20.sp)
+                        Text(text = "Sign Up", fontSize = 20.sp, color = Color.White)
                     }
 
                     Spacer(modifier = Modifier.padding(10.dp))
@@ -144,24 +148,26 @@ fun SignUpScreen(
         }
 
         if (state.isLoading) {
-
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
-                CircularProgressIndicator()
+                CircularProgressIndicator(color = Color.Black)
             }
         }
     }
 
 
     if (state.isSuccess) {
-        Toast.makeText(LocalContext.current, "Account successfully created", Toast.LENGTH_LONG)
-            .show()
+        ToastSuccess(context = context, message = "Account successfully created")
+        nameValue = ""
+        surnameValue = ""
+        emailValue = ""
+        passwordValue = ""
     }
-    
+
     if (state.isError.isNotBlank()) {
-        Toast.makeText(LocalContext.current, state.isError, Toast.LENGTH_SHORT).show()
+        ToastError(context = context, message = state.isError)
     }
 }
 

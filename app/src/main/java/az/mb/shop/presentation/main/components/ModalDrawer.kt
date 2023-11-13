@@ -1,5 +1,6 @@
 package az.mb.shop.presentation.main.components
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -8,7 +9,6 @@ import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalDrawerSheet
-import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
@@ -23,6 +23,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import az.mb.shop.common.PreferencesManager
+import az.mb.shop.navigation.Screen
 import az.mb.shop.navigation.navigation_items.drawerNavigationScreens
 import az.mb.shop.presentation.ui.theme.darkGrey
 import az.mb.shop.presentation.ui.theme.f5
@@ -32,9 +36,11 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ModalDrawer(
-    clickIndex: (index: Int) -> Unit,
     clickItemId: (index: Int) -> Unit,
-    selectedItem: State<Int> = mutableIntStateOf(1)
+    navController: NavController,
+    scope: CoroutineScope,
+    drawerState: DrawerState,
+    context: Context
 ) {
     var selectedItemIndex by rememberSaveable { mutableIntStateOf(0) }
 
@@ -47,11 +53,24 @@ fun ModalDrawer(
                 label = { Text(text = item.title) },
                 selected = index == selectedItemIndex,
                 onClick = {
-                    if (index != 4) {
+
+                    if (item.id != 4 && item.id != 5) {
                         selectedItemIndex = index
-                        clickIndex(index)
                         clickItemId(item.id)
                     }
+
+                    if (index != 4) {
+
+                        drawerNavigate(
+                            navController = navController,
+                            route = drawerNavigationScreens[index].route,
+                            scope = scope,
+                            drawerState = drawerState,
+                            context = context
+                        )
+                    }
+
+
                 },
                 colors = NavigationDrawerItemDefaults.colors(
                     selectedIconColor = Color.Black,
@@ -72,13 +91,6 @@ fun ModalDrawer(
             )
         }
     }
-
-    var selectBottomNavItem = drawerNavigationScreens
-        .indexOf(drawerNavigationScreens
-            .find { it.id == selectedItem.value })
-    Log.e("12345", selectBottomNavItem.toString())
-    selectedItemIndex = selectBottomNavItem
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -87,12 +99,21 @@ fun drawerNavigate(
     route: String,
     scope: CoroutineScope,
     drawerState: DrawerState,
+    context: Context
+
 ) {
-    navController.popBackStack()
+    //
+
+    if (route == Screen.SignOut.route)
+        PreferencesManager(context).removeAllSharedPreferences()
+
+
     navController.navigate(route) {
-        popUpTo(navController.graph.findStartDestination().id)
+        navController.popBackStack()
+        // popUpTo(navController.graph.findStartDestination().id)
         launchSingleTop = true
     }
+
     closeDrawer(drawerState = drawerState, scope = scope)
 }
 
@@ -102,6 +123,8 @@ fun closeDrawer(drawerState: DrawerState, scope: CoroutineScope) {
         drawerState.close()
     }
 }
+
+
 
 
 

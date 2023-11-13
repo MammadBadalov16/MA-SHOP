@@ -23,9 +23,6 @@ class SignInViewModel @Inject constructor(
     private val _signInState = mutableStateOf(SignInState())
     val signInState: State<SignInState> = _signInState
 
-    init {
-        //signUp("memmedbedelov32@gmail.com", "memmed0102")
-    }
 
     fun signIn(email: String, password: String) {
         signInUseCase(email = email, password = password).onEach {

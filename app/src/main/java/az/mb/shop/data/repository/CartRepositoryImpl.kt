@@ -4,6 +4,7 @@ import az.mb.shop.data.local.dao.CartDao
 import az.mb.shop.data.local.entity.CartEntity
 import az.mb.shop.domain.repository.CartRepository
 import kotlinx.coroutines.flow.Flow
+import kotlin.jvm.Throws
 
 class CartRepositoryImpl(
     private val dao: CartDao
@@ -13,7 +14,7 @@ class CartRepositoryImpl(
     }
 
     override suspend fun insertCart(cartEntity: CartEntity) {
-        dao.insertCart(cartEntity = cartEntity)
+        return dao.insertCart(cartEntity = cartEntity)
     }
 
     override suspend fun deleteCart(cartEntity: CartEntity) {

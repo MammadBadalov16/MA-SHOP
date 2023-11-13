@@ -1,5 +1,6 @@
 package az.mb.shop.presentation.product
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -44,10 +45,6 @@ class ProductViewModel @Inject constructor(
             getProductById(productId.toInt())
             getFavoriteProductById(productId.toInt())
         }
-        
-        getProductById(5)
-        getFavoriteProductById(5)
-
     }
 
     fun onEvent(event: ProductScreenEvents) {
@@ -63,6 +60,12 @@ class ProductViewModel @Inject constructor(
                 viewModelScope.launch {
                     productUseCase.deleteFavoriteProduct(event.data.toFavProductAboutEntity())
                     productUseCase.deleteFavoriteProductImages(event.data.id)
+                }
+            }
+
+            is ProductScreenEvents.AddToCart -> {
+                viewModelScope.launch {
+                    cartUseCase.addCartUseCase(event.data)
                 }
             }
         }

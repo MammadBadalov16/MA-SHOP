@@ -13,6 +13,7 @@ android {
     namespace = "az.mb.shop"
     compileSdk = 34
 
+
     defaultConfig {
         applicationId = "az.mb.shop"
         minSdk = 24
@@ -53,6 +54,7 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
 }
 
 dependencies {
@@ -104,6 +106,11 @@ dependencies {
     implementation("com.google.accompanist:accompanist-pager:0.12.0")
     //systemUiController
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
+    //toast
+    implementation("com.github.shubhamvashisht:KToasty:1.0")
+    //icons
+    implementation("androidx.compose.material:material-icons-extended:1.5.4")
+
 
 
 }

@@ -28,24 +28,38 @@ class FavoritesViewModel @Inject constructor(
 
 
     init {
-        _stateFavProducts.value = ProductsState(isLoading = true)
         getFavProducts()
     }
 
 
-    private fun getFavProducts() {
-        getProductUseCase.getFavoriteProducts.invoke().onEach {
-            try {
-                val products = it.map { favProduct -> favProduct.toProduct() }
-                _stateFavProducts.value = ProductsState(products = products)
-                Log.e("products", products.toString())
+     fun getFavProducts() {
+        getProductUseCase.getFavoriteProducts.invoke().onEach { it ->
 
-            } catch (exception: Exception) {
-                _stateFavProducts.value = ProductsState(error = exception.message.toString())
+            when (it) {
+                is Resource.Loading -> {
+                    _stateFavProducts.value = ProductsState(isLoading = true)
+                }
+
+                is Resource.Success -> {
+
+                    if (it.data != null)
+                        it.data.onEach { data ->
+
+                            _stateFavProducts.value =
+                                ProductsState(products = data.map { it.toProduct() })
+
+
+                        }.launchIn(viewModelScope)
+                }
+
+                is Resource.Error -> {
+
+                    _stateFavProducts.value =
+                        ProductsState(error = it.message ?: Constants.unknownError)
+                }
             }
         }.launchIn(viewModelScope)
     }
-
 }
 
 
