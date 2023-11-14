@@ -184,6 +184,7 @@ fun ChangeScreen(questions: String, route: String, navController: NavController,
         )
         TextButton(onClick = {
             if (type == 0) {
+                navController.popBackStack()
                 navController.navigate(Screen.SignUp.route)
             } else {
                 navController.popBackStack()

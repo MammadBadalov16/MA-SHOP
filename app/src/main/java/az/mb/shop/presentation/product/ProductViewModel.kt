@@ -72,7 +72,7 @@ class ProductViewModel @Inject constructor(
     }
 
 
-    private fun getProductById(id: Int) {
+     fun getProductById(id: Int) {
         getProductUseCase(id).onEach {
             when (it) {
                 is Resource.Error -> _stateProduct.value =
@@ -84,7 +84,7 @@ class ProductViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    private fun getFavoriteProductById(id: Int) {
+     fun getFavoriteProductById(id: Int) {
         productUseCase.getFavoriteProduct.invoke(id).onEach {
             try {
                 _stateFavProducts.value = ProductState(isLoading = true)

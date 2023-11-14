@@ -3,6 +3,7 @@ package az.mb.shop.presentation.main
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerValue
@@ -61,8 +62,9 @@ fun MainScreen() {
             },
             bottomBar = {
                 AnimatedVisibility(
-                    visible = true,//currentRoute != "product_screen/{productId}",
-                    enter = EnterTransition.None
+                    visible = currentRoute != "product_screen/{productId}",
+                    enter = EnterTransition.None,
+                    exit = ExitTransition.None
                 ) {
                     BottomNavigationBar(
                         navController = navController,
@@ -82,7 +84,13 @@ fun MainScreen() {
         }
     }
 
-    if (selectedItemId.value == Screen.SignOut.id) {
+    Log.e("CurrentRoute", currentRoute.toString())
+
+    if (currentRoute == "product_screen/{productId}") {
+        //navController.navigate(Screen.Product.route)
+    }
+
+    if (selectedItemId.intValue == Screen.SignOut.id) {
         navController.popBackStack()
         PreferencesManager(context = context).removeAllSharedPreferences()
         AuthGraph(navController = rememberNavController())

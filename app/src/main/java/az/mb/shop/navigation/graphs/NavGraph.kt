@@ -22,6 +22,7 @@ import az.mb.shop.navigation.Screen
 import az.mb.shop.presentation.cart.CartScreen
 import az.mb.shop.presentation.favorites.FavoritesScreen
 import az.mb.shop.presentation.home.HomeScreen
+import az.mb.shop.presentation.main.MainScreen
 import az.mb.shop.presentation.product.ProductScreen
 import az.mb.shop.presentation.profile.ProfileScreen
 import az.mb.shop.presentation.signIn.SignInScreen
@@ -32,16 +33,16 @@ import az.mb.shop.presentation.signup.SignUpScreen
 fun MyNavGraph(
     navController: NavHostController,
     startDestination: String = Screen.Home.route,
-    drawerState: DrawerState,
+    drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
 ) {
     NavHost(
         navController = navController,
         startDestination = startDestination,
         enterTransition = {
-            fadeIn(animationSpec = tween(1000))
+            fadeIn(animationSpec = tween(700))
         },
         exitTransition = {
-            fadeOut(animationSpec = tween(500))
+            fadeOut(animationSpec = tween(700))
         }
     ) {
         composable(route = Screen.Home.route) {
@@ -65,21 +66,6 @@ fun MyNavGraph(
             ProfileScreen()
         }
         composable(route = Screen.Settings.route) {
-        }
-        composable(
-            route = Screen.SignIn.route
-        ) {
-            SignInScreen(navController = navController)
-        }
-        composable(
-            route = Screen.SignUp.route
-        ) {
-            SignUpScreen(navController = navController)
-        }
-        composable(
-            route = Screen.SignOut.route
-        ) {
-            SignInScreen(navController = navController)
         }
     }
 }

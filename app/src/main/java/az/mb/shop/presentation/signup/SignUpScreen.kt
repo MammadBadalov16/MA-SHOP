@@ -62,7 +62,12 @@ fun SignUpScreen(
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
 
 
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White),
+        contentAlignment = Alignment.Center
+    ) {
 
         AnimatedVisibility(visible = !state.isLoading) {
             Column(

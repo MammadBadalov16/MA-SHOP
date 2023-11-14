@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import az.mb.shop.R
 import az.mb.shop.data.local.entity.CartEntity
 import az.mb.shop.domain.model.Product
@@ -68,7 +69,6 @@ fun ProductScreen(
     viewModel: ProductViewModel = hiltViewModel(),
     navController: NavController
 ) {
-
     val stateProduct = viewModel.stateProduct.value
     val product = stateProduct.product
     val images = stateProduct.product?.images

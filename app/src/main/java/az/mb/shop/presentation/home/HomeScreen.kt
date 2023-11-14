@@ -12,8 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,6 +52,7 @@ fun HomeScreen(
     val favProductsState = viewModel.stateFavProducts.value
     val category = categoriesState.categories
     val products = productsState.products
+
     val favProducts = favProductsState.products
     var onClickTryAgain by remember { mutableStateOf(false) }
 
@@ -157,39 +159,33 @@ fun ProductSection(
     navController: NavController,
     viewModel: HomeViewModel,
 ) {
-    LazyColumn() {
-        items(products.windowed(2, 2, true)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
-            ) {
-                it.forEach { product ->
-                    Box(
-                        modifier = Modifier
-                            .weight(0.5f)
-                    ) {
-                        ProductsItem(product = product,
-                            isFav = favProducts.contains(product),
-                            onClick = {
 
+    val products = rememberSaveable { products }
 
-                                navigateToProductById(
-                                    productId = it,
-                                    navController = navController
-                                )
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        verticalArrangement = Arrangement.Center,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        items(count = products.size,
+            itemContent = {
 
-                            }, onClickAddFavorite = {
-                                viewModel.onEvent(HomeEvents.AddFavProduct(it))
+                ProductsItem(product = products[it],
+                    isFav = favProducts.contains(products[it]),
+                    onClick = { id ->
+                          navigateToProductById(
+                              productId = id,
+                              navController = navController
+                          )
+                    }, onClickAddFavorite = { product ->
+                        viewModel.onEvent(HomeEvents.AddFavProduct(product))
 
-                            }, onClickRemoveFavorite = {
+                    }, onClickRemoveFavorite = { product ->
 
-                                viewModel.onEvent(HomeEvents.RemoveFavProduct(it))
-                            })
-                    }
-                }
-            }
-        }
+                        viewModel.onEvent(HomeEvents.RemoveFavProduct(product))
+                    })
+            })
     }
-
 }
 
 fun productsByCategories(viewModel: HomeViewModel, category: String) {
@@ -200,6 +196,11 @@ fun productsByCategories(viewModel: HomeViewModel, category: String) {
 }
 
 fun navigateToProductById(navController: NavController, productId: Int) {
+
+    /* DetailsGraph(
+         navController = rememberNavController(),
+         startDestination = Screen.Product.route + "/" + productId.toString()
+     )*/
 
     navController.navigate(Screen.Product.route + "/" + productId.toString())
 
