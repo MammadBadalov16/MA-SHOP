@@ -6,9 +6,9 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import az.mb.shop.data.local.entity.FavProductAboutEntity
-import az.mb.shop.data.local.entity.FavProductEntity
-import az.mb.shop.data.local.entity.FavProductImageEntity
+import az.mb.shop.data.local.entity.favProduct.FavProductAboutEntity
+import az.mb.shop.data.local.entity.favProduct.FavProductEntity
+import az.mb.shop.data.local.entity.favProduct.FavProductImageEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

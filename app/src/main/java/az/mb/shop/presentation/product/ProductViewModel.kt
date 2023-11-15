@@ -1,6 +1,5 @@
 package az.mb.shop.presentation.product
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -8,17 +7,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import az.mb.shop.common.Constants
 import az.mb.shop.common.Resource
-import az.mb.shop.data.local.entity.CartEntity
 import az.mb.shop.data.mapper.toFavProductAboutEntity
 import az.mb.shop.data.mapper.toListFavProductImageEntity
 import az.mb.shop.data.mapper.toProduct
 import az.mb.shop.domain.use_case.cart.CartUseCase
-import az.mb.shop.domain.use_case.cart.GetCartUseCase
 import az.mb.shop.domain.use_case.product.GetProductUseCase
 import az.mb.shop.domain.use_case.product.ProductUseCase
-import az.mb.shop.presentation.home.HomeEvents
 import az.mb.shop.presentation.home.state.ProductState
-import az.mb.shop.presentation.home.state.ProductsState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

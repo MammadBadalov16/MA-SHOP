@@ -47,9 +47,8 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import az.mb.shop.R
-import az.mb.shop.data.local.entity.CartEntity
+import az.mb.shop.data.local.entity.cart.CartEntity
 import az.mb.shop.domain.model.Product
 import az.mb.shop.presentation.components.ErrorScreen
 import az.mb.shop.presentation.components.MyProgressBar
@@ -292,10 +291,7 @@ fun ContentSection(
             addToCart = {
                 viewModel.onEvent(
                     ProductScreenEvents.AddToCart(
-                        CartEntity(
-                            productId = product.id,
-                            quantity = quantityRemember
-                        )
+                        product
                     )
                 )
             }

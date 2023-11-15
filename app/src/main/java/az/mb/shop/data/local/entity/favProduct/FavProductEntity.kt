@@ -1,4 +1,4 @@
-package az.mb.shop.data.local.entity
+package az.mb.shop.data.local.entity.favProduct
 
 import androidx.room.Embedded
 import androidx.room.Relation

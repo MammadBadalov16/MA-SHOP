@@ -73,7 +73,7 @@ fun ProductsItem(
 
                     ) {
                     SubcomposeAsyncImage(
-                        model = product.images!![0],
+                        model = product.thumbnail,
                         contentDescription = null,
                         loading = { MyProgressBar() }
                     )

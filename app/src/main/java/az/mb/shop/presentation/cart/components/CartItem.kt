@@ -1,4 +1,4 @@
-package az.mb.shop.presentation.favorites.components
+package az.mb.shop.presentation.cart.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -38,6 +38,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import az.mb.shop.R
 import az.mb.shop.domain.model.Product
 import az.mb.shop.presentation.components.MyProgressBar
+import az.mb.shop.presentation.product.QuantitySection
 import az.mb.shop.presentation.ui.theme.f3
 import az.mb.shop.presentation.ui.theme.f5
 import coil.compose.SubcomposeAsyncImage
@@ -45,21 +46,19 @@ import com.gowtham.ratingbar.RatingBar
 import com.gowtham.ratingbar.RatingBarStyle
 
 @Composable
-fun FavProductsItem(
+fun CartItem(
     product: Product,
-    isFav: Boolean,
-    onClick: (id: Int) -> Unit
+    onClickBuy: (id: Int) -> Unit
 ) {
 
     var rating: Float by remember { mutableFloatStateOf(product.rating!!.toFloat() / 10) }
-
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(150.dp)
             .padding(top = 25.dp)
-            .clickable { onClick(product.id) }
+            .clickable { onClickBuy(product.id) }
     ) {
         Box(
             modifier = Modifier
@@ -68,7 +67,7 @@ fun FavProductsItem(
                 .clip(RoundedCornerShape(15.dp)),
             contentAlignment = Alignment.Center,
         ) {
-            SubcomposeAsyncImage(model = product.thumbnail,
+            SubcomposeAsyncImage(model = product.images!![0],
                 contentDescription = null,
                 loading = { MyProgressBar() })
         }
@@ -91,14 +90,8 @@ fun FavProductsItem(
                 fontWeight = FontWeight.Medium
             )
 
-            Text(
-                text = product.description,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Normal
-            )
-
+            QuantitySection(quantityValue = {})
+            
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween

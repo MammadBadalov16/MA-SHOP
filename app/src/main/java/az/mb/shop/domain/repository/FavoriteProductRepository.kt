@@ -1,8 +1,8 @@
 package az.mb.shop.domain.repository
 
-import az.mb.shop.data.local.entity.FavProductAboutEntity
-import az.mb.shop.data.local.entity.FavProductEntity
-import az.mb.shop.data.local.entity.FavProductImageEntity
+import az.mb.shop.data.local.entity.favProduct.FavProductAboutEntity
+import az.mb.shop.data.local.entity.favProduct.FavProductEntity
+import az.mb.shop.data.local.entity.favProduct.FavProductImageEntity
 import kotlinx.coroutines.flow.Flow
 
 interface FavoriteProductRepository {
