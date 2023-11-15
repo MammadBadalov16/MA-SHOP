@@ -9,6 +9,6 @@ interface CartRepository {
 
     suspend fun addCart(cartEntity: CartEntity)
 
-    suspend fun deleteCart(cartEntity: CartEntity)
+    suspend fun deleteCart(id: Int)
 
 }

@@ -18,8 +18,7 @@ interface CartDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addCart(cartEntity: CartEntity)
 
-    @Delete
-    suspend fun deleteCart(cartEntity: CartEntity)
-
+    @Query("DELETE FROM CartEntity WHERE id = :id")
+    suspend fun deleteCart(id: Int)
 
 }

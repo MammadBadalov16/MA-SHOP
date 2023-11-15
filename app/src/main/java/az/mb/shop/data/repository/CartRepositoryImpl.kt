@@ -16,8 +16,8 @@ class CartRepositoryImpl(
         dao.addCart(cartEntity)
     }
 
-    override suspend fun deleteCart(cartEntity: CartEntity) {
-        dao.deleteCart(cartEntity)
+    override suspend fun deleteCart(id: Int) {
+        dao.deleteCart(id = id)
     }
 
 

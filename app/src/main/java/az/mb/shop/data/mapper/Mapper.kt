@@ -5,6 +5,7 @@ import az.mb.shop.data.local.entity.FavProductEntity
 import az.mb.shop.data.remote.dto.CategoryDTO
 import az.mb.shop.data.remote.dto.product.ProductDTO
 import az.mb.shop.data.remote.dto.product.ProductsDTO
+import az.mb.shop.domain.model.Cart
 import az.mb.shop.domain.model.Category
 import az.mb.shop.domain.model.Product
 
@@ -70,6 +71,7 @@ fun Product.toFavProductEntity(): FavProductEntity {
         description = description
     )
 }
+
 fun Product.toCartEntity(): CartEntity {
     return CartEntity(
         id = id,
@@ -77,6 +79,18 @@ fun Product.toCartEntity(): CartEntity {
         rating = rating,
         thumbnail = thumbnail,
         title = title,
+        stock = stock
+    )
+}
+
+fun CartEntity.toCart(): Cart {
+    return Cart(
+        id = id,
+        price = price,
+        rating = rating,
+        thumbnail = thumbnail,
+        title = title,
+        stock = stock
     )
 }
 

@@ -5,11 +5,11 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class CartEntity(
-    @PrimaryKey(autoGenerate = true)
-    val cartId: Int? = null,
+    @PrimaryKey(autoGenerate = false)
     val id: Int,
     val title: String,
     val price: Int,
+    val stock: Int,
     val rating: Double,
     val thumbnail: String,
     var quantity: Int? = null
