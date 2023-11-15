@@ -12,9 +12,7 @@ import az.mb.shop.domain.use_case.cart.AddCartUseCase
 import az.mb.shop.domain.use_case.cart.CartUseCase
 import az.mb.shop.domain.use_case.cart.DeleteCartUseCase
 import az.mb.shop.domain.use_case.cart.GetCartUseCase
-import az.mb.shop.domain.use_case.product.AddFavoriteProductImagesUseCase
 import az.mb.shop.domain.use_case.product.AddFavoriteProductUseCase
-import az.mb.shop.domain.use_case.product.DeleteFavoriteProductImagesUseCase
 import az.mb.shop.domain.use_case.product.DeleteFavoriteProductUseCase
 import az.mb.shop.domain.use_case.product.GetFavoriteProductUseCase
 import az.mb.shop.domain.use_case.product.GetFavoriteProductsUseCase
@@ -54,14 +52,11 @@ object RoomModule {
         return ProductUseCase(
             getFavoriteProduct = GetFavoriteProductUseCase(repository),
             deleteFavoriteProduct = DeleteFavoriteProductUseCase(repository),
-            deleteFavoriteProductImages = DeleteFavoriteProductImagesUseCase(repository),
             addFavoriteProduct = AddFavoriteProductUseCase(repository),
             getFavoriteProducts = GetFavoriteProductsUseCase(repository),
-            addFavProductImages = AddFavoriteProductImagesUseCase(repository)
+
         )
     }
-
-
 
     @Provides
     @Singleton

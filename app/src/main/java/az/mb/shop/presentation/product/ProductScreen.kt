@@ -48,7 +48,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import az.mb.shop.R
-import az.mb.shop.data.local.entity.cart.CartEntity
 import az.mb.shop.domain.model.Product
 import az.mb.shop.presentation.components.ErrorScreen
 import az.mb.shop.presentation.components.MyProgressBar
@@ -62,7 +61,7 @@ import com.google.accompanist.pager.rememberPagerState
 import com.gowtham.ratingbar.RatingBar
 import com.gowtham.ratingbar.RatingBarStyle
 
-@OptIn(ExperimentalPagerApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun ProductScreen(
     viewModel: ProductViewModel = hiltViewModel(),
@@ -181,7 +180,7 @@ fun ImageSection(pagerState: PagerState, product: Product) {
                 modifier = Modifier.constrainAs(horizontalPager) {}) { pagerCount ->
 
                 SubcomposeAsyncImage(modifier = Modifier.fillMaxSize(),
-                    model = product.images!![pagerCount],
+                    model = product.images[pagerCount],
                     contentDescription = null,
                     contentScale = ContentScale.FillWidth,
                     loading = {
@@ -189,7 +188,7 @@ fun ImageSection(pagerState: PagerState, product: Product) {
                     })
             }
             PageIndicator(
-                pageCount = product.images!!.size,
+                pageCount = product.images.size,
                 currentPage = pagerState.currentPage,
                 modifier = Modifier
                     .padding(0.dp)
@@ -212,7 +211,7 @@ fun ContentSection(
     onClickRemoveFavorite: (product: Product) -> Unit,
 ) {
 
-    var rating: Float by remember { mutableFloatStateOf(product.rating!!.toFloat() / 10) }
+    var rating: Float by remember { mutableFloatStateOf(product.rating.toFloat() / 10) }
     var favoriteRemember by remember { mutableStateOf(isFav) }
     var quantityRemember by remember { mutableIntStateOf(1) }
 
@@ -224,7 +223,7 @@ fun ContentSection(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = product.title!!, fontSize = 25.sp, fontWeight = FontWeight.Bold
+                text = product.title, fontSize = 25.sp, fontWeight = FontWeight.Bold
             )
 
             Icon(painter = painterResource(
@@ -291,7 +290,8 @@ fun ContentSection(
             addToCart = {
                 viewModel.onEvent(
                     ProductScreenEvents.AddToCart(
-                        product
+                        data = product,
+                        quantity = quantityRemember
                     )
                 )
             }
@@ -308,7 +308,7 @@ fun DescriptionSection(product: Product) {
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = product.description!!,
+            text = product.description,
             fontSize = 15.sp,
             style = LocalTextStyle.current.copy(lineHeight = 18.sp)
         )

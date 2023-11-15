@@ -7,8 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import az.mb.shop.common.Constants
 import az.mb.shop.common.Resource
-import az.mb.shop.data.mapper.toFavProductAboutEntity
-import az.mb.shop.data.mapper.toListFavProductImageEntity
 import az.mb.shop.data.mapper.toProduct
 import az.mb.shop.domain.model.Category
 import az.mb.shop.domain.use_case.get_category.GetCategoryUseCase
@@ -64,15 +62,13 @@ class HomeViewModel @Inject constructor(
         when (event) {
             is HomeEvents.AddFavProduct -> {
                 viewModelScope.launch {
-                    productUseCase.addFavoriteProduct(event.data.toFavProductAboutEntity())
-                    productUseCase.addFavProductImages(event.data.toListFavProductImageEntity())
+                    productUseCase.addFavoriteProduct(event.data)
                 }
             }
 
             is HomeEvents.RemoveFavProduct -> {
                 viewModelScope.launch {
-                    productUseCase.deleteFavoriteProduct(event.data.toFavProductAboutEntity())
-                    productUseCase.deleteFavoriteProductImages(event.data.id)
+                    productUseCase.deleteFavoriteProduct(event.data)
                 }
             }
         }

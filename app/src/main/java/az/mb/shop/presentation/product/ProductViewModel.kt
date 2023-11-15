@@ -7,8 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import az.mb.shop.common.Constants
 import az.mb.shop.common.Resource
-import az.mb.shop.data.mapper.toFavProductAboutEntity
-import az.mb.shop.data.mapper.toListFavProductImageEntity
 import az.mb.shop.data.mapper.toProduct
 import az.mb.shop.domain.use_case.cart.CartUseCase
 import az.mb.shop.domain.use_case.product.GetProductUseCase
@@ -46,28 +44,30 @@ class ProductViewModel @Inject constructor(
         when (event) {
             is ProductScreenEvents.AddFavProduct -> {
                 viewModelScope.launch {
-                    productUseCase.addFavoriteProduct(event.data.toFavProductAboutEntity())
-                    productUseCase.addFavProductImages(event.data.toListFavProductImageEntity())
+                    productUseCase.addFavoriteProduct(event.data)
+
                 }
             }
 
             is ProductScreenEvents.RemoveFavProduct -> {
                 viewModelScope.launch {
-                    productUseCase.deleteFavoriteProduct(event.data.toFavProductAboutEntity())
-                    productUseCase.deleteFavoriteProductImages(event.data.id)
+                    productUseCase.deleteFavoriteProduct(event.data)
                 }
             }
 
             is ProductScreenEvents.AddToCart -> {
                 viewModelScope.launch {
-                    cartUseCase.addCartUseCase(event.data)
+                    cartUseCase.addCartUseCase(
+                        product = event.data,
+                        quantity = event.quantity
+                    )
                 }
             }
         }
     }
 
 
-     fun getProductById(id: Int) {
+    private fun getProductById(id: Int) {
         getProductUseCase(id).onEach {
             when (it) {
                 is Resource.Error -> _stateProduct.value =
@@ -79,7 +79,7 @@ class ProductViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-     fun getFavoriteProductById(id: Int) {
+    private fun getFavoriteProductById(id: Int) {
         productUseCase.getFavoriteProduct.invoke(id).onEach {
             try {
                 _stateFavProducts.value = ProductState(isLoading = true)

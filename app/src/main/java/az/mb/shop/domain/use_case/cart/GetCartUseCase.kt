@@ -1,6 +1,6 @@
 package az.mb.shop.domain.use_case.cart
 
-import az.mb.shop.data.local.entity.cart.CartEntity
+import az.mb.shop.data.local.entity.CartEntity
 import az.mb.shop.domain.repository.CartRepository
 import kotlinx.coroutines.flow.Flow
 

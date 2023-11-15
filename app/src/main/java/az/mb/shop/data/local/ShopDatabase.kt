@@ -4,18 +4,13 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import az.mb.shop.data.local.dao.CartDao
 import az.mb.shop.data.local.dao.FavoriteProductDao
-import az.mb.shop.data.local.entity.cart.CartAboutEntity
-import az.mb.shop.data.local.entity.cart.CartEntity
-import az.mb.shop.data.local.entity.cart.CartImageEntity
-import az.mb.shop.data.local.entity.favProduct.FavProductAboutEntity
-import az.mb.shop.data.local.entity.favProduct.FavProductImageEntity
+import az.mb.shop.data.local.entity.CartEntity
+import az.mb.shop.data.local.entity.FavProductEntity
 
 @Database(
     entities = [
-        FavProductAboutEntity::class,
-        FavProductImageEntity::class,
-        CartAboutEntity::class,
-        CartImageEntity::class
+        FavProductEntity::class,
+        CartEntity::class
     ],
     version = 1,
     exportSchema = false

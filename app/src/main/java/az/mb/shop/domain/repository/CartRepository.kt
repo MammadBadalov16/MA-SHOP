@@ -1,16 +1,14 @@
 package az.mb.shop.domain.repository
 
-import az.mb.shop.data.local.entity.cart.CartAboutEntity
-import az.mb.shop.data.local.entity.cart.CartEntity
-import az.mb.shop.data.local.entity.cart.CartImageEntity
+import az.mb.shop.data.local.entity.CartEntity
 import kotlinx.coroutines.flow.Flow
 
 interface CartRepository {
 
     fun getCarts(): Flow<List<CartEntity>>
 
-    suspend fun addCart(cartAboutEntity: CartAboutEntity)
+    suspend fun addCart(cartEntity: CartEntity)
 
-    suspend fun addCartImages(cartImageEntity: List<CartImageEntity>)
+    suspend fun deleteCart(cartEntity: CartEntity)
 
 }

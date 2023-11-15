@@ -1,10 +1,12 @@
-package az.mb.shop.data.local.entity.favProduct
+package az.mb.shop.data.local.entity
 
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.Relation
 
 @Entity
-data class FavProductAboutEntity(
+data class FavProductEntity(
     @PrimaryKey(autoGenerate = false)
     val id: Int,
     val brand: String,
