@@ -8,6 +8,6 @@ interface FavoriteProductRepository {
     fun getFavoriteProducts(): Flow<List<FavProductEntity>>
     fun getFavoriteProductById(id: Int): Flow<FavProductEntity>
     suspend fun addFavoriteProduct(favProductEntity: FavProductEntity)
-    suspend fun deleteFavoriteProduct(favProductEntity: FavProductEntity)
+    suspend fun deleteFavoriteProduct(id: Int)
 
 }

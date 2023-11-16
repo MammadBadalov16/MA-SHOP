@@ -51,6 +51,7 @@ fun CartItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .background(Color.White)
             .height(120.dp)
             .padding(top = 25.dp)
     ) {

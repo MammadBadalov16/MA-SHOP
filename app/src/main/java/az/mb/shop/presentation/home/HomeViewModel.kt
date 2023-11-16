@@ -12,6 +12,7 @@ import az.mb.shop.domain.model.Category
 import az.mb.shop.domain.use_case.get_category.GetCategoryUseCase
 import az.mb.shop.domain.use_case.get_prodocts_of_category.GetProductsOfCategoryUseCase
 import az.mb.shop.domain.use_case.product.GetProductsUseCase
+import az.mb.shop.domain.use_case.product.GetSearchProductsUseCase
 import az.mb.shop.domain.use_case.product.ProductUseCase
 import az.mb.shop.presentation.home.state.CategoryState
 import az.mb.shop.presentation.home.state.ProductState
@@ -27,6 +28,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val getCategoryUseCase: GetCategoryUseCase,
     private val getProductsUseCase: GetProductsUseCase,
+    private val getSearchProductsUseCase: GetSearchProductsUseCase,
     private val getProductsOfCategoryUseCase: GetProductsOfCategoryUseCase,
     private val productUseCase: ProductUseCase
 ) : ViewModel() {
@@ -45,9 +47,6 @@ class HomeViewModel @Inject constructor(
 
     private val _stateFavProducts = mutableStateOf(ProductsState())
     val stateFavProducts: State<ProductsState> = _stateFavProducts
-
-    private val _stateMessage = mutableStateOf("")
-    val stateMessage: State<String> = _stateMessage
 
 
     init {
@@ -68,7 +67,7 @@ class HomeViewModel @Inject constructor(
 
             is HomeEvents.RemoveFavProduct -> {
                 viewModelScope.launch {
-                    productUseCase.deleteFavoriteProduct(event.data)
+                    productUseCase.deleteFavoriteProduct(event.id)
                 }
             }
         }
@@ -94,6 +93,7 @@ class HomeViewModel @Inject constructor(
             }
         }.launchIn(viewModelScope)
     }
+
 
     fun getCategories() {
         getCategoryUseCase().onEach {
@@ -121,8 +121,6 @@ class HomeViewModel @Inject constructor(
     }
 
     fun getProducts() {
-
-
         getProductsUseCase().onEach {
             when (it) {
                 is Resource.Loading -> {
@@ -137,6 +135,26 @@ class HomeViewModel @Inject constructor(
                     _stateProducts.value =
                         ProductsState(error = it.message ?: Constants.unknownError)
 
+                }
+
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    fun getSearchProducts(query: String) {
+        getSearchProductsUseCase(query = query).onEach {
+            when (it) {
+                is Resource.Loading -> {
+                    _stateProducts.value = ProductsState(isLoading = true)
+                }
+
+                is Resource.Success -> {
+                    _stateProducts.value = ProductsState(products = it.data ?: emptyList())
+                }
+
+                is Resource.Error -> {
+                    _stateProducts.value =
+                        ProductsState(error = it.message ?: Constants.unknownError)
                 }
 
             }

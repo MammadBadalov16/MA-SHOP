@@ -20,7 +20,7 @@ interface FavoriteProductDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addFavoriteProduct(favProductEntity: FavProductEntity)
 
-    @Delete
-    suspend fun deleteFavoriteProduct(favProductEntity: FavProductEntity)
+    @Query("DELETE FROM FavProductEntity WHERE id = :id")
+    suspend fun deleteFavoriteProduct(id: Int)
 
 }

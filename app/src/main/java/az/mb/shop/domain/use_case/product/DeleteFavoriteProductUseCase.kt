@@ -6,7 +6,7 @@ import az.mb.shop.domain.repository.FavoriteProductRepository
 
 class DeleteFavoriteProductUseCase(private val repository: FavoriteProductRepository) {
 
-    suspend operator fun invoke(product: Product){
-        repository.deleteFavoriteProduct(favProductEntity = product.toFavProductEntity())
+    suspend operator fun invoke(id: Int) {
+        repository.deleteFavoriteProduct(id = id)
     }
 }

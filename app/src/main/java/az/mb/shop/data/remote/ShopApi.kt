@@ -23,6 +23,6 @@ interface ShopApi {
     suspend fun getCategories(): CategoryDTO
 
     @GET("products/search")
-    suspend fun getSearchProducts(@Query("q") searchKey: String): SearchDTO
+    suspend fun getSearchProducts(@Query("q") query: String): ProductsDTO
 
 }

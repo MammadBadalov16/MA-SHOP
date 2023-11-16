@@ -1,5 +1,6 @@
 package az.mb.shop.presentation.home
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -38,9 +39,9 @@ import az.mb.shop.navigation.Screen
 import az.mb.shop.presentation.components.ErrorScreen
 import az.mb.shop.presentation.home.components.CategoryItem
 import az.mb.shop.presentation.home.components.ProductsItem
+import az.mb.shop.presentation.home.components.SearchBarM3
 import az.mb.shop.presentation.main.components.TopBar
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
@@ -56,6 +57,11 @@ fun HomeScreen(
     val favProducts = favProductsState.products
     var onClickTryAgain by remember { mutableStateOf(false) }
 
+    var query by rememberSaveable { mutableStateOf("") }
+
+
+
+
 
     Box(
         modifier = Modifier
@@ -64,19 +70,32 @@ fun HomeScreen(
         contentAlignment = Alignment.Center,
     ) {
 
+
         Column(
             modifier = Modifier
                 .padding(20.dp)
                 .fillMaxSize(),
         ) {
+
             TopBar(drawerState = drawerState)
 
-            Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(30.dp))
 
-            if (category.isNotEmpty())
-                CategorySection(viewModel = viewModel, category = category)
+            SearchBarM3(queryChange = {
+                viewModel.getSearchProducts(query = it)
+                query = it
+            })
+
+            if (query == "") {
+                Spacer(modifier = Modifier.height(30.dp))
+
+                if (category.isNotEmpty())
+                    CategorySection(viewModel = viewModel, category = category)
+            }
 
             Spacer(modifier = Modifier.height(30.dp))
+
+
 
             if (products.isNotEmpty())
                 ProductSection(
@@ -85,7 +104,9 @@ fun HomeScreen(
                     navController = navController,
                     viewModel = viewModel
                 )
+
         }
+
 
         if (productsState.isLoading)
             CircularProgressIndicator(
@@ -161,6 +182,9 @@ fun ProductSection(
 ) {
 
     val products = rememberSaveable { products }
+    val favProductsId: MutableList<Int> = mutableListOf()
+
+    favProducts.forEach { favProductsId.add(it.id) }
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -170,19 +194,20 @@ fun ProductSection(
         items(count = products.size,
             itemContent = {
 
+
                 ProductsItem(product = products[it],
-                    isFav = favProducts.contains(products[it]),
+                    isFav = favProductsId.contains(products[it].id),
                     onClick = { id ->
-                          navigateToProductById(
-                              productId = id,
-                              navController = navController
-                          )
+                        navigateToProductById(
+                            productId = id,
+                            navController = navController
+                        )
                     }, onClickAddFavorite = { product ->
                         viewModel.onEvent(HomeEvents.AddFavProduct(product))
 
                     }, onClickRemoveFavorite = { product ->
 
-                        viewModel.onEvent(HomeEvents.RemoveFavProduct(product))
+                        viewModel.onEvent(HomeEvents.RemoveFavProduct(product.id))
                     })
             })
     }
@@ -205,6 +230,8 @@ fun navigateToProductById(navController: NavController, productId: Int) {
     navController.navigate(Screen.Product.route + "/" + productId.toString())
 
 }
+
+
 
 
 

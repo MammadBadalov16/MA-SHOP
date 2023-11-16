@@ -11,11 +11,12 @@ import az.mb.shop.domain.use_case.product.GetProductUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CartViewModel @Inject constructor(
-    cartUseCase: CartUseCase,
+    private val cartUseCase: CartUseCase,
 ) : ViewModel() {
 
     private val _cartState = mutableStateOf(CartState())
@@ -27,5 +28,12 @@ class CartViewModel @Inject constructor(
             _cartState.value = CartState(cart = list.map { it.toCart() })
 
         }.launchIn(viewModelScope)
+    }
+
+
+    fun deleteCart(id: Int) {
+        viewModelScope.launch {
+            cartUseCase.deleteCartUseCase.invoke(id)
+        }
     }
 }

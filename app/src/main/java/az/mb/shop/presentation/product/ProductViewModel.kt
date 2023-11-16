@@ -51,7 +51,7 @@ class ProductViewModel @Inject constructor(
 
             is ProductScreenEvents.RemoveFavProduct -> {
                 viewModelScope.launch {
-                    productUseCase.deleteFavoriteProduct(event.data)
+                    productUseCase.deleteFavoriteProduct(event.id)
                 }
             }
 

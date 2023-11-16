@@ -127,7 +127,7 @@ fun ProductScreen(
                         onClickRemoveFavorite = {
                             viewModel.onEvent(
                                 ProductScreenEvents.RemoveFavProduct(
-                                    it
+                                    it.id
                                 )
                             )
                         }

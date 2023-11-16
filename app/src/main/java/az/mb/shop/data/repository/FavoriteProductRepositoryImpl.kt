@@ -21,8 +21,8 @@ class FavoriteProductRepositoryImpl(
         dao.addFavoriteProduct(favProductEntity = favProductEntity)
     }
 
-    override suspend fun deleteFavoriteProduct(favProductEntity: FavProductEntity) {
-        dao.deleteFavoriteProduct(favProductEntity = favProductEntity)
+    override suspend fun deleteFavoriteProduct(id: Int) {
+        dao.deleteFavoriteProduct(id = id)
     }
 
 }

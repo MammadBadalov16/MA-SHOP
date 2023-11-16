@@ -16,6 +16,10 @@ class RemoteRepositoryImpl @Inject constructor(private val shopApi: ShopApi) : R
         return shopApi.getProducts()
     }
 
+    override suspend fun getSearchProducts(query: String): ProductsDTO {
+        return shopApi.getSearchProducts(query = query)
+    }
+
     override suspend fun getProduct(id: Int): ProductDTO {
         return shopApi.getProduct(id)
     }
