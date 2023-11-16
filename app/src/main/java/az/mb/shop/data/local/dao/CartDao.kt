@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Upsert
 import az.mb.shop.data.local.entity.CartEntity
 import az.mb.shop.data.local.entity.FavProductEntity
 import kotlinx.coroutines.flow.Flow
@@ -12,10 +13,10 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface CartDao {
 
-    @Query("SELECT  * FROM CartEntity ")
+    @Query("SELECT  * FROM CartEntity ORDER BY cartId DESC")
     fun getCarts(): Flow<List<CartEntity>>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert()
     suspend fun addCart(cartEntity: CartEntity)
 
     @Query("DELETE FROM CartEntity WHERE id = :id")

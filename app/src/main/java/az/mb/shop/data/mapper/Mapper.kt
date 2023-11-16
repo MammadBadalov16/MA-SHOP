@@ -90,7 +90,8 @@ fun CartEntity.toCart(): Cart {
         rating = rating,
         thumbnail = thumbnail,
         title = title,
-        stock = stock
+        stock = stock,
+        quantity = quantity
     )
 }
 

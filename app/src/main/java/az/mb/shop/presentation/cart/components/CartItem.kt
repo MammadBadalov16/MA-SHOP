@@ -51,8 +51,8 @@ fun CartItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .height(120.dp)
             .padding(top = 25.dp)
-            .clickable { onClickBuy(cart.id) }
     ) {
         Box(
             modifier = Modifier
@@ -71,19 +71,17 @@ fun CartItem(
 
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(),
+                .fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
 
 
             Row(
-
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
 
-                Box(modifier = Modifier.weight(2.2f)) {
+                Column(modifier = Modifier.weight(2.2f)) {
                     Text(
                         text = cart.title,
                         maxLines = 1,
@@ -91,7 +89,16 @@ fun CartItem(
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Medium
                     )
+                    Spacer(modifier = Modifier.height(2.dp))
+                    Text(
+                        text = "Quantity : ${cart.quantity}",
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        fontSize = 12.sp,
+                        color = Color.DarkGray
+                    )
                 }
+
 
                 Box(modifier = Modifier.weight(0.8f)) {
 
@@ -107,42 +114,49 @@ fun CartItem(
             }
 
 
-            Row(Modifier.fillMaxWidth()) {
+
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
 
                 Column(Modifier.weight(1f)) {
 
                     Text(
-                        text = "$${cart.price}",
+                        text = "$${cart.price * cart.quantity!!}",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Medium,
                         color = Color.Black
                     )
                 }
 
-                Quantity(quantityValue = {})
-            }
 
-            Box() {
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    onClick = { },
-                    colors = ButtonDefaults.buttonColors(
-                        contentColor = Color.White,
-                        containerColor = Color.Black
-                    )
-                ) {
+                Box(Modifier.weight(2f)) {
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        onClick = { onClickBuy(cart.id) },
+                        colors = ButtonDefaults.buttonColors(
+                            contentColor = Color.White,
+                            containerColor = Color.Black
+                        )
+                    ) {
 
-                    Text(
-                        text = "Confirm",
-                        fontSize = 15.sp,
-                        color = Color.White
-                    )
+                        Text(
+                            text = "Confirm",
+                            fontSize = 15.sp,
+                            color = Color.White
+                        )
+                    }
                 }
             }
+
         }
     }
 }
+
 
 
 

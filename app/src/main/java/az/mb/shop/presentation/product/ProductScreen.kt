@@ -40,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -51,6 +52,8 @@ import az.mb.shop.R
 import az.mb.shop.domain.model.Product
 import az.mb.shop.presentation.components.ErrorScreen
 import az.mb.shop.presentation.components.MyProgressBar
+import az.mb.shop.presentation.components.ToastSuccess
+import az.mb.shop.presentation.components.ToastSuccessC
 import az.mb.shop.presentation.product.components.BackButton
 import az.mb.shop.presentation.ui.theme.f5
 import coil.compose.SubcomposeAsyncImage
@@ -211,6 +214,7 @@ fun ContentSection(
     onClickRemoveFavorite: (product: Product) -> Unit,
 ) {
 
+    val context = LocalContext.current.applicationContext
     var rating: Float by remember { mutableFloatStateOf(product.rating.toFloat() / 10) }
     var favoriteRemember by remember { mutableStateOf(isFav) }
     var quantityRemember by remember { mutableIntStateOf(1) }
@@ -294,6 +298,7 @@ fun ContentSection(
                         quantity = quantityRemember
                     )
                 )
+                ToastSuccess(context =context, message = "Added successfully !")
             }
         )
     }

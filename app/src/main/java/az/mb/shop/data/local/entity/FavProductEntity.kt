@@ -7,7 +7,8 @@ import androidx.room.Relation
 
 @Entity
 data class FavProductEntity(
-    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey(autoGenerate = true)
+    val favProductId: Int? = null,
     val id: Int,
     val brand: String,
     val category: String,
