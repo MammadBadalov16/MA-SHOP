@@ -36,6 +36,7 @@ fun SearchBarM3(queryChange: (query: String) -> Unit) {
             unfocusedLeadingIconColor = Color.Black,
             focusedLabelColor = Color.Black,
             unfocusedLabelColor = Color.Black,
+            cursorColor = Color.Black
         ),
         value = query,
         onValueChange = {

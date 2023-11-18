@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -55,7 +56,7 @@ fun MainScreen() {
                 context = context
             )
         },
-        drawerState = drawerState
+        drawerState = drawerState,
     ) {
         Scaffold(
             topBar = {
@@ -83,6 +84,7 @@ fun MainScreen() {
             }
         }
     }
+
 
     Log.e("CurrentRoute", currentRoute.toString())
 

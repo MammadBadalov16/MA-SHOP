@@ -5,6 +5,7 @@ data class SignInState(
     val isLoading: Boolean = false,
     val isSuccess: Boolean = false,
     val isEmailVerify: Boolean = false,
+    val token: String? = null,
     val isError: String = ""
 
 )

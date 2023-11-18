@@ -1,5 +1,6 @@
 package az.mb.shop.data.local.dao
 
+import androidx.paging.PagingData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -21,5 +22,6 @@ interface CartDao {
 
     @Query("DELETE FROM CartEntity WHERE id = :id")
     suspend fun deleteCart(id: Int)
+
 
 }

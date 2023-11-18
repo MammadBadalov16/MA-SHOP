@@ -82,7 +82,7 @@ fun CartItem(
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
 
-                Column(modifier = Modifier.weight(2.2f)) {
+                Column(modifier = Modifier.weight(2f)) {
                     Text(
                         text = cart.title,
                         maxLines = 1,
@@ -101,10 +101,11 @@ fun CartItem(
                 }
 
 
-                Box(modifier = Modifier.weight(0.8f)) {
+                Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.TopEnd) {
 
                     Text(
                         text = "${cart.stock} stock",
+                        maxLines = 1,
                         modifier = Modifier
                             .background(color = f5, shape = RoundedCornerShape(8.dp))
                             .padding(top = 5.dp, bottom = 5.dp, start = 8.dp, end = 8.dp),

@@ -5,6 +5,8 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,11 +22,15 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonColors
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -230,21 +236,30 @@ fun ContentSection(
                 text = product.title, fontSize = 25.sp, fontWeight = FontWeight.Bold
             )
 
-            Icon(painter = painterResource(
-                id = if (!favoriteRemember) R.drawable.ic_heart
-                else R.drawable.ic_heart_full
-            ),
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(5.dp)
-                    .size(25.dp)
-                    .clickable {
-                        if (favoriteRemember) onClickRemoveFavorite(product)
-                        else onClickAddFavorite(product)
-                        favoriteRemember = !favoriteRemember
-                    }
+            Box(modifier =
+            Modifier
+                .clip(CircleShape)
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(color = Color.Transparent)
+                ) {
+                    if (favoriteRemember) onClickRemoveFavorite(product)
+                    else onClickAddFavorite(product)
+                    favoriteRemember = !favoriteRemember
+                }
 
-            )
+
+            ) {
+                Icon(painter = painterResource(
+                    id = if (!favoriteRemember) R.drawable.ic_heart
+                    else R.drawable.ic_heart_full
+                ),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(5.dp)
+                        .size(25.dp)
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(15.dp))
@@ -298,7 +313,7 @@ fun ContentSection(
                         quantity = quantityRemember
                     )
                 )
-                ToastSuccess(context =context, message = "Added successfully !")
+                ToastSuccess(context = context, message = "Added successfully !")
             }
         )
     }

@@ -1,6 +1,5 @@
 package az.mb.shop.presentation.home
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,7 +16,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,7 +38,7 @@ import az.mb.shop.presentation.components.ErrorScreen
 import az.mb.shop.presentation.home.components.CategoryItem
 import az.mb.shop.presentation.home.components.ProductsItem
 import az.mb.shop.presentation.home.components.SearchBarM3
-import az.mb.shop.presentation.main.components.TopBar
+import az.mb.shop.presentation.home.components.TopBar
 
 @Composable
 fun HomeScreen(
@@ -53,14 +51,10 @@ fun HomeScreen(
     val favProductsState = viewModel.stateFavProducts.value
     val category = categoriesState.categories
     val products = productsState.products
-
     val favProducts = favProductsState.products
+
     var onClickTryAgain by remember { mutableStateOf(false) }
-
     var query by rememberSaveable { mutableStateOf("") }
-
-
-
 
 
     Box(
@@ -77,13 +71,9 @@ fun HomeScreen(
                 .fillMaxSize(),
         ) {
 
-            TopBar(drawerState = drawerState)
-
-            Spacer(modifier = Modifier.height(30.dp))
-
-            SearchBarM3(queryChange = {
-                viewModel.getSearchProducts(query = it)
+            HeaderSection(drawerState = drawerState, changeQuery = {
                 query = it
+                viewModel.getSearchProducts(query = it)
             })
 
             if (query == "") {
@@ -95,8 +85,6 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(30.dp))
 
-
-
             if (products.isNotEmpty())
                 ProductSection(
                     favProducts = favProducts,
@@ -106,7 +94,6 @@ fun HomeScreen(
                 )
 
         }
-
 
         if (productsState.isLoading)
             CircularProgressIndicator(
@@ -134,6 +121,21 @@ fun HomeScreen(
         viewModel.getCategories()
         viewModel.getProducts()
     }
+}
+
+@Composable
+fun HeaderSection(
+    drawerState: DrawerState,
+    changeQuery: (query: String) -> Unit
+) {
+    TopBar(drawerState = drawerState)
+
+    Spacer(modifier = Modifier.height(10.dp))
+
+    SearchBarM3(queryChange = {
+        changeQuery(it)
+    })
+
 }
 
 @Composable
@@ -180,21 +182,18 @@ fun ProductSection(
     navController: NavController,
     viewModel: HomeViewModel,
 ) {
-
-    val products = rememberSaveable { products }
     val favProductsId: MutableList<Int> = mutableListOf()
 
     favProducts.forEach { favProductsId.add(it.id) }
 
     LazyVerticalGrid(
+        modifier = Modifier.fillMaxSize(),
         columns = GridCells.Fixed(2),
         verticalArrangement = Arrangement.Center,
         horizontalArrangement = Arrangement.Center
     ) {
         items(count = products.size,
             itemContent = {
-
-
                 ProductsItem(product = products[it],
                     isFav = favProductsId.contains(products[it].id),
                     onClick = { id ->
@@ -212,6 +211,7 @@ fun ProductSection(
             })
     }
 }
+
 
 fun productsByCategories(viewModel: HomeViewModel, category: String) {
     if (category == "All")

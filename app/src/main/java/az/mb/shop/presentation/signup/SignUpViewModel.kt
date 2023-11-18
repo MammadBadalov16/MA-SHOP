@@ -5,8 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import az.mb.shop.common.Resource
-import az.mb.shop.domain.use_case.signup.SignUpUseCase
-import az.mb.shop.presentation.signIn.state.SignInState
+import az.mb.shop.domain.use_case.auth.SignUpUseCase
 import az.mb.shop.presentation.signup.state.SignUpState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn

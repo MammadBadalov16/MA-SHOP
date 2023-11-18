@@ -68,6 +68,9 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3:1.1.2")
     implementation("com.google.firebase:firebase-auth:22.2.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.google.android.material:material:1.10.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -110,7 +113,8 @@ dependencies {
     implementation("com.github.shubhamvashisht:KToasty:1.0")
     //icons
     implementation("androidx.compose.material:material-icons-extended:1.5.4")
-
+    //Splash API
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
 
 }

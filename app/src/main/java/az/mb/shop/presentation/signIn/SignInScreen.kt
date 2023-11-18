@@ -58,28 +58,30 @@ fun SignInScreen(
 ) {
     val context = LocalContext.current.applicationContext
     val sharedPreferences = PreferencesManager(context)
-    val state = viewModel.signInState.value
+    val signInState = viewModel.signInState.value
     var emailValue by rememberSaveable { mutableStateOf("") }
     var passwordValue by rememberSaveable { mutableStateOf("") }
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
     var isSuccess by remember { mutableStateOf(false) }
 
+
+
     Box(
         modifier = Modifier
-            .fillMaxSize()
-            .background(White),
+            .background(White)
+            .verticalScroll(rememberScrollState()),
         contentAlignment = Alignment.Center,
 
         ) {
 
-        AnimatedVisibility(visible = !state.isLoading) {
+        AnimatedVisibility(visible = !signInState.isLoading) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
                 modifier = Modifier
                     .fillMaxSize()
                     .background(White)
-                    .verticalScroll(rememberScrollState())
+
             ) {
 
                 Image(
@@ -126,7 +128,7 @@ fun SignInScreen(
                                 ToastError(context = context, message = message)
                             }
 
-                            Log.e("HomeViewModel", state.toString())
+                            Log.e("HomeViewModel", signInState.toString())
                         },
                         modifier = Modifier
                             .fillMaxWidth(0.9f),
@@ -151,7 +153,7 @@ fun SignInScreen(
             }
         }
 
-        if (state.isLoading) {
+        if (signInState.isLoading) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
@@ -159,21 +161,24 @@ fun SignInScreen(
                 CircularProgressIndicator(color = Black)
             }
         }
+
     }
 
-    if (state.isSuccess && !state.isEmailVerify) {
+
+    if (signInState.isSuccess && !signInState.isEmailVerify) {
         ToastErrorC(context = context, message = "Please confirm your email address.")
     }
 
-    if (state.isError.isNotBlank()) {
-        ToastErrorC(context = context, message = state.isError)
+    if (signInState.isError.isNotBlank()) {
+        ToastErrorC(context = context, message = signInState.isError)
     }
 
-    LaunchedEffect(key1 = state) {
-        if (state.isSuccess && state.isEmailVerify) {
+    LaunchedEffect(key1 = signInState) {
+        if (signInState.isSuccess && signInState.isEmailVerify && signInState.token != null) {
+            sharedPreferences.saveData(Constants.TOKEN, signInState.token)
             ToastSuccess(context = context, message = "Sign In successfully")
-            sharedPreferences.saveData(Constants.TOKEN, "fakeToken")
             isSuccess = true
+
         }
     }
 

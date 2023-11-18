@@ -80,12 +80,6 @@ fun SignUpScreen(
 
             ) {
 
-                Image(
-                    painter = painterResource(id = R.drawable.img2),
-                    contentDescription = "image",
-                    modifier = Modifier.size(300.dp)
-                )
-
                 Text(
                     text = "Sign Up",
                     style = TextStyle(fontWeight = FontWeight.Bold),
