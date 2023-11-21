@@ -1,5 +1,6 @@
 package az.mb.shop.navigation.graphs
 
+import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -40,6 +41,13 @@ fun MyNavGraph(
             )
         }
         composable(
+            enterTransition = {
+                EnterTransition.None
+                 fadeIn(animationSpec = tween(200))
+            },
+            exitTransition = {
+                fadeOut(animationSpec = tween(500))
+            },
             route = Screen.Product.route + "/{productId}"
         ) {
             ProductScreen(navController = navController)

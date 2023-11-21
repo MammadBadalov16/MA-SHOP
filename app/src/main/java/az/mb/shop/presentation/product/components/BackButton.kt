@@ -26,7 +26,8 @@ fun BackButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
             .size(30.dp)
             .background(color = Color.Transparent, shape = CircleShape)
             .clip(CircleShape)
-            .clickable { onClick() }, contentAlignment = Alignment.Center
+            .clickable { onClick() },
+        contentAlignment = Alignment.Center
 
     ) {
         Image(

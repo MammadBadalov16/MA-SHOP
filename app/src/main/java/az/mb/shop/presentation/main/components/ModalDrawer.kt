@@ -52,6 +52,8 @@ fun ModalDrawer(
     selectedItemIndex = selectBottomNavItem
 
     ModalDrawerSheet(drawerContainerColor = Color.White) {
+        Spacer(modifier = Modifier.height(25.dp))
+        DrawerHeader()
         Spacer(modifier = Modifier.height(16.dp))
         drawerNavigationScreens.forEachIndexed { index, item ->
             Log.e("s123", index.toString())

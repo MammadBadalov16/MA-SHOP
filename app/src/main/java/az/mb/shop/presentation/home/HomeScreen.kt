@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Text
@@ -186,29 +188,34 @@ fun ProductSection(
 
     favProducts.forEach { favProductsId.add(it.id) }
 
-    LazyVerticalGrid(
-        modifier = Modifier.fillMaxSize(),
-        columns = GridCells.Fixed(2),
-        verticalArrangement = Arrangement.Center,
-        horizontalArrangement = Arrangement.Center
-    ) {
-        items(count = products.size,
-            itemContent = {
-                ProductsItem(product = products[it],
-                    isFav = favProductsId.contains(products[it].id),
-                    onClick = { id ->
-                        navigateToProductById(
-                            productId = id,
-                            navController = navController
-                        )
-                    }, onClickAddFavorite = { product ->
-                        viewModel.onEvent(HomeEvents.AddFavProduct(product))
+    Column(Modifier.fillMaxSize()) {
+        LazyVerticalGrid(
 
-                    }, onClickRemoveFavorite = { product ->
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(2f),
+            columns = GridCells.Fixed(2),
+            // verticalArrangement = Arrangement.Center,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            items(count = products.size,
+                itemContent = {
+                    ProductsItem(product = products[it],
+                        isFav = favProductsId.contains(products[it].id),
+                        onClick = { id ->
+                            navigateToProductById(
+                                productId = id,
+                                navController = navController
+                            )
+                        }, onClickAddFavorite = { product ->
+                            viewModel.onEvent(HomeEvents.AddFavProduct(product))
 
-                        viewModel.onEvent(HomeEvents.RemoveFavProduct(product.id))
-                    })
-            })
+                        }, onClickRemoveFavorite = { product ->
+
+                            viewModel.onEvent(HomeEvents.RemoveFavProduct(product.id))
+                        })
+                })
+        }
     }
 }
 

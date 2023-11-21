@@ -188,7 +188,7 @@ fun checkFields(user: User, viewModel: SignUpViewModel): String {
     if (password.length < 6)
         return "Your code must be more than 6 digits"
 
-    viewModel.signUp(email, password)
+    viewModel.signUp(email = email, password = password, nameAndSurname = "$name $surname")
 
     return ""
 }

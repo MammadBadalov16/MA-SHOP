@@ -10,10 +10,18 @@ import javax.inject.Inject
 
 class SignUpUseCase @Inject constructor(private val authRepository: AuthRepository) {
 
-    operator fun invoke(email: String, password: String): Flow<Resource<AuthResult>> = flow {
+    operator fun invoke(
+        email: String,
+        password: String,
+        nameAndSurname: String
+    ): Flow<Resource<AuthResult>> = flow {
         try {
             emit(Resource.Loading())
-            val result = authRepository.signUp(email = email, password = password)
+            val result = authRepository.signUp(
+                email = email,
+                password = password,
+                nameAndSurname = nameAndSurname
+            )
             emit(Resource.Success(data = result))
         } catch (e: Exception) {
             emit(Resource.Error(message = e.message.toString()))

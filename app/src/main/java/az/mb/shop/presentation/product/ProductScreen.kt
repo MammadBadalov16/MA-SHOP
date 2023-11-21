@@ -157,7 +157,11 @@ fun ProductScreen(
 fun HeaderSection(navController: NavController, product: Product) {
 
     Box(modifier = Modifier.fillMaxWidth()) {
-        BackButton(onClick = { navController.navigateUp() })
+        BackButton(onClick = {
+            //.popBackStack()
+            navController.popBackStack()
+
+        })
 
         Box(modifier = Modifier.align(Alignment.Center)) {
             Text(text = product.brand)
@@ -250,10 +254,11 @@ fun ContentSection(
 
 
             ) {
-                Icon(painter = painterResource(
-                    id = if (!favoriteRemember) R.drawable.ic_heart
-                    else R.drawable.ic_heart_full
-                ),
+                Icon(
+                    painter = painterResource(
+                        id = if (!favoriteRemember) R.drawable.ic_heart
+                        else R.drawable.ic_heart_full
+                    ),
                     contentDescription = null,
                     modifier = Modifier
                         .padding(5.dp)

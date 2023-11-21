@@ -66,7 +66,7 @@ fun CartScreen(viewModel: CartViewModel = hiltViewModel()) {
 
             }
 
-        }else{
+        } else {
             Text(
                 text = "Cart is empty",
                 overflow = TextOverflow.Ellipsis,
@@ -91,34 +91,28 @@ fun CartSection(carts: List<Cart>, viewModel: CartViewModel) {
             val state = rememberDismissState(
                 confirmValueChange = {
                     if (it == DismissValue.DismissedToStart) {
-                        viewModel.deleteCart(item.id)
+                        viewModel.deleteCart(item.cartId)
                         false
                     } else true
                 }
             )
 
             SwipeToDismiss(
-
+                directions = setOf(DismissDirection.EndToStart),
                 state = state,
                 background = {
-                    val color = when (state.dismissDirection) {
-                        DismissDirection.EndToStart -> Color.Red
-                        DismissDirection.StartToEnd -> Color.Green
-                        null -> Color.Transparent
-                    }
+                    val color = if (state.dismissDirection == DismissDirection.EndToStart) Color.Red
+                    else Color.Transparent
+
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(color)
+                            .background(color = color)
                             .padding(horizontal = 20.dp, vertical = 6.dp)
                     ) {
                         Icon(
                             imageVector = Icons.Default.Delete, contentDescription = "Delete",
                             modifier = Modifier.align(Alignment.CenterEnd)
-                        )
-                        Icon(
-                            imageVector = Icons.Default.Edit, contentDescription = "edit",
-                            modifier = Modifier.align(Alignment.CenterStart)
                         )
                     }
 
@@ -126,8 +120,6 @@ fun CartSection(carts: List<Cart>, viewModel: CartViewModel) {
                 dismissContent = {
                     CartItem(cart = item, onClickBuy = {})
                 })
-
-
         }
     }
 

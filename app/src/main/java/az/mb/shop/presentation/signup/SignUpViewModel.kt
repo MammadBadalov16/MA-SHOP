@@ -22,8 +22,8 @@ class SignUpViewModel @Inject constructor(
     val signUpState: State<SignUpState> = _signUpState
 
 
-    fun signUp(email: String, password: String) {
-        signUpUseCase(email = email, password = password).onEach {
+    fun signUp(email: String, password: String, nameAndSurname: String) {
+        signUpUseCase(email = email, password = password, nameAndSurname = nameAndSurname).onEach {
 
             when (it) {
                 is Resource.Success -> {
@@ -38,6 +38,8 @@ class SignUpViewModel @Inject constructor(
                 is Resource.Error -> {
                     _signUpState.value = (SignUpState(isError = it.message ?: "Please try again"))
                 }
+
+                else -> {}
             }
 
         }.launchIn(viewModelScope)

@@ -20,7 +20,7 @@ interface CartDao {
     @Insert()
     suspend fun addCart(cartEntity: CartEntity)
 
-    @Query("DELETE FROM CartEntity WHERE id = :id")
+    @Query("DELETE FROM CartEntity WHERE cartId = :id")
     suspend fun deleteCart(id: Int)
 
 

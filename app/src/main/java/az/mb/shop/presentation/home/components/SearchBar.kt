@@ -43,7 +43,8 @@ fun SearchBarM3(queryChange: (query: String) -> Unit) {
             query = it
             queryChange(it)
         },
-        label = { Text("Search for a brand, product or category") },
+        maxLines = 2,
+        label = { Text(text = "Search for a brand, product or category") },
         leadingIcon = {
             Icon(
                 Icons.Default.Search,

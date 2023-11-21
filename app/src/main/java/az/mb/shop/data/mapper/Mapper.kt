@@ -85,6 +85,7 @@ fun Product.toCartEntity(): CartEntity {
 
 fun CartEntity.toCart(): Cart {
     return Cart(
+        cartId = cartId!!,
         id = id,
         price = price,
         rating = rating,
