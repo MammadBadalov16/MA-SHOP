@@ -8,6 +8,8 @@ import az.mb.shop.data.remote.dto.product.ProductsDTO
 import az.mb.shop.domain.model.Cart
 import az.mb.shop.domain.model.Category
 import az.mb.shop.domain.model.Product
+import az.mb.shop.domain.model.User
+import com.google.firebase.auth.FirebaseUser
 
 
 fun ProductDTO.toProduct(): Product {
@@ -95,6 +97,16 @@ fun CartEntity.toCart(): Cart {
         quantity = quantity
     )
 }
+
+fun FirebaseUser.toUser(): User? {
+    return User(
+        name = displayName!!,
+        surname = displayName!!,
+        email = email!!,
+        password = ""
+    )
+}
+
 
 
 

@@ -171,24 +171,26 @@ fun SignUpScreen(
 }
 
 fun checkFields(user: User, viewModel: SignUpViewModel): String {
-    val name = user.name.trim()
-    val surname = user.surname.trim()
-    val email = user.email.trim()
-    val password = user.password.trim()
+    val name = user.name?.trim()
+    val surname = user.surname?.trim()
+    val email = user.email?.trim()
+    val password = user.password?.trim()
 
-    if (name.isEmpty() || name == "")
+    if (name != null)
         return "Please enter name."
 
-    if (surname.isEmpty() || surname == "")
+    if (surname != null)
         return "Please enter surname"
 
-    if (!email.contains('@'))
-        return "Please enter your email address correctly"
+    if (email != null)
+        if (!(email.contains('@')))
+            return "Please enter your email address correctly"
+    if (password != null)
+        if (password.length < 6)
+            return "Your code must be more than 6 digits"
 
-    if (password.length < 6)
-        return "Your code must be more than 6 digits"
-
-    viewModel.signUp(email = email, password = password, nameAndSurname = "$name $surname")
+    if (email != null && password != null)
+        viewModel.signUp(email = email, password = password, nameAndSurname = "$name $surname")
 
     return ""
 }

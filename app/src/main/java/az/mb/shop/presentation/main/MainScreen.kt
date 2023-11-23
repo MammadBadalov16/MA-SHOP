@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -32,8 +33,9 @@ import az.mb.shop.presentation.main.components.ModalDrawer
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
 
+    val user = viewModel.userState.value.user
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     var currentRoute = navBackStackEntry?.destination?.route
@@ -43,12 +45,13 @@ fun MainScreen() {
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
-    val selectedItemId = remember { mutableIntStateOf(3) }
+    val selectedItemId = remember { mutableIntStateOf(Screen.Profile.id) }
 
 
     ModalNavigationDrawer(
         drawerContent = {
             ModalDrawer(
+                user = user,
                 clickItemId = { selectedItemId.value = it },
                 navController = navController,
                 drawerState = drawerState,
@@ -79,7 +82,8 @@ fun MainScreen() {
             Box(modifier = Modifier.padding(it)) {
                 MyNavGraph(
                     navController = navController,
-                    drawerState = drawerState
+                    drawerState = drawerState,
+                    startDestination = Screen.Profile.route
                 )
             }
         }

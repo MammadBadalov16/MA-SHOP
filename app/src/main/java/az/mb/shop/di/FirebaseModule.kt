@@ -1,7 +1,9 @@
 package az.mb.shop.di
 
 import az.mb.shop.data.repository.AuthRepositoryImpl
+import az.mb.shop.data.repository.UserRepositoryImpl
 import az.mb.shop.domain.repository.AuthRepository
+import az.mb.shop.domain.repository.UserRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
@@ -25,8 +27,19 @@ object FirebaseModule {
 
     @Provides
     @Singleton
-    fun providesRepositoryImpl(firebaseAuth: FirebaseAuth,firebaseFireStore: FirebaseFirestore): AuthRepository {
-        return AuthRepositoryImpl(firebaseAuth,firebaseFireStore)
+    fun providesRepositoryImpl(
+        firebaseAuth: FirebaseAuth,
+        firebaseFireStore: FirebaseFirestore
+    ): AuthRepository {
+        return AuthRepositoryImpl(firebaseAuth, firebaseFireStore)
+    }
+
+    @Provides
+    @Singleton
+    fun providesUserRepositoryImpl(
+        firebaseAuth: FirebaseAuth, firebaseFireStore: FirebaseFirestore
+    ): UserRepository {
+        return UserRepositoryImpl(firebaseAuth, firebaseFireStore)
     }
 
 }

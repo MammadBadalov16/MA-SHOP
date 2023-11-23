@@ -22,9 +22,11 @@ import androidx.compose.ui.unit.sp
 import az.mb.shop.R
 import az.mb.shop.presentation.ui.theme.f3
 import az.mb.shop.presentation.ui.theme.f5
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.auth.User
 
 @Composable
-fun DrawerHeader() {
+fun DrawerHeader(user: FirebaseUser?) {
 
     Box(
         modifier = Modifier
@@ -43,18 +45,15 @@ fun DrawerHeader() {
             )
             Spacer(modifier = Modifier.height(5.dp))
 
-            Text(
-                text = "Mammad Badalov",
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black
-            )
-            Text(text = "mammadbadalov16@gmail.com", fontSize = 14.sp, color = Color.Black)
-
-
+            if ((user?.displayName != null) && (user.email != null)) {
+                Text(
+                    text = user.displayName!!,
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+                Text(text = user.email!!, fontSize = 14.sp, color = Color.Black)
+            }
         }
-
     }
-
-
 }

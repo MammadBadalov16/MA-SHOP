@@ -22,21 +22,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import az.mb.shop.common.PreferencesManager
-import az.mb.shop.navigation.Screen
-import az.mb.shop.navigation.navigation_items.bottomNavigationScreens
 import az.mb.shop.navigation.navigation_items.drawerNavigationScreens
 import az.mb.shop.presentation.ui.theme.darkGrey
 import az.mb.shop.presentation.ui.theme.f5
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ModalDrawer(
+    user: FirebaseUser?,
     clickItemId: (index: Int) -> Unit,
     navController: NavController,
     scope: CoroutineScope,
@@ -53,7 +49,7 @@ fun ModalDrawer(
 
     ModalDrawerSheet(drawerContainerColor = Color.White) {
         Spacer(modifier = Modifier.height(25.dp))
-        DrawerHeader()
+        DrawerHeader(user = user)
         Spacer(modifier = Modifier.height(16.dp))
         drawerNavigationScreens.forEachIndexed { index, item ->
             Log.e("s123", index.toString())
