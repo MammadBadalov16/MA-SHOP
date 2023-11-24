@@ -1,5 +1,7 @@
 package az.mb.shop.presentation.cart
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -57,7 +59,8 @@ fun CartScreen(viewModel: CartViewModel = hiltViewModel()) {
                     text = "Cart",
                     overflow = TextOverflow.Ellipsis,
                     fontSize = 22.sp,
-                    fontWeight = FontWeight.Medium
+                    fontWeight = FontWeight.Medium,
+                    color = Color.Black
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -70,6 +73,8 @@ fun CartScreen(viewModel: CartViewModel = hiltViewModel()) {
             Text(
                 text = "Cart is empty",
                 overflow = TextOverflow.Ellipsis,
+                color = Color.Black
+
             )
 
         }

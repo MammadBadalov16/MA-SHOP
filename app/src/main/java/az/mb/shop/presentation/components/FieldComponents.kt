@@ -1,24 +1,19 @@
 package az.mb.shop.presentation.components
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.PersonOutline
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextFieldColors
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,14 +28,12 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import az.mb.shop.R
 import az.mb.shop.navigation.Screen
 import az.mb.shop.presentation.ui.theme.placeHolder
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FieldEmail(
     initOldValue: String,
@@ -50,13 +43,16 @@ fun FieldEmail(
     emailValue = initOldValue
 
     OutlinedTextField(
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            unfocusedBorderColor = Color.Gray,
-            unfocusedLabelColor = Color.Black,
-            unfocusedLeadingIconColor = Color.Black,
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedTextColor = Color.Black,
+            unfocusedTextColor = Color.Black,
+            cursorColor = Color.Black,
             focusedBorderColor = Color.Black,
+            unfocusedBorderColor = Color.Gray,
+            focusedLeadingIconColor = Color.Black,
+            unfocusedLeadingIconColor = Color.Black,
             focusedLabelColor = Color.Black,
-            focusedLeadingIconColor = Color.Black
+            unfocusedLabelColor = Color.Black,
         ),
         value = emailValue,
         onValueChange = {
@@ -81,7 +77,6 @@ fun FieldEmail(
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FieldPassword(
     initOldValue: String,
@@ -95,13 +90,16 @@ fun FieldPassword(
 
 
     OutlinedTextField(
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            unfocusedBorderColor = Color.Gray,
-            unfocusedLabelColor = Color.Black,
-            unfocusedLeadingIconColor = Color.Black,
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedTextColor = Color.Black,
+            unfocusedTextColor = Color.Black,
+            cursorColor = Color.Black,
             focusedBorderColor = Color.Black,
+            unfocusedBorderColor = Color.Gray,
+            focusedLeadingIconColor = Color.Black,
+            unfocusedLeadingIconColor = Color.Black,
             focusedLabelColor = Color.Black,
-            focusedLeadingIconColor = Color.Black
+            unfocusedLabelColor = Color.Black,
         ),
         value = passwordValue,
         onValueChange = {
@@ -136,7 +134,6 @@ fun FieldPassword(
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FieldString(
     initOldValue: String,
@@ -147,13 +144,16 @@ fun FieldString(
     value = initOldValue
 
     OutlinedTextField(
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            unfocusedBorderColor = Color.Gray,
-            unfocusedLabelColor = Color.Black,
-            unfocusedLeadingIconColor = Color.Black,
+        colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = Color.Black,
+            unfocusedBorderColor = Color.Gray,
+            focusedLeadingIconColor = Color.Black,
+            unfocusedLeadingIconColor = Color.Black,
             focusedLabelColor = Color.Black,
-            focusedLeadingIconColor = Color.Black
+            unfocusedLabelColor = Color.Black,
+            cursorColor = Color.Black,
+            focusedTextColor = Color.Black,
+            unfocusedTextColor = Color.Black
         ),
         value = value,
         onValueChange = {

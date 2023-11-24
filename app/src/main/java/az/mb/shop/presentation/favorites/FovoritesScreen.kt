@@ -49,7 +49,9 @@ fun FavoritesScreen(
         if (products.isNotEmpty())
             content(products = products, navController = navController)
 
-        if (products.isEmpty() && !state.value.isLoading) Text(text = "Favorites is empty")
+        if (products.isEmpty() && !state.value.isLoading) Text(
+            text = "Favorites is empty", color = Color.Black
+        )
 
         if (state.value.error.isNotBlank())
             ErrorScreen(
@@ -70,7 +72,8 @@ fun content(
             text = "Favorites",
             overflow = TextOverflow.Ellipsis,
             fontSize = 22.sp,
-            fontWeight = FontWeight.Medium
+            fontWeight = FontWeight.Medium,
+            color = Color.Black
         )
 
         Spacer(modifier = Modifier.height(12.dp))

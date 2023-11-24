@@ -176,10 +176,10 @@ fun checkFields(user: User, viewModel: SignUpViewModel): String {
     val email = user.email?.trim()
     val password = user.password?.trim()
 
-    if (name != null)
+    if (name == null)
         return "Please enter name."
 
-    if (surname != null)
+    if (surname == null)
         return "Please enter surname"
 
     if (email != null)
@@ -190,7 +190,7 @@ fun checkFields(user: User, viewModel: SignUpViewModel): String {
             return "Your code must be more than 6 digits"
 
     if (email != null && password != null)
-        viewModel.signUp(email = email, password = password, nameAndSurname = "$name $surname")
+        viewModel.signUp(email = email, password = password, name = name, surname = surname)
 
     return ""
 }

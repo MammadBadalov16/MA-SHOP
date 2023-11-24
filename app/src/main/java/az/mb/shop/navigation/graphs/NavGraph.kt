@@ -4,10 +4,13 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -27,6 +30,7 @@ fun MyNavGraph(
     NavHost(
         navController = navController,
         startDestination = startDestination,
+        modifier = Modifier.background(Color.White),
         enterTransition = {
             fadeIn(animationSpec = tween(700))
         },
@@ -43,7 +47,7 @@ fun MyNavGraph(
         composable(
             enterTransition = {
                 EnterTransition.None
-                 fadeIn(animationSpec = tween(200))
+                fadeIn(animationSpec = tween(200))
             },
             exitTransition = {
                 fadeOut(animationSpec = tween(500))

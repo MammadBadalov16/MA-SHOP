@@ -3,6 +3,7 @@ package az.mb.shop.presentation.home.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,8 +13,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -57,8 +60,12 @@ fun ProductsItem(
 
     Box(
         modifier = Modifier
-            .clickable { onClick(product.id!!) }
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = rememberRipple(color = Color.Transparent)
+            ) { onClick(product.id!!) }
             .padding(10.dp)
+            .wrapContentHeight()
     ) {
         Column() {
             ConstraintLayout() {
@@ -116,7 +123,8 @@ fun ProductsItem(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     fontSize = 15.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
                 )
                 Spacer(modifier = Modifier.height(5.dp))
 
@@ -136,14 +144,15 @@ fun ProductsItem(
                         }
                     )
                     Spacer(modifier = Modifier.width(5.dp))
-                    Text(text = "${product.rating} |  ", fontSize = 12.sp)
+                    Text(text = "${product.rating} |  ", fontSize = 12.sp, color = Color.Black)
                     Text(
                         text = "${product.stock} stock",
                         modifier = Modifier
                             .background(color = f5, shape = RoundedCornerShape(8.dp))
                             .padding(top = 5.dp, bottom = 5.dp, start = 8.dp, end = 8.dp),
                         fontSize = 9.sp,
-                        fontWeight = FontWeight.Black
+                        fontWeight = FontWeight.Black,
+                        color = Color.Black
                     )
                 }
                 Spacer(modifier = Modifier.height(5.dp))
@@ -152,7 +161,6 @@ fun ProductsItem(
                     fontWeight = FontWeight(600),
                     color = Color.Black
                 )
-
             }
         }
     }

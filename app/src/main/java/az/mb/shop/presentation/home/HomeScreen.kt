@@ -12,10 +12,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Text
@@ -154,13 +153,15 @@ fun CategorySection(
             Text(
                 text = "Categories",
                 fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
+                fontSize = 20.sp,
+                color = Color.Black
             )
             Text(
                 text = "See All",
                 fontWeight = FontWeight.Black,
                 fontSize = 15.sp,
-                modifier = Modifier.clickable { }
+                color = Color.Black,
+                        modifier = Modifier.clickable { }
             )
         }
 
@@ -188,35 +189,29 @@ fun ProductSection(
 
     favProducts.forEach { favProductsId.add(it.id) }
 
-    Column(Modifier.fillMaxSize()) {
-        LazyVerticalGrid(
+    LazyVerticalStaggeredGrid(
+        modifier = Modifier.fillMaxSize(),
+        columns = StaggeredGridCells.Fixed(2),
+        horizontalArrangement = Arrangement.Center,
+        content = {
+            items(products, key = { products -> products.id }) { item ->
+                ProductsItem(product = item,
+                    isFav = favProductsId.contains(item.id),
+                    onClick = { id ->
+                        navigateToProductById(
+                            productId = id,
+                            navController = navController
+                        )
+                    }, onClickAddFavorite = { product ->
+                        viewModel.onEvent(HomeEvents.AddFavProduct(product))
 
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(2f),
-            columns = GridCells.Fixed(2),
-            // verticalArrangement = Arrangement.Center,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            items(count = products.size,
-                itemContent = {
-                    ProductsItem(product = products[it],
-                        isFav = favProductsId.contains(products[it].id),
-                        onClick = { id ->
-                            navigateToProductById(
-                                productId = id,
-                                navController = navController
-                            )
-                        }, onClickAddFavorite = { product ->
-                            viewModel.onEvent(HomeEvents.AddFavProduct(product))
+                    }, onClickRemoveFavorite = { product ->
 
-                        }, onClickRemoveFavorite = { product ->
-
-                            viewModel.onEvent(HomeEvents.RemoveFavProduct(product.id))
-                        })
-                })
+                        viewModel.onEvent(HomeEvents.RemoveFavProduct(product.id))
+                    })
+            }
         }
-    }
+    )
 }
 
 

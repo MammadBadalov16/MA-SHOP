@@ -7,7 +7,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,6 +19,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,25 +39,41 @@ import az.mb.shop.common.check_network.ConnectionState
 import az.mb.shop.common.check_network.connectivityState
 import az.mb.shop.domain.model.User
 import az.mb.shop.presentation.components.ErrorScreen
-import az.mb.shop.presentation.main.MainScreen
-import az.mb.shop.presentation.main.components.DrawerHeader
 import az.mb.shop.presentation.profile.components.UserInfoTextField
 import az.mb.shop.presentation.ui.theme.f5
 import com.google.firebase.auth.FirebaseUser
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun ProfileScreen(viewModel: ProfileViewModel = hiltViewModel()) {
 
-    val state = viewModel.userState.value
-    val user = viewModel.userState.value.user
+    val stateUser = viewModel.userState.value
+    val user = stateUser.user
+
+    val stateUserAdditional = viewModel.userAdditionalState.value
+    val userAdditional = stateUserAdditional.user
+
+    val stateAddUser = viewModel.addInfoUserState.value
 
     val connection by connectivityState()
-    val isConnectedLost = connection === ConnectionState.Lost
+    val isConnected = connection === ConnectionState.Available
+
+    var showInternetConnection by rememberSaveable { mutableStateOf(false) }
+
 
     var addressValue by rememberSaveable { mutableStateOf("") }
     var phoneValue by rememberSaveable { mutableStateOf("") }
 
     var onClickTryAgain by remember { mutableStateOf(false) }
+
+    LaunchedEffect(key1 = userAdditional) {
+        if (userAdditional?.address != null)
+            addressValue = userAdditional.address
+        if (userAdditional?.phone != null)
+            phoneValue = userAdditional.phone
+    }
+
 
     Box(
         modifier = Modifier
@@ -67,74 +83,59 @@ fun ProfileScreen(viewModel: ProfileViewModel = hiltViewModel()) {
         contentAlignment = Alignment.Center
     ) {
 
-        if (user != null) {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+        if (stateUser.isLoading || stateAddUser.isLoading || stateUserAdditional.isLoading) {
+            CircularProgressIndicator(color = Color.Black)
+        } else {
+            if (user != null) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
 
-                SectionTopBar(onClickSave = {
-                    viewModel.onEvents(
-                        event = ProfileEvents.SaveChanges(
-                            user = User(address = addressValue, phone = phoneValue)
-                        )
-                    )
-                })
 
-                Spacer(modifier = Modifier.height(30.dp))
+                    Spacer(modifier = Modifier.height(30.dp))
 
-                SectionHeader(user = user)
+                    SectionHeader(user = user)
 
-                Spacer(modifier = Modifier.height(20.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
 
-                SectionChangeUserInfo(
-                    firebaseUser = user,
-                    initOldAddressValue = addressValue,
-                    initOldPhoneValue = phoneValue,
-                    onChangeAddressValue = { addressValue = it },
-                    onChangePhoneValue = { phoneValue = it })
-
+                    SectionChangeUserInfo(
+                        firebaseUser = user,
+                        initOldAddressValue = addressValue,
+                        initOldPhoneValue = phoneValue,
+                        onChangeAddressValue = { addressValue = it },
+                        onChangePhoneValue = { phoneValue = it },
+                        onSaveChanges = {
+                            if (!isConnected) {
+                                showInternetConnection = true
+                            } else {
+                                viewModel.onEvents(
+                                    event = ProfileEvents.SaveChanges(
+                                        user = User(
+                                            name = userAdditional?.name,
+                                            surname = userAdditional?.surname,
+                                            email = userAdditional?.email,
+                                            address = addressValue,
+                                            phone = phoneValue
+                                        )
+                                    )
+                                )
+                            }
+                        })
+                }
             }
         }
 
-        if (state.isBoolean)
-            CircularProgressIndicator(color = Color.Black)
-
-        if (state.isError.isNotBlank())
-            ErrorScreen(error = state.isError, onClick = { onClickTryAgain = true })
-
-        if (isConnectedLost)
+        if (showInternetConnection)
             ErrorScreen(
                 error = "Please check internet connection and try again",
                 onClick = { onClickTryAgain = true })
 
+        if (stateUser.isError.isNotBlank())
+            ErrorScreen(error = stateUser.isError, onClick = { onClickTryAgain = true })
 
         if (onClickTryAgain) {
             viewModel.getUserInfo()
-        }
-    }
-}
-
-
-@Composable
-fun SectionTopBar(onClickSave: () -> Unit) {
-
-    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
-
-        Box(modifier = Modifier
-            .clip(CircleShape)
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = rememberRipple(color = Color.Transparent)
-            ) {
-                onClickSave()
-            }) {
-            Text(
-                text = "Save",
-                fontSize = 18.sp,
-                modifier = Modifier
-                    .padding(5.dp),
-            )
         }
     }
 }
@@ -169,7 +170,8 @@ fun SectionChangeUserInfo(
     initOldAddressValue: String,
     initOldPhoneValue: String,
     onChangeAddressValue: (value: String) -> Unit,
-    onChangePhoneValue: (value: String) -> Unit
+    onChangePhoneValue: (value: String) -> Unit,
+    onSaveChanges: () -> Unit
 ) {
     /*  var addressValue by rememberSaveable { mutableStateOf("") }
       var phoneValue by rememberSaveable { mutableStateOf("") }*/
@@ -221,13 +223,13 @@ fun SectionChangeUserInfo(
         modifier = Modifier
             .fillMaxWidth()
             .height(50.dp),
-        onClick = { },
+        onClick = { onSaveChanges() },
         colors = ButtonDefaults.buttonColors(
             contentColor = Color.White,
             containerColor = Color.Black
         )
     ) {
-        Text(text = "Delete account")
+        Text(text = "Save")
     }
 
 }

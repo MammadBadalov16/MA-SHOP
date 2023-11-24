@@ -1,6 +1,7 @@
 package az.mb.shop.presentation.home.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -10,11 +11,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NotificationsNone
+import androidx.compose.material.ripple.rememberRipple
 import az.mb.shop.R
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,7 +41,10 @@ fun TopBar(drawerState: DrawerState) {
             modifier = Modifier
                 .size(38.dp)
                 .clip(CircleShape)
-                .clickable {
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(color = Color.Transparent)
+                ) {
                     scope.launch {
                         drawerState.open()
                     }
@@ -58,7 +64,10 @@ fun TopBar(drawerState: DrawerState) {
             modifier = Modifier
                 .size(38.dp)
                 .clip(CircleShape)
-                .clickable {
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(color = Color.Transparent)
+                ) {
 
                 },
             contentAlignment = Alignment.Center

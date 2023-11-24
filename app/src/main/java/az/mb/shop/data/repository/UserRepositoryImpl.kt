@@ -6,7 +6,9 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
@@ -16,25 +18,32 @@ class UserRepositoryImpl @Inject constructor(
     UserRepository {
     override fun getUserInfo(): FirebaseUser? {
 
-        
 
         return firebaseAuth.currentUser
 
     }
 
-    override suspend fun addUserAdditionalInfo(user: User): Task<Void> {
+    override suspend fun addUserAdditionalInfo(user: User): Boolean {
 
         val idUser = firebaseAuth.currentUser!!.uid
+        var response: Boolean = false
 
         val documentReference: DocumentReference =
             firebaseFireStore.collection("Users").document(idUser)
 
-        val request: MutableMap<String, Any> = HashMap()
-        request["address"] = user.address.toString()
-        request["phone"] = user.phone.toString()
+        documentReference.set(user).addOnCompleteListener() {
+            response = it.isSuccessful
+        }.await()
 
+        return response
+    }
 
-        return documentReference.set(request).addOnCompleteListener {}
+    override suspend fun getUserAdditionalInfo(): DocumentSnapshot? {
+        val idUser = firebaseAuth.currentUser!!.uid
+        val documentReference = firebaseFireStore.collection("Users").document(idUser)
+
+        return documentReference.get().await()
+
 
     }
 }

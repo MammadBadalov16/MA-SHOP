@@ -88,7 +88,8 @@ fun CartItem(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         fontSize = 18.sp,
-                        fontWeight = FontWeight.Medium
+                        fontWeight = FontWeight.Medium,
+                        color = Color.Black
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
@@ -96,7 +97,7 @@ fun CartItem(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         fontSize = 12.sp,
-                        color = Color.DarkGray
+                        color = Color.DarkGray,
                     )
                 }
 
@@ -110,7 +111,8 @@ fun CartItem(
                             .background(color = f5, shape = RoundedCornerShape(8.dp))
                             .padding(top = 5.dp, bottom = 5.dp, start = 8.dp, end = 8.dp),
                         fontSize = 9.sp,
-                        fontWeight = FontWeight.Black
+                        fontWeight = FontWeight.Black,
+                        color = Color.Black
                     )
                 }
             }

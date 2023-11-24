@@ -1,12 +1,9 @@
 package az.mb.shop.presentation.product
 
-import android.util.Log
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,14 +25,10 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonColors
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -59,7 +52,6 @@ import az.mb.shop.domain.model.Product
 import az.mb.shop.presentation.components.ErrorScreen
 import az.mb.shop.presentation.components.MyProgressBar
 import az.mb.shop.presentation.components.ToastSuccess
-import az.mb.shop.presentation.components.ToastSuccessC
 import az.mb.shop.presentation.product.components.BackButton
 import az.mb.shop.presentation.ui.theme.f5
 import coil.compose.SubcomposeAsyncImage
@@ -82,15 +74,6 @@ fun ProductScreen(
 
     val stateFavProduct = viewModel.stateFavProducts.value
     val favProduct = stateFavProduct.product
-
-    Log.e("ProductScreen", stateProduct.toString())
-
-    val animations = listOf(
-        R.raw.intro1, R.raw.intro2, R.raw.intro3
-    )
-
-    var quantity by remember { mutableIntStateOf(1) }
-    val totalPrice by remember { mutableDoubleStateOf(0.0) }
 
 
     Box(
@@ -164,7 +147,10 @@ fun HeaderSection(navController: NavController, product: Product) {
         })
 
         Box(modifier = Modifier.align(Alignment.Center)) {
-            Text(text = product.brand)
+            Text(
+                text = product.brand,
+                color = Color.Black
+            )
         }
     }
 
@@ -237,7 +223,11 @@ fun ContentSection(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = product.title, fontSize = 25.sp, fontWeight = FontWeight.Bold
+                text = product.title,
+                fontSize = 25.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
+
             )
 
             Box(modifier =
@@ -259,6 +249,7 @@ fun ContentSection(
                         id = if (!favoriteRemember) R.drawable.ic_heart
                         else R.drawable.ic_heart_full
                     ),
+                    tint = Color.Black,
                     contentDescription = null,
                     modifier = Modifier
                         .padding(5.dp)
@@ -276,7 +267,8 @@ fun ContentSection(
                     .background(color = f5, shape = RoundedCornerShape(8.dp))
                     .padding(top = 3.dp, bottom = 3.dp, start = 8.dp, end = 8.dp),
                 fontSize = 15.sp,
-                fontWeight = FontWeight.Black
+                fontWeight = FontWeight.Black,
+                color = Color.Black
             )
 
             Spacer(modifier = Modifier.width(10.dp))
@@ -292,7 +284,9 @@ fun ContentSection(
                 onRatingChanged = {})
             Spacer(modifier = Modifier.width(5.dp))
 
-            Text(text = "${product.rating} (5.389 reviews)", fontSize = 17.sp)
+            Text(
+                text = "${product.rating} (5.389 reviews)", fontSize = 17.sp, color = Color.Black
+            )
         }
 
         Spacer(modifier = Modifier.height(15.dp))
@@ -305,7 +299,9 @@ fun ContentSection(
 
         Spacer(modifier = Modifier.height(15.dp))
 
-        QuantitySection(quantityValue = { quantity -> quantityRemember = quantity })
+        QuantitySection(
+            stock = product.stock,
+            quantityValue = { quantity -> quantityRemember = quantity })
 
         Spacer(modifier = Modifier.height(15.dp))
 
@@ -328,14 +324,20 @@ fun ContentSection(
 fun DescriptionSection(product: Product) {
 
     Column {
-        Text(text = "Description", fontSize = 22.sp, fontWeight = FontWeight.Medium)
+        Text(
+            text = "Description",
+            fontSize = 22.sp,
+            fontWeight = FontWeight.Medium,
+            color = Color.Black
+        )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
             text = product.description,
             fontSize = 15.sp,
-            style = LocalTextStyle.current.copy(lineHeight = 18.sp)
+            style = LocalTextStyle.current.copy(lineHeight = 18.sp),
+            color = Color.Black
         )
     }
 
@@ -343,7 +345,7 @@ fun DescriptionSection(product: Product) {
 }
 
 @Composable
-fun QuantitySection(quantityValue: (quantity: Int) -> Unit) {
+fun QuantitySection(stock: Int, quantityValue: (quantity: Int) -> Unit) {
 
     var quantityRemember by remember { mutableIntStateOf(1) }
 
@@ -355,7 +357,7 @@ fun QuantitySection(quantityValue: (quantity: Int) -> Unit) {
             text = "Quantity",
             color = Color.Black,
             fontSize = 22.sp,
-            fontWeight = FontWeight.Medium
+            fontWeight = FontWeight.Medium,
         )
         Spacer(modifier = Modifier.width(10.dp))
 
@@ -369,11 +371,16 @@ fun QuantitySection(quantityValue: (quantity: Int) -> Unit) {
                 painter = painterResource(id = R.drawable.ic_minus),
                 tint = Color.Black,
                 contentDescription = "",
-                modifier = Modifier.clickable {
-                    if (quantityRemember != 1)
-                        quantityRemember--
-                    quantityValue(quantityRemember)
-                }
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = rememberRipple(color = Color.Transparent)
+                    ) {
+                        if (quantityRemember != 1)
+                            quantityRemember--
+                        quantityValue(quantityRemember)
+                    }
             )
             Spacer(modifier = Modifier.width(18.dp))
             Text(
@@ -387,10 +394,17 @@ fun QuantitySection(quantityValue: (quantity: Int) -> Unit) {
                 painter = painterResource(id = R.drawable.ic_add),
                 tint = Color.Black,
                 contentDescription = "",
-                modifier = Modifier.clickable {
-                    quantityRemember++
-                    quantityValue(quantityRemember)
-                }
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = rememberRipple(color = Color.Transparent)
+                    ) {
+                        if (quantityRemember < stock) {
+                            quantityRemember++
+                            quantityValue(quantityRemember)
+                        }
+                    }
             )
         }
     }

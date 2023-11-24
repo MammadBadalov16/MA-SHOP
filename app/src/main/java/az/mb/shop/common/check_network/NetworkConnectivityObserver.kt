@@ -40,7 +40,6 @@ class NetworkConnectivityObserver(
                 }
 
             }
-
             connectivityManager.registerDefaultNetworkCallback(callback)
             awaitClose {
                 connectivityManager.unregisterNetworkCallback(callback)

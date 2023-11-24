@@ -38,7 +38,9 @@ fun UserInfoTextField(
             unfocusedLeadingIconColor = Color.Black,
             focusedLabelColor = Color.Black,
             unfocusedLabelColor = Color.Black,
-            cursorColor = Color.Black
+            cursorColor = Color.Black,
+            focusedTextColor = Color.Black,
+            unfocusedTextColor = Color.Black
         ),
         value = value,
         onValueChange = {

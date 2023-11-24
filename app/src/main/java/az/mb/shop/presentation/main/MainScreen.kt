@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -18,6 +19,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -31,28 +33,27 @@ import az.mb.shop.presentation.main.components.BottomNavigationBar
 import az.mb.shop.presentation.main.components.ModalDrawer
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
 
     val user = viewModel.userState.value.user
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    var currentRoute = navBackStackEntry?.destination?.route
+    val currentRoute = navBackStackEntry?.destination?.route
 
 
     val context = LocalContext.current.applicationContext
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
-    val selectedItemId = remember { mutableIntStateOf(Screen.Profile.id) }
+    val selectedItemId = remember { mutableIntStateOf(Screen.Home.id) }
 
 
     ModalNavigationDrawer(
         drawerContent = {
             ModalDrawer(
                 user = user,
-                clickItemId = { selectedItemId.value = it },
+                clickItemId = { selectedItemId.intValue = it },
                 navController = navController,
                 drawerState = drawerState,
                 scope = scope,
@@ -62,6 +63,7 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
         drawerState = drawerState,
     ) {
         Scaffold(
+            modifier = Modifier.background(Color.White),
             topBar = {
             },
             bottomBar = {
@@ -72,18 +74,21 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
                 ) {
                     BottomNavigationBar(
                         navController = navController,
-                        clickItemId = { selectedItemId.value = it },
+                        clickItemId = { selectedItemId.intValue = it },
                         selectedItemId = selectedItemId
                     )
                 }
             },
         )
         {
-            Box(modifier = Modifier.padding(it)) {
+            Box(modifier = Modifier
+                .padding(it)
+                .background(Color.White)
+            ) {
                 MyNavGraph(
                     navController = navController,
                     drawerState = drawerState,
-                    startDestination = Screen.Profile.route
+                    // startDestination = Screen.Profile.route
                 )
             }
         }

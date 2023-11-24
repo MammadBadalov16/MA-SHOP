@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import az.mb.shop.common.Resource
-import az.mb.shop.data.mapper.toUser
 import az.mb.shop.domain.use_case.user.GetUserUseCase
 import az.mb.shop.presentation.main.state.UserState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,7 +27,7 @@ class MainViewModel @Inject constructor(private val getUserUseCase: GetUserUseCa
         getUserUseCase.invoke().onEach {
             when (it) {
                 is Resource.Error -> _userState.value = UserState(isError = it.message.toString())
-                is Resource.Loading -> _userState.value = UserState(isBoolean = true)
+                is Resource.Loading -> _userState.value = UserState(isLoading = true)
                 is Resource.Success -> {
                     val firebaseUser = it.data
                         _userState.value = UserState(user = firebaseUser)
