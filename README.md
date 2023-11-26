@@ -4,7 +4,8 @@
 
 
 
-I use in my app:
+The technologies employed in my application :
+
 - Kotlin
 - Jetpack Compose
 - Material Design 3
