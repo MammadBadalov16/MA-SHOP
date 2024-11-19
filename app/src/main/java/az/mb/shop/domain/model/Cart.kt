@@ -4,7 +4,7 @@ data class Cart(
     val cartId: Int,
     val id: Int,
     val title: String,
-    val price: Int,
+    val price: Double,
     val rating: Double,
     val stock: Int,
     val thumbnail: String,

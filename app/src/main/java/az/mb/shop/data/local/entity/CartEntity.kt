@@ -9,7 +9,7 @@ data class CartEntity(
     val cartId: Int? = null,
     val id: Int,
     val title: String,
-    val price: Int,
+    val price: Double,
     val stock: Int,
     val rating: Double,
     val thumbnail: String,

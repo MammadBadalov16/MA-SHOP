@@ -38,8 +38,8 @@ fun ProductsDTO.toProduct(): List<Product> {
     return list
 }
 
-fun CategoryDTO.toCategory() = map {
-    Category(category = it)
+fun CategoryDTO.toCategory(): List<Category> = map {
+    Category(category = it.name)
 }
 
 fun FavProductEntity.toProduct(): Product {

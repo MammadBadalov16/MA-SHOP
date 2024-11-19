@@ -148,7 +148,7 @@ fun HeaderSection(navController: NavController, product: Product) {
 
         Box(modifier = Modifier.align(Alignment.Center)) {
             Text(
-                text = product.brand,
+                text = product.brand ?:  "",
                 color = Color.Black
             )
         }

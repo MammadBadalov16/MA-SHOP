@@ -10,11 +10,11 @@ data class FavProductEntity(
     @PrimaryKey(autoGenerate = true)
     val favProductId: Int? = null,
     val id: Int,
-    val brand: String,
+    val brand: String?,
     val category: String,
     val description: String,
     val discountPercentage: Double,
-    val price: Int,
+    val price: Double,
     val rating: Double,
     val stock: Int,
     val thumbnail: String,

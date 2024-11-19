@@ -1,5 +1,6 @@
 package az.mb.shop.domain.use_case.get_category
 
+import android.util.Log
 import az.mb.shop.common.Resource
 import az.mb.shop.data.mapper.toCategory
 import az.mb.shop.domain.model.Category
@@ -15,8 +16,10 @@ class GetCategoryUseCase @Inject constructor(private val remoteRepository: Remot
         try {
             send(Resource.Loading())
             val categories = remoteRepository.getCategories().toCategory()
+            Log.e("Get caregories success ", categories.toString())
             send(Resource.Success(data = categories))
         } catch (e: Exception) {
+            Log.e("Get categories error ", e.message.toString())
             send(Resource.Error(message = e.message.toString()))
         }
     }

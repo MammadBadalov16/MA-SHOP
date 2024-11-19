@@ -1,5 +1,6 @@
 package az.mb.shop.domain.use_case.product
 
+import android.util.Log
 import az.mb.shop.common.Resource
 import az.mb.shop.data.mapper.toProduct
 import az.mb.shop.domain.model.Product
@@ -17,6 +18,7 @@ class GetProductsUseCase @Inject constructor(private val remoteRepository: Remot
             var products = remoteRepository.getProducts().products.map { it.toProduct() }
             send(Resource.Success(products))
         } catch (e: Exception) {
+            Log.e("Get products",e.message.toString())
             send(Resource.Error(e.message.toString()))
         }
     }

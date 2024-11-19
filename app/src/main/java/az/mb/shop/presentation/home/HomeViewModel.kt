@@ -1,6 +1,5 @@
 package az.mb.shop.presentation.home
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -18,7 +17,6 @@ import az.mb.shop.presentation.home.state.CategoryState
 import az.mb.shop.presentation.home.state.ProductState
 import az.mb.shop.presentation.home.state.ProductsState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
